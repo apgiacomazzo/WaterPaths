@@ -216,10 +216,13 @@ void Transfers::applyPolicy(int week) {
         vector<double> transfer_requests((unsigned long) n_allocations, 0);
 
         /// Total volume available for transfers in source utility.
-        double available_transfer_volume =
-                (source_utility->getTotal_treatment_capacity()
-                 - source_treatment_buffer) * PEAKING_FACTOR
-                - source_utility->getUnrestrictedDemand();
+        double available_transfer_volume = 0;
+        if (source_utility->getRisk_of_failure() == 0) {
+            available_transfer_volume =
+                    (source_utility->getTotal_treatment_capacity()
+                     - source_treatment_buffer) * PEAKING_FACTOR
+                    - source_utility->getUnrestrictedDemand();
+        }
 
         if (available_transfer_volume > 0) {
 
