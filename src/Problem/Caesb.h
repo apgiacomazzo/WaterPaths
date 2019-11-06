@@ -48,8 +48,10 @@ private:
     vector<vector<double>> evap_tortoSM;
     vector<vector<double>> evap_paranoa;
     vector<vector<double>> evap_corumba;
-    vector<vector<double>> demand_to_wastewater_fraction_caesb;
-    vector<vector<double>> caesbDemandClassesFractions;
+    vector<vector<double>> demand_to_wastewater_fraction_caesb_descoberto;
+    vector<vector<double>> demand_to_wastewater_fraction_caesb_tortoSM;
+    vector<vector<double>> caesbDescobertoDemandClassesFractions;
+    vector<vector<double>> caesbTortoSMDemandClassesFractions;
     vector<vector<double>> caesbUserClassesWaterPrices;
     vector<vector<double>> caesbPriceRestrictionMultipliers;
 

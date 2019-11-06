@@ -108,8 +108,8 @@ set(SOURCE_FILES
         src/Utils/QPSolver/QuadProg++.h
         src/Utils/Utils.cpp
         src/Utils/Utils.h
-        src/Problem/Triangle.cpp
-        src/Problem/Triangle.h
+        src/Problem/Caesb.cpp
+        src/Problem/Caesb.h
         src/Problem/Base/Problem.cpp
         src/Problem/Base/Problem.h
         src/SystemComponents/Bonds/Base/Bond.cpp
@@ -217,8 +217,8 @@ set(TEST_SOURCE_FILES
         src/Utils/QPSolver/QuadProg++.h
         src/Utils/Utils.cpp
         src/Utils/Utils.h
-        src/Problem/Triangle.cpp
-        src/Problem/Triangle.h
+        src/Problem/Caesb.cpp
+        src/Problem/Caesb.h
         src/Problem/Base/Problem.cpp
         src/Problem/Base/Problem.h
         src/SystemComponents/Bonds/Base/Bond.cpp
