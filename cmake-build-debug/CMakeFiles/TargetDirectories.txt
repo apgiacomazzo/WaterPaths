@@ -1,0 +1,3 @@
+/mnt/c/Users/andre/CLionProjects/WaterPaths1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/andre/CLionProjects/WaterPaths1/cmake-build-debug/CMakeFiles/WaterPaths.dir
+/mnt/c/Users/andre/CLionProjects/WaterPaths1/cmake-build-debug/CMakeFiles/edit_cache.dir

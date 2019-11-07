@@ -535,12 +535,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                                    caesb_tortoSM_restriction_trigger};
                                                     //variáveis de decisão que representam os gatilhos para acionar o racionamento em cada companhia
 
-    vector<double> restriction_stage_multipliers_caesb_descoberto = {0.9, 0.8, 0.7, 0.6}; //São 4 estágios de racionamento. Os fatores 0.9, 0.8, 0.7, 0.6 são as restrições da demanda. 0.9 significa que a demanda será restringida em 10% e assim por diante.
+    vector<double> restriction_stage_multipliers_caesb_descoberto = {0.9, 0.8, 0.7}; //São 4 estágios de racionamento. Os fatores 0.9, 0.8, 0.7, 0.6 são as restrições da demanda. 0.9 significa que a demanda será restringida em 10% e assim por diante.
     vector<double> restriction_stage_triggers_caesb_descoberto = {caesb_descoberto_restriction_trigger, //estágio 1
                                                                   caesb_descoberto_restriction_trigger + delta_descoberto_restriction_trigger, // estágio 2 -> 0.15f está relacionado ao limite da métrica de risco utilizado para acionar a implementação de racionamento do estágio 2 (mais severo do que o estágio 1)
                                                                   caesb_descoberto_restriction_trigger + 2 * delta_descoberto_restriction_trigger}; //estágio 4
 
-    vector<double> restriction_stage_multipliers_caesb_tortoSM = {0.9, 0.8, 0.7, 0.6}; //São 4 estágios de racionamento. Os fatores 0.9, 0.8, 0.7, 0.6 são as restrições da demanda. 0.9 significa que a demanda será restringida em 10% e assim por diante.
+    vector<double> restriction_stage_multipliers_caesb_tortoSM = {0.9, 0.8, 0.7}; //São 4 estágios de racionamento. Os fatores 0.9, 0.8, 0.7, 0.6 são as restrições da demanda. 0.9 significa que a demanda será restringida em 10% e assim por diante.
     vector<double> restriction_stage_triggers_caesb_tortoSM = {caesb_tortoSM_restriction_trigger, //estágio 1
                                                                caesb_tortoSM_restriction_trigger + delta_tortoSM_restriction_trigger, // estágio 2 -> 0.15f está relacionado ao limite da métrica de risco utilizado para acionar a implementação de racionamento do estágio 2 (mais severo do que o estágio 1)
                                                                caesb_tortoSM_restriction_trigger + 2 * delta_tortoSM_restriction_trigger}; //estágio 4
@@ -567,13 +567,13 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Graph transfer_graph_tortoSM_descoberto(1);
     transfer_graph_tortoSM_descoberto.addEdge(1, 0); // Água do tortoSM para o Descoberto
     Transfers transfer_tortoSM_descoberto(0, 1, 1, 0.1, {0},
-                                          {0.7}, {caesb_descoberto_transfer_trigger},
+                                          {0.7}, {caesb_descoberto_transfer_trigger}, //TortoSM transfere até 0.7 m³/s para o Descoberto
                                           transfer_graph_tortoSM_descoberto, vector<double>(), vector<int>());
 
     Graph transfer_graph_descoberto_tortoSM(1);
     transfer_graph_tortoSM_descoberto.addEdge(0, 1); // Água do tortoSM para o Descoberto
     Transfers transfer_descoberto_tortoSM(0, 0, 0, 0.1, {1},
-                                          {0.5}, {caesb_tortoSM_transfer_trigger},
+                                          {0.5}, {caesb_tortoSM_transfer_trigger}, //Descoberto transfere até 0.5 m³/s para o TortoSM
                                           transfer_graph_descoberto_tortoSM, vector<double>(), vector<int>());
 
     drought_mitigation_policies = {&transfer_tortoSM_descoberto};
@@ -663,7 +663,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
 int Caesb::simulationExceptionHander(const std::exception &e, Simulation *s, // :: significa "resolução de escopo"
                                         double *objs, const double *vars) {
-    int num_dec_var = 14; //número de variáveis desse estudo de caso - alterar para o valor do meu estudo
+    int num_dec_var = 18; //número de variáveis desse estudo de caso - alterar para o valor do meu estudo
 //        printf("Exception called during calculations. Decision variables are below:\n");
     ofstream sol;
     int world_rank;
