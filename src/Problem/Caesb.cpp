@@ -108,7 +108,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     //IDENTIFICADOR DE CADA INFRAESTRUTURA FUTURA. Obs: as infraestruturas já existentes devem ser numeradas antes, começando do 0.
 
     vector<infraRank> caesb_descoberto_infra_order_raw = { //A Companhia Caesb Descoberto abrange os reservatórios do Descoberto e de Corumbá IV
-            infraRank(5, descoberto_expansao_ranking),
+            infraRank(11, descoberto_expansao_ranking),
             infraRank(6, ETA_corumba_upgrade1_ranking),
             infraRank(7, ETA_corumba_upgrade2_ranking)
             };
@@ -237,17 +237,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                       460489632 * table_gen_storage_multiplier}; //dados do volume (m³) do reservatório do Paranoá
     vector<double> paranoa_area = {0, 27568, 151539, 816557, 3247850, 7637880, 13213364, 18746798, 24297885, 30069390, 38814515}; //dados da area (m²) do reservatório do Paranoá (correspondente a cada volume acima)
 
-    //Curva de Corumbá IV - baseado nos dados do portal da ANA (volume útil)
-    vector<double> corumba_storage = {0, 2936600000 * table_gen_storage_multiplier, 3708000000 * table_gen_storage_multiplier}; //só obtive esses dados
-    vector<double> corumba_area = {0, 137120000, 173300000}; //só obtive esses dados
 
     DataSeries descoberto_storage_area(&descoberto_storage, &descoberto_area); //aqui ele está juntando o vetor storage e o vetor area criado para cada reservatório acima
     DataSeries tortoSM_storage_area(&tortoSM_storage,
                                            &tortoSM_area);
     DataSeries paranoa_storage_area(&paranoa_storage,
                                  &paranoa_area);
-    DataSeries corumba_storage_area(&corumba_storage,
-                                         &corumba_area);
 
 
     /// REGRAS RELACIONADAS ÀS VAZÕES REMANESCENTES (RESTRIÇÕES AMBIENTAIS)
@@ -260,16 +255,16 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     FixedMinEnvFlowControl tortoSM_min_env_control(1, 0);
 
     // Vazão remanescente do Paranoá - baseado na resolução n° 33/2018 da ADASA
-    vector<int> paranoa_weeks = {18, 44}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> paranoa_releases = {0.7, 1.2}; // mínimo de 0,7 m³/s no período de estiagem e de 1,2 m³/s no período chuvoso
+    vector<int> paranoa_weeks = {0, 18, 44, 53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
+    vector<double> paranoa_releases = {1.2, 0.7, 1.2}; // mínimo de 0,7 m³/s no período de estiagem e de 1,2 m³/s no período chuvoso
     SeasonalMinEnvFlowControl paranoa_min_env_control(4, paranoa_weeks, paranoa_releases);
 
     // Vazão remanescente de Corumbá IV - baseado no EIA da UHE de Corumbá IV
     FixedMinEnvFlowControl corumba_min_env_control(2, 16.8);
 
     // Vazão remanescente do Ribeirão Bananal - baseado no gráfico de vazões remanescentes do córrego Bananal no PGIRH/DF (2012)
-    vector<int> bananal_weeks = {18, 44}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> bananal_releases = {0.36, 0.5};
+    vector<int> bananal_weeks = {0, 18, 44, 53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
+    vector<double> bananal_releases = {0.5, 0.36, 0.5};
     SeasonalMinEnvFlowControl bananal_min_env_control(3, bananal_weeks, bananal_releases);
 
     //FixedMinEnvFlowControl captacoes_gama();
@@ -312,17 +307,21 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     double cIV_energy_capacity = 745701657 * table_gen_storage_multiplier;
     double cIV_wq_capacity = 2936600000 * table_gen_storage_multiplier;
     double cIV_storage_capacity = cIV_wq_capacity + cIV_energy_capacity + cIV_supply_saneago_capacity + cIV_supply_caesb_capacity; //o armazenamento de água total é igual a soma da parte destinada a abastecimento, destinada a energia e e da parte destinada a preservação ambiental
+
+    //Curva de Corumbá IV - baseado nos dados do portal da ANA (volume útil)
+    vector<double> corumba_storage = {0, 2936600000 * table_gen_storage_multiplier, cIV_storage_capacity * table_gen_storage_multiplier}; //só obtive esses dados
+    vector<double> corumba_area = {0, 137120000, 173300000}; //só obtive esses dados
+    DataSeries corumba_storage_area(&corumba_storage, &corumba_area);
+
     vector<int> cIV_allocations_ids = {0, WATER_QUALITY_ALLOCATION}; //0 é a id da companhia do Descoberto
     vector<double> cIV_allocation_fractions = {
             cIV_supply_caesb_capacity / cIV_storage_capacity,
-            cIV_supply_saneago_capacity / cIV_storage_capacity,
-            cIV_energy_capacity / cIV_storage_capacity,
-            cIV_wq_capacity / cIV_storage_capacity};
-    vector<double> cIV_treatment_allocation_fractions = {1.0, 0.0};  //A companhia descoberto trata água do Corumbá IV. A companhia TortoSM não trata nada.
+             (cIV_wq_capacity + cIV_supply_saneago_capacity + cIV_energy_capacity) / cIV_storage_capacity};
+    vector<double> cIV_treatment_allocation_fractions = {1.0};  //A companhia descoberto trata água do Corumbá IV. A companhia TortoSM não trata nada.
 
     AllocatedReservoir corumba("Corumba IV", 2, //colocar como alocated reservoir
                                 bacia_corumba,
-                                cIV_storage_capacity,
+                                cIV_storage_capacity * table_gen_storage_multiplier,
                                 1.4, //capacidade de tratamento da ETA Corumbá atualmente (1.4 m³/s)
                                 evaporation_corumba,
                                 &corumba_storage_area,
@@ -338,7 +337,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<double> lp_allocation_fractions = {
             lp_supply_capacity / lp_storage_capacity,
             lp_wq_capacity / lp_storage_capacity};
-    vector<double> lp_treatment_allocation_fractions = {0.0, 1.0}; //A companhia descoberto não trata nenhuma água do Lago Paranoá. A companhia TortoSM trata.
+    vector<double> lp_treatment_allocation_fractions = {1.0}; //A companhia descoberto não trata nenhuma água do Lago Paranoá. A companhia TortoSM trata.
 
     AllocatedReservoir paranoa("Lago Paranoa", 3,
                                 bacia_paranoa,
@@ -354,6 +353,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                             subsistema_bananal,
                             0.73); // 0,73 m³/s
 
+    LevelDebtServiceBond dummy_bond(5, 1., 1, 1., vector<int>(1, 0)); // O QUE É DUMMY ENDPOINT?
+    Reservoir dummy_endpoint("Dummy Node", 5, vector<Catchment *>(), 1., 0, evaporation_corumba, 1,
+                             construction_time_interval, 0, dummy_bond);
+
     // OPÇÕES DE INFRAESTRUTURAS FUTURAS - Descrição das opções futuras de infraestrutura para ampliar a oferta de água
 
     // The capacities listed here for expansions are what additional capacity is gained relative to existing capacity,
@@ -364,8 +367,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     //OBS: os custos estão em unidade de milhão. - Assumiu-se que todas as infraestruturas já tinham licença para serem construídas (permitting period = 0)
 
-    LevelDebtServiceBond descoberto_exp_bond(5, 7.5, 25, 0.05, vector<int>(1, 0)); //Elevação do nível d'água da barragem do descoberto (aumento da capacidade de armazenamento em 25%)
-    ReservoirExpansion descoberto_expansion("Expansao da capacidade de armazenamento do Descoberto", 5, 0, 25215500, construction_time_interval, //25215500 = aumento em m³ da capacidade de armazenamento do Descoberto
+    LevelDebtServiceBond descoberto_exp_bond(11, 7.5, 25, 0.05, vector<int>(1, 0)); //Elevação do nível d'água da barragem do descoberto (aumento da capacidade de armazenamento em 25%)
+    ReservoirExpansion descoberto_expansion("Expansao da capacidade de armazenamento do Descoberto", 11, 0, 25215500, construction_time_interval, //25215500 = aumento em m³ da capacidade de armazenamento do Descoberto
                                      0 * WEEKS_IN_YEAR, descoberto_exp_bond); //previsão: 2022 //acréscimo de 0.4 m³/s na vazão captável (PDSB, 2017).
 
     //Empréstimo para Expansão da ETA Corumbá (Sistema Corumbá)
@@ -419,13 +422,6 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     SequentialJointTreatmentExpansion etapa3_ETA_paranoaSul("Etapa 3 da ETA Paranoa Sul", 10, 3, 2, {8, 9, 10}, capacities_ETA_paranoaSul_upgrade_3,
                                                             debendure_expansao_ETA_paranoa_3, construction_time_interval, 0 * WEEKS_IN_YEAR); //previsão: 2034 a 2037
 
-
-
-
-    LevelDebtServiceBond dummy_bond(11, 1., 1, 1., vector<int>(1, 0)); // O QUE É DUMMY ENDPOINT?
-    Reservoir dummy_endpoint("Dummy Node", 11, vector<Catchment *>(), 1., 0, evaporation_corumba, 1,
-                             construction_time_interval, 0, dummy_bond);
-
     vector<WaterSource *> water_sources; //water_sources é um vetor comum, que comportará todas as opções descritas acima de ampliação da infraestrutura de abastecimento
     water_sources.push_back(&descoberto);
     water_sources.push_back(&tortoSM);
@@ -469,16 +465,16 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      *                  2(9, 12)_   /
      *                           \ /
      *                           \/
-     *                           11 (dummy)
+     *                           5 (dummy)
      *
      */
 
-    Graph g(5); //graph é uma forma de estruturar dados que consiste em dois componentes: um conjunto finito de vértices denominado de nós; e um cojunto finito de pares ordenados (x,y), denominados de edges.
+    Graph g(6); //graph é uma forma de estruturar dados que consiste em dois componentes: um conjunto finito de vértices denominado de nós; e um cojunto finito de pares ordenados (x,y), denominados de edges.
     g.addEdge(0, 2); //essa conexão indica que existe uma aresta do vértice 0 ao vértice 2.
+    g.addEdge(2, 5);
     g.addEdge(1, 4);
     g.addEdge(3, 4);
-    g.addEdge(4, 11);
-    g.addEdge(2, 11);
+    g.addEdge(4, 5);
 
     auto demand_n_weeks = (int) std::round(40 * WEEKS_IN_YEAR); //40 é o número de anos a serem simulados. A fç auto serve para declarar variáveis cujo tipo vai ser inferido pelo compilador a partir da inicialização delas
 
@@ -512,7 +508,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     /// Water-source-utility connectivity matrix (each row corresponds to a utility and numbers are water
     /// sources IDs.
     vector<vector<int>> reservoir_utility_connectivity_matrix = {
-            {0, 2, 5, 6, 7},  //CAESB Descoberto
+            {0, 2, 11, 6, 7},  //CAESB Descoberto
             {1, 3, 4, 8, 9, 10}  //CAESB Torto/Santa Maria
     };
 
@@ -564,7 +560,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     // POLÍTICA DE TRANSFERÊNCIA
 
-    Graph transfer_graph_tortoSM_descoberto(1);
+    Graph transfer_graph_tortoSM_descoberto(2);
     transfer_graph_tortoSM_descoberto.addEdge(1, 0); // Água do tortoSM para o Descoberto
     Transfers transfer_tortoSM_descoberto(0, 1, 1, 0.1, {0},
                                           {0.7}, {caesb_descoberto_transfer_trigger}, //TortoSM transfere até 0.7 m³/s para o Descoberto

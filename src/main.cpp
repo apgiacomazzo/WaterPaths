@@ -1,7 +1,7 @@
 #include "SystemComponents/WaterSources/Base/WaterSource.h"
 #include "Utils/QPSolver/QuadProg++.h"
 #include "Utils/Solutions.h"
-#include "Problem/PaperTestProblem.h"
+//#include "Problem/PaperTestProblem.h"
 //#include "Problem/Triangle.h"
 #include "Utils/Utils.h"
 
@@ -15,13 +15,14 @@
 #include <getopt.h>
 #include <fstream>
 #include <omp.h>
+#include <Caesb.h>
 
 
 using namespace std;
 using namespace Constants;
 using namespace Solutions;
 
-PaperTestProblem *problem_ptr;
+Caesb *problem_ptr;
 //Triangle *problem_ptr;
 int failures = 0;
 
@@ -220,7 +221,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    PaperTestProblem problem(n_weeks, import_export_rof_table);
+    Caesb problem(n_weeks, import_export_rof_table);
 //    Triangle problem(n_weeks, import_export_rof_table);
     if (seed > -1) {
         WaterSource::setSeed(seed);

@@ -3,6 +3,8 @@ project(WaterPaths)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O0 -march=native")
+
 include_directories(src/ContinuityModels)
 include_directories(src/ContinuityModels/Base)
 include_directories(src/Controls)
@@ -24,7 +26,7 @@ include_directories(src/SystemComponents/WaterSources/Base)
 include_directories(src/Utils)
 include_directories(src/Utils/Graph)
 include_directories(src/Utils/QPSolver)
-include_directories(Tests)
+#include_directories(Tests)
 include_directories(Utils)
 
 add_executable(WaterPaths
@@ -141,6 +143,6 @@ add_executable(WaterPaths
         src/Utils/Utils.cpp
         src/Utils/Utils.h
         src/main.cpp
-        Tests/catch.hpp
-        Tests/Tests.cpp
+#        Tests/catch.hpp
+#        Tests/Tests.cpp
         Utils/Constants.h)
