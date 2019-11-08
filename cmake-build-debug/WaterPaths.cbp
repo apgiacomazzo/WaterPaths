@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="WaterPaths"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/media/DATA/WaterPaths/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/media/DATA/WaterPaths/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="WaterPaths">
+				<Option output="/media/DATA/WaterPaths/cmake-build-debug/WaterPaths" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/media/DATA/WaterPaths/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/media/DATA/WaterPaths/src/ContinuityModels"/>
+					<Add directory="/media/DATA/WaterPaths/src/ContinuityModels/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Controls"/>
+					<Add directory="/media/DATA/WaterPaths/src/Controls/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Controls/Custom"/>
+					<Add directory="/media/DATA/WaterPaths/src/DataCollector"/>
+					<Add directory="/media/DATA/WaterPaths/src/DataCollector/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/DroughtMitigationInstruments"/>
+					<Add directory="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Problem"/>
+					<Add directory="/media/DATA/WaterPaths/src/Problem/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Simulation"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/Bonds"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/Bonds/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/Utility"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/WaterSources"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Utils"/>
+					<Add directory="/media/DATA/WaterPaths/src/Utils/Graph"/>
+					<Add directory="/media/DATA/WaterPaths/src/Utils/QPSolver"/>
+					<Add directory="/media/DATA/WaterPaths/Tests"/>
+					<Add directory="/media/DATA/WaterPaths/Utils"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 WaterPaths"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="WaterPaths/fast">
+				<Option output="/media/DATA/WaterPaths/cmake-build-debug/WaterPaths" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/media/DATA/WaterPaths/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/media/DATA/WaterPaths/src/ContinuityModels"/>
+					<Add directory="/media/DATA/WaterPaths/src/ContinuityModels/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Controls"/>
+					<Add directory="/media/DATA/WaterPaths/src/Controls/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Controls/Custom"/>
+					<Add directory="/media/DATA/WaterPaths/src/DataCollector"/>
+					<Add directory="/media/DATA/WaterPaths/src/DataCollector/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/DroughtMitigationInstruments"/>
+					<Add directory="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Problem"/>
+					<Add directory="/media/DATA/WaterPaths/src/Problem/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Simulation"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/Bonds"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/Bonds/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/Utility"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/WaterSources"/>
+					<Add directory="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Base"/>
+					<Add directory="/media/DATA/WaterPaths/src/Utils"/>
+					<Add directory="/media/DATA/WaterPaths/src/Utils/Graph"/>
+					<Add directory="/media/DATA/WaterPaths/src/Utils/QPSolver"/>
+					<Add directory="/media/DATA/WaterPaths/Tests"/>
+					<Add directory="/media/DATA/WaterPaths/Utils"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 WaterPaths/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/media/DATA/WaterPaths/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/media/DATA/WaterPaths/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/media/DATA/WaterPaths/Tests/Tests.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/Tests/catch.hpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/Utils/Constants.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/ContinuityModels/Base/ContinuityModel.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/ContinuityModels/Base/ContinuityModel.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/ContinuityModels/ContinuityModelROF.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/ContinuityModels/ContinuityModelROF.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/ContinuityModels/ContinuityModelRealization.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/ContinuityModels/ContinuityModelRealization.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Base/ControlRules.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Base/MinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Base/MinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Base/MinEnvironFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Base/MinEnvironFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Custom/FallsLakeMinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Custom/FallsLakeMinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Custom/JordanLakeMinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/Custom/JordanLakeMinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/EvaporationSeries.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/EvaporationSeries.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/FixedMinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/FixedMinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/InflowMinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/InflowMinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/SeasonalMinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/SeasonalMinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/StorageMinEnvFlowControl.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/StorageMinEnvFlowControl.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/WwtpDischargeRule.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Controls/WwtpDischargeRule.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/AllocatedReservoirDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/AllocatedReservoirDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/Base/DataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/Base/DataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/EmptyDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/EmptyDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/IntakeDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/IntakeDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/MasterDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/MasterDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/QuaryDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/QuaryDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/ReservoirDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/ReservoirDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/RestrictionsDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/RestrictionsDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/TransfersDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/TransfersDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/UtilitiesDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/UtilitiesDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/WaterReuseDataCollector.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DataCollector/WaterReuseDataCollector.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Base/DroughtMitigationPolicy.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Base/DroughtMitigationPolicy.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/InsuranceStorageToROF.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/InsuranceStorageToROF.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Restrictions.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Restrictions.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Transfers.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/DroughtMitigationInstruments/Transfers.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Problem/Base/Problem.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Problem/Base/Problem.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Problem/Caesb.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Problem/Caesb.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Problem/PaperTestProblem.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Problem/PaperTestProblem.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Simulation/Simulation.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Simulation/Simulation.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/BalloonPaymentBond.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/BalloonPaymentBond.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/Base/Bond.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/Base/Bond.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/FloatingInterestBalloonPaymentBond.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/FloatingInterestBalloonPaymentBond.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/LevelDebtServiceBond.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Bonds/LevelDebtServiceBond.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Catchment.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Catchment.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Utility/InfrastructureManager.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Utility/InfrastructureManager.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Utility/Utility.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/Utility/Utility.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/AllocatedReservoir.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/AllocatedReservoir.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Base/WaterSource.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Base/WaterSource.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Intake.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Intake.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Quarry.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Quarry.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Relocation.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Relocation.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Reservoir.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/Reservoir.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/ReservoirExpansion.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/ReservoirExpansion.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/SequentialJointTreatmentExpansion.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/SequentialJointTreatmentExpansion.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/WaterReuse.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/SystemComponents/WaterSources/WaterReuse.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Constants.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/DataSeries.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/DataSeries.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Graph/Graph.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Graph/Graph.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Matrices.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/ObjectivesCalculator.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/ObjectivesCalculator.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/QPSolver/Array.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/QPSolver/Array.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/QPSolver/QuadProg++.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/QPSolver/QuadProg++.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Solutions.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Utils.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/Utils/Utils.h">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/src/main.cpp">
+			<Option target="WaterPaths"/>
+		</Unit>
+		<Unit filename="/media/DATA/WaterPaths/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
