@@ -718,7 +718,7 @@ int PaperTestProblem::functionEvaluation(double *vars, double *objs, double *con
 
     // Creates simulation object depending on use (or lack thereof) ROF tables
     printf("Starting Simulation\n");
-    double start_time = omp_get_wtime();
+//    double start_time = omp_get_wtime();
     if (import_export_rof_tables == EXPORT_ROF_TABLES) {
         s = new Simulation(water_sources,
                            g,
@@ -763,8 +763,8 @@ int PaperTestProblem::functionEvaluation(double *vars, double *objs, double *con
                            realizations_to_run);
         this->master_data_collector = s->runFullSimulation(n_threads, vars);
     }
-    double end_time = omp_get_wtime();
-    printf("Function evaluation time: %f\n", end_time - start_time);
+//    double end_time = omp_get_wtime();
+//    printf("Function evaluation time: %f\n", end_time - start_time);
 
     // Calculate objectives and store them in Borg decision variables array.
 #ifdef  PARALLEL

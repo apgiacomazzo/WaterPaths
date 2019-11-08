@@ -70,6 +70,7 @@ void Caesb::setProblemDefinition(BORG_Problem &problem) //void = vazio. O tipo v
 
  */
 int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
+
 //    cout << "Building Caesb Problem." << endl;
     // ===================== SET UP DECISION VARIABLES  =====================
 
@@ -148,11 +149,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     if (utilities_rdm.empty()) {
         /// All matrices below have dimensions n_realizations x nr_rdm_factors
         utilities_rdm = std::vector<vector<double>>(
-                n_realizations, vector<double>(1, 1.));
+                n_realizations, vector<double>(4, 1.));
         water_sources_rdm = std::vector<vector<double>>(
                 n_realizations, vector<double>(51, 1.)); //alterar número "51" para (1 + 2 * N° de novas infraestruturas), caso eu opte por não fazer as análises de deep uncertainty.
         policies_rdm = std::vector<vector<double>>(
-                n_realizations, vector<double>(1, 1.));
+                n_realizations, vector<double>(2, 1.));
     }
 
     // ===================== SET UP PROBLEM COMPONENTS =====================
@@ -504,6 +505,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<Utility *> utilities; //vetor que junta as companhias criadas acima
     utilities.push_back(&caesb_descoberto);
     utilities.push_back(&caesb_tortoSM);
+    utilities[5];
 
     /// Water-source-utility connectivity matrix (each row corresponds to a utility and numbers are water
     /// sources IDs.
@@ -566,17 +568,17 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                           {0.7}, {caesb_descoberto_transfer_trigger}, //TortoSM transfere até 0.7 m³/s para o Descoberto
                                           transfer_graph_tortoSM_descoberto, vector<double>(), vector<int>());
 
-    Graph transfer_graph_descoberto_tortoSM(1);
-    transfer_graph_tortoSM_descoberto.addEdge(0, 1); // Água do tortoSM para o Descoberto
-    Transfers transfer_descoberto_tortoSM(0, 0, 0, 0.1, {1},
+    Graph transfer_graph_descoberto_tortoSM(2);
+    transfer_graph_descoberto_tortoSM.addEdge(0, 1); // Água do tortoSM para o Descoberto
+    Transfers transfer_descoberto_tortoSM(1, 0, 0, 0.1, {1},
                                           {0.5}, {caesb_tortoSM_transfer_trigger}, //Descoberto transfere até 0.5 m³/s para o TortoSM
                                           transfer_graph_descoberto_tortoSM, vector<double>(), vector<int>());
 
-    drought_mitigation_policies = {&transfer_tortoSM_descoberto};
-    drought_mitigation_policies = {&transfer_descoberto_tortoSM};
+    drought_mitigation_policies.push_back(&transfer_tortoSM_descoberto);
+    drought_mitigation_policies.push_back(&transfer_descoberto_tortoSM);
 
     /// Creates simulation object depending on use (or lack thereof) ROF tables
-    double start_time = omp_get_wtime();
+//    double start_time = omp_get_wtime();
     if (import_export_rof_tables == EXPORT_ROF_TABLES) {
         s = new Simulation(water_sources,
                            g,
@@ -624,7 +626,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
         //realization_start = omp_get_wtime();
         this->master_data_collector = s->runFullSimulation(n_threads, nullptr);
     }
-    double end_time = omp_get_wtime();
+//    double end_time = omp_get_wtime();
 //	printf("Function evaluation time: %f s\n", end_time - start_time);
 
     //double realization_end = omp_get_wtime();
@@ -718,7 +720,7 @@ void Caesb::readInputData() { //A partir dessa linha serão inseridos os dados d
     cout << "Reading input data." << endl;
     string data_dir = DEFAULT_DATA_DIR + BAR;
 
-#pragma omp parallel num_threads(omp_get_thread_num())
+#pragma omp parallel default(none) num_threads(omp_get_thread_num())
     {
 #pragma omp single
         streamflows_descoberto = Utils::parse2DCsvFile( //inserção dos dados de vazão

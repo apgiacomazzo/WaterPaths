@@ -66,7 +66,7 @@ void Restrictions::applyPolicy(int week) {
     if (!restricted_weekly_average_volumetric_price.empty() && stage > 0) {
         int week_of_year = Utils::weekOfTheYear(week);
         realization_utilities[0]->setRestricted_price(
-                restricted_weekly_average_volumetric_price[stage][week_of_year]);
+                restricted_weekly_average_volumetric_price[stage - 1][week_of_year]);
     }
 }
 

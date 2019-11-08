@@ -288,7 +288,7 @@ Problem::Problem(unsigned long n_weeks) : n_weeks(n_weeks) {
 void
 Problem::setRofTables(unsigned long n_realizations, string rof_tables_directory) {
 
-    double start_time = omp_get_wtime();
+//    double start_time = omp_get_wtime();
     printf("Reading ROF tables.\n");
     string file_name = rof_tables_directory + "tables_r0_u0.csv";
     auto data_r0_u0 = Utils::parse2DCsvFile(file_name);
@@ -341,7 +341,7 @@ Problem::setRofTables(unsigned long n_realizations, string rof_tables_directory)
         }
     }
 
-    printf("Loading tables took %f time.\n", omp_get_wtime() - start_time);
+//    printf("Loading tables took %f time.\n", omp_get_wtime() - start_time);
 }
 
 
