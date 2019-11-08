@@ -1,4 +1,4 @@
-/home/bernardo/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/192.7142.39/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 -G "CodeBlocks - Unix Makefiles" /media/DATA/WaterPaths
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/c/Users/andre/CLionProjects/WaterPaths1
 -- Configuring done
 -- Generating done
--- Build files have been written to: /media/DATA/WaterPaths/cmake-build-debug
+-- Build files have been written to: /mnt/c/Users/andre/CLionProjects/WaterPaths1/cmake-build-debug
