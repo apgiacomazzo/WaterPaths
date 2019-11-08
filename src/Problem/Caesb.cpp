@@ -728,10 +728,7 @@ void Caesb::readInputData() { //A partir dessa linha serão inseridos os dados d
         streamflows_descoberto = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" + evap_inflows_suffix +
                 BAR + "descoberto_inflows.csv", n_realizations);
-/*#pragma omp single
-        streamflows_subsistema_gama = Utils::parse2DCsvFile( //inserção dos dados de vazão
-                io_directory + DEFAULT_DATA_DIR + "inflows" + evap_inflows_suffix +
-                BAR + "subsistema_gama_inflows.csv", n_realizations);*/
+
 #pragma omp single
         streamflows_tortoSM = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" + evap_inflows_suffix +
