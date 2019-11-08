@@ -4,6 +4,7 @@
 //#include "Problem/PaperTestProblem.h"
 //#include "Problem/Triangle.h"
 #include "Utils/Utils.h"
+#include "Problem/Caesb.h"
 
 #ifdef  PARALLEL
 #include "../Borg/borgms.h"
@@ -15,7 +16,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <omp.h>
-#include <Caesb.h>
 
 
 using namespace std;
