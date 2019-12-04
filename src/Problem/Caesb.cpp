@@ -402,7 +402,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<double> capacities_ETA_paranoaSul_upgrade_3 = {0, 0.7}; // aumento da capacidade de produção da ETA paranoá Sul na sua etapa 3 = 0.350 m³/s
 
-    vector<double> cost_ETA_paranoaSul_upgrade_3 = {0, 60}; //custo do upgrade 3 da ETA Paranoá Sul = 30 milhões
+    vector<double> cost_ETA_paranoaSul_upgrade_3 = {0, 60}; //custo do upgrade 3 da ETA Paranoá Sul = 60 milhões
 
 
     /// Empréstimos para a implantação e ampliação da ETA Paranoá Sul
