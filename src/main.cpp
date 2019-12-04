@@ -4,6 +4,7 @@
 //#include "Problem/PaperTestProblem.h"
 //#include "Problem/Triangle.h"
 #include "Utils/Utils.h"
+#include "Problem/Caesb.h"
 
 #ifdef  PARALLEL
 #include "../Borg/borgms.h"
@@ -15,7 +16,6 @@
 #include <getopt.h>
 #include <fstream>
 #include <omp.h>
-#include <Caesb.h>
 
 
 using namespace std;
@@ -343,7 +343,7 @@ int main(int argc, char *argv[]) {
 
             problem_ptr->destroyDataCollector();
         } else {
-            double time_0 = omp_get_wtime();
+//            double time_0 = omp_get_wtime();
             ofstream objs_file;
             string file_name = system_io + "output" + BAR + "Objectives" +
                     (rdm_no == NON_INITIALIZED ? "" : "_RDM" + to_string(rdm_no)) +
@@ -369,7 +369,7 @@ int main(int argc, char *argv[]) {
                 objs_file << line << endl;
             }
             objs_file.close();
-            printf("Time to simulate %d solutions: %f s", last_solution - first_solution, omp_get_wtime() - time_0);
+//            printf("Time to simulate %d solutions: %f s", last_solution - first_solution, omp_get_wtime() - time_0);
         }
 
         return 0;

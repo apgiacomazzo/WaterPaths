@@ -3,7 +3,7 @@ project(WaterPaths)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O0 -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O2 -march=native")
 
 include_directories(src/ContinuityModels)
 include_directories(src/ContinuityModels/Base)

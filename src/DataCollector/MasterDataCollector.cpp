@@ -472,11 +472,11 @@ vector<double> MasterDataCollector::calculatePrintObjectives(string file_name, b
 void MasterDataCollector::isolateRestrictionDataCollectors(vector<UtilitiesDataCollector *> &u,
                                                            vector<RestrictionsDataCollector *> &utility_restrictions) const {
     for (auto &p : drought_mitigation_policy_collectors)
-                if (p.at(realizations_ran.at(0))->type == RESTRICTIONS && p[realizations_ran[0]]->id == u.at(realizations_ran[0])->id)
-                    for (auto i : realizations_ran) {
-                        utility_restrictions.at(i) =
-                                dynamic_cast<RestrictionsDataCollector *>(p.at(i));
-                    }
+        if (p.at(realizations_ran.at(0))->type == RESTRICTIONS && p[realizations_ran[0]]->id == u.at(realizations_ran[0])->id)
+            for (auto i : realizations_ran) {
+                utility_restrictions.at(i) =
+                        dynamic_cast<RestrictionsDataCollector *>(p.at(i));
+            }
 }
 
 void MasterDataCollector::performBootstrapAnalysis(
@@ -731,11 +731,11 @@ void MasterDataCollector::removeRealization(unsigned long r) {
         utility_collectors[u][r] = nullptr;
     }
     for (int dmp = 0; dmp < (int) drought_mitigation_policy_collectors.size(); ++dmp) {
-	delete drought_mitigation_policy_collectors[dmp][r];
+	    delete drought_mitigation_policy_collectors[dmp][r];
         drought_mitigation_policy_collectors[dmp][r] = nullptr;
     }
     for (int ws = 0; ws < (int) water_source_collectors.size(); ++ws) {
-	delete water_source_collectors[ws][r];
+	    delete water_source_collectors[ws][r];
         water_source_collectors[ws][r] = nullptr;
     }
 
@@ -743,16 +743,8 @@ void MasterDataCollector::removeRealization(unsigned long r) {
     crashed_realizations.push_back(r);
 }
 
-//void MasterDataCollector::removeNullptrs(vector<vector<void *>> vector_of_collectors) {
-//    for (auto &v : vector_of_collectors) {
-//        v.erase(remove_if(v.begin(), v.end(), [](const void *x) { return x == nullptr; }), v.end());
-//    }
-//}
 
 void MasterDataCollector::cleanCollectorsOfDeletedRealizations() {
-//    removeNullptrs(utility_collectors);
-//    removeNullptrs(drought_mitigation_policy_collectors);
-//    removeNullptrs(water_source_collectors);
 
     for (auto &v : utility_collectors) {
         v.erase(remove_if(v.begin(), v.end(), [](const void *x) { return x == nullptr; }), v.end());
