@@ -533,15 +533,19 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                                    caesb_tortoSM_restriction_trigger};
                                                     //variáveis de decisão que representam os gatilhos para acionar o racionamento em cada companhia
 
-    vector<double> restriction_stage_multipliers_caesb_descoberto = {0.9, 0.8, 0.7}; //São 4 estágios de racionamento. Os fatores 0.9, 0.8, 0.7, 0.6 são as restrições da demanda. 0.9 significa que a demanda será restringida em 10% e assim por diante.
-    vector<double> restriction_stage_triggers_caesb_descoberto = {caesb_descoberto_restriction_trigger, //estágio 1
-                                                                  caesb_descoberto_restriction_trigger + delta_descoberto_restriction_trigger, // estágio 2 -> 0.15f está relacionado ao limite da métrica de risco utilizado para acionar a implementação de racionamento do estágio 2 (mais severo do que o estágio 1)
-                                                                  caesb_descoberto_restriction_trigger + 2 * delta_descoberto_restriction_trigger}; //estágio 4
+    vector<double> restriction_stage_multipliers_caesb_descoberto = {0.98, 0.94, 0.86}; //São 3 estágios de racionamento. Os fatores 0.98, 0.96, 0.88 são as restrições da demanda. 0.98 significa que a demanda será restringida em 2% e assim por diante.
+    vector<double> restriction_stage_triggers_caesb_descoberto = {caesb_descoberto_restriction_trigger, //estágio 1 - 2% de redução (campanha de conscientização)
+                                                                  caesb_descoberto_restriction_trigger + delta_descoberto_restriction_trigger, // estágio 2 - 4% de redução (tarifa de conting) + 2% do primeiro
+                                                                  caesb_descoberto_restriction_trigger + 2 * delta_descoberto_restriction_trigger}; //estágio 3 - 12% de redução (racionamento) + 2% do primeiro
+                                                                  //Obs: o 1° estágio corresponde à campanha, o 2° à tarifa de contingência e o 3° ao racionamento.
+                                                                  //Acumulou-se a campanha com os outros dois estágios.
+                                                                  //Como a tarifa de contingência é uma medida bastante penosa, bem como o racionamento,
+                                                                  //optou-se por não acumular com o terceiro estágio.
 
-    vector<double> restriction_stage_multipliers_caesb_tortoSM = {0.9, 0.8, 0.7}; //São 4 estágios de racionamento. Os fatores 0.9, 0.8, 0.7, 0.6 são as restrições da demanda. 0.9 significa que a demanda será restringida em 10% e assim por diante.
+    vector<double> restriction_stage_multipliers_caesb_tortoSM = {0.98, 0.94, 0.86}; //São 3 estágios de racionamento. Os fatores 0.98, 0.96, 0.88 são as restrições da demanda. 0.98 significa que a demanda será restringida em 2% e assim por diante.
     vector<double> restriction_stage_triggers_caesb_tortoSM = {caesb_tortoSM_restriction_trigger, //estágio 1
-                                                               caesb_tortoSM_restriction_trigger + delta_tortoSM_restriction_trigger, // estágio 2 -> 0.15f está relacionado ao limite da métrica de risco utilizado para acionar a implementação de racionamento do estágio 2 (mais severo do que o estágio 1)
-                                                               caesb_tortoSM_restriction_trigger + 2 * delta_tortoSM_restriction_trigger}; //estágio 4
+                                                               caesb_tortoSM_restriction_trigger + delta_tortoSM_restriction_trigger, // estágio 2
+                                                               caesb_tortoSM_restriction_trigger + 2 * delta_tortoSM_restriction_trigger}; //estágio 3
 
 
     Restrictions restrictions_d(0, // Criação das políticas de restrição de uso da água (puxa o código Restrictions.h, que contém os comandos dessa política)
