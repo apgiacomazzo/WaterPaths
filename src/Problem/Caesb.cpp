@@ -350,11 +350,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                 &lp_allocation_fractions,
                                 &lp_treatment_allocation_fractions);
 
-    Intake ribeirao_bananal("Captacao no Ribeirao Bananal", 4,
-                            subsistema_bananal,
-                            0.73); // 0,73 m³/s
+    Intake ribeirao_bananal("Captacao no Ribeirao Bananal", 4, //Obs: a série de vazão utilizada referente ao Bananal
+                            subsistema_bananal,                             //foi retirada de uma estação fluviométrica localizada
+                            0.73); // 0,73 m³/s         //a justante do ponto de captação. Não há problema, pois a captação começou apenas ao final de 2017, então a série é basicamente composta pela vazão natural do ribeirão.
 
-    LevelDebtServiceBond dummy_bond(5, 1., 1, 1., vector<int>(1, 0)); // O QUE É DUMMY ENDPOINT?
+    LevelDebtServiceBond dummy_bond(5, 1., 1, 1., vector<int>(1, 0));
     Reservoir dummy_endpoint("Dummy Node", 5, vector<Catchment *>(), 1., 0, evaporation_corumba, 1,
                              construction_time_interval, 0, dummy_bond);
 
