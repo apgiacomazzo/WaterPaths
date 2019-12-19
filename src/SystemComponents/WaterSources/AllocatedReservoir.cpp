@@ -114,25 +114,25 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
     double direct_demand = total_demand;
 
 
-    /// Constrain outflow to what is available on water quality pool.
+    // Constrain outflow to what is available on water quality pool.
     min_environmental_outflow = (has_water_quality_pool ?
                                  min(min_environmental_outflow, available_allocated_volumes.back()) :
                                  min_environmental_outflow);
     double outflow_new = min_environmental_outflow;
     total_outflow = outflow_new;
 
-    /// Calculate total runoff inflow reaching reservoir from its watershed.
+    // Calculate total runoff inflow reaching reservoir from its watershed.
     upstream_catchment_inflow = 0;
     for (Catchment &c : catchments)
         upstream_catchment_inflow += c.getStreamflow(week);
 
-    /// Calculates water lost through evaporation.
+    // Calculates water lost through evaporation.
     evaporated_volume =
             (fixed_area ? area * evaporation_series.getEvaporation(week) :
              storage_area_curve->get_dependent_variable(available_volume) *
              evaporation_series.getEvaporation(week));
 
-    /// Calculate new stored volume and outflow based on continuity.
+    // Calculate new stored volume and outflow based on continuity.
     double available_volume_new = available_volume
                                   + total_upstream_inflow
                                   + upstream_catchment_inflow
@@ -140,9 +140,9 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                                   - min_environmental_outflow
                                   - evaporated_volume;
 
-    /// Check if spillage is needed and, if so, correct stored volume and
-    /// calculate spillage and set all allocations to full. Otherwise,
-    /// distributed inflows and outflows among respective allocations.
+    // Check if spillage is needed and, if so, correct stored volume and
+    // calculate spillage and set all allocations to full. Otherwise,
+    // distributed inflows and outflows among respective allocations.
     if (available_volume_new > capacity) {
         for (int u : *utilities_with_allocations)
             available_allocated_volumes[u] = this->capacity *
@@ -151,12 +151,12 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
         available_volume = capacity;
     } else {
             available_volume = available_volume_new;
-            /// Water exceeding allocated capacities.
+            // Water exceeding allocated capacities.
             double excess_allocated_water = 0.f;
             double fraction_needing_water = 0.f;
 
-            /// Volume of water that entered the reservoir and stayed until being
-            /// used or released.
+            // Volume of water that entered the reservoir and stayed until being
+            // used or released.
             double net_inflow = upstream_catchment_inflow +
                                 total_upstream_inflow - evaporated_volume;
 
@@ -169,13 +169,13 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                                                               demand_outflow);
             }
 
-            /// Split among utilities any allocated volume exceeding a giver
-            /// utility's maximum allocated capacity.
+            // Split among utilities any allocated volume exceeding a giver
+            // utility's maximum allocated capacity.
             if (overallocation) {
-                /// Calculate combined excess allocation and combined allocation
-                /// fraction.
+                // Calculate combined excess allocation and combined allocation
+                // fraction.
                 for (int u : *utilities_with_allocations) {
-                    /// Calculation of amount exceeding all individual allocations
+                    // Calculation of amount exceeding all individual allocations
                     if (available_allocated_volumes[u] >=
                         allocated_capacities[u]) {
                         excess_allocated_water += available_allocated_volumes[u]
@@ -185,14 +185,14 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                         fraction_needing_water += allocated_fractions[u];
                 }
 
-                /// Redistribute combined excess among utilities based on their
-                /// allocation fractions. If one is exceeded, roll "second order"
-                /// excess down to the next utility.
+                // Redistribute combined excess among utilities based on their
+                // allocation fractions. If one is exceeded, roll "second order"
+                // excess down to the next utility.
                 double rellocation_excess = 0;
                 while (excess_allocated_water > 0 &&
                        fraction_needing_water > 0) {
                     for (int u : *utilities_with_allocations) {
-                        /// Redistribute excess based on allocations fractions.
+                        // Redistribute excess based on allocations fractions.
                         if (available_allocated_volumes[u] <
                             allocated_capacities[u]) {
                             available_allocated_volumes[u] +=
@@ -200,8 +200,8 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                                     (allocated_fractions[u]
                                      / fraction_needing_water);
 
-                            /// Check if redistribution of excesses didn't make an
-                            /// allocation exceed its capacity.
+                            // Check if redistribution of excesses didn't make an
+                            // allocation exceed its capacity.
                             if (available_allocated_volumes[u] >
                                 allocated_capacities[u]) {
                                 rellocation_excess += (
@@ -212,8 +212,8 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                         }
                     }
 
-                    /// If there was too much water added to an allocation,
-                    /// redistribute it.
+                    // If there was too much water added to an allocation,
+                    // redistribute it.
                     excess_allocated_water = rellocation_excess;
                     rellocation_excess = 0;
                     fraction_needing_water = 0;
@@ -224,8 +224,8 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                     }
                 }
 
-                /// If there's still an excess but all allocations are at capacity,
-                /// release the rest as environmental flows.
+                // If there's still an excess but all allocations are at capacity,
+                // release the rest as environmental flows.
                 for (int u : *utilities_with_allocations) {
                     if (available_allocated_volumes[u] >
                         allocated_capacities[u]) {
@@ -239,7 +239,7 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
 
     total_demand += policy_added_demand;
 
-    /// Sanity checking from now on.
+    // Sanity checking from now on.
     double sum_allocations = accumulate(available_allocated_volumes.begin(),
                                         available_allocated_volumes.end(),
                                         0.f);
@@ -263,29 +263,11 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                         "total_upstream_inflow: %f\n"
                         "upstream_catchment_inflow: %f\nevaporation: %f\n"
                         "total_demand: %f\npolicy_added_demand: %f\n"
-                        "total_outflow: %f\ncontinuity error: %f\n"
-                        "demands_0: %f\n"
-                        "demands_1: %f\n"
-                        "demands_2: %f\n"
-                        "demands_3: %f\n"
-                        "alloc_vols_0: %f\n"
-                        "alloc_vols_1: %f\n"
-                        "alloc_vols_2: %f\n"
-                        "alloc_vols_3: %f\n"
-                        "alloc_vols_4: %f\n",
+                        "total_outflow: %f\ncontinuity error: %f\n",
                 week, sum_allocations, available_volume_old, available_volume,
                 total_upstream_inflow, upstream_catchment_inflow,
                 evaporated_volume, total_demand, policy_added_demand,
-                total_outflow, cont_error,
-                demand_outflow[0],
-                demand_outflow[1],
-                demand_outflow[2],
-                demand_outflow[3],
-                available_allocated_volumes[0],
-                available_allocated_volumes[1],
-                available_allocated_volumes[2],
-                available_allocated_volumes[3],
-                available_allocated_volumes[4]);
+                total_outflow, cont_error);
 
 	throw runtime_error(error);
 //        throw_with_nested(runtime_error(error));
@@ -299,29 +281,11 @@ void AllocatedReservoir::applyContinuity(int week, double upstream_source_inflow
                         "total_upstream_inflow: %f\n"
                         "upstream_catchment_inflow: %f\nevaporation: %f\n"
                         "total_demand: %f\npolicy_added_demand: %f\n"
-                        "total_outflow: %f\ncontinuity error: %f\n"
-                        "demands_0: %f\n"
-                        "demands_1: %f\n"
-                        "demands_2: %f\n"
-                        "demands_3: %f\n"
-                        "alloc_vols_0: %f\n"
-                        "alloc_vols_1: %f\n"
-                        "alloc_vols_2: %f\n"
-                        "alloc_vols_3: %f\n"
-                        "alloc_vols_4: %f\n",
+                        "total_outflow: %f\ncontinuity error: %f\n",
                 name, week, sum_allocations, available_volume_old, available_volume,
                 total_upstream_inflow, upstream_catchment_inflow,
                 evaporated_volume, total_demand, policy_added_demand,
-                total_outflow, cont_error,
-                demand_outflow[0],
-                demand_outflow[1],
-                demand_outflow[2],
-                demand_outflow[3],
-                available_allocated_volumes[0],
-                available_allocated_volumes[1],
-                available_allocated_volumes[2],
-                available_allocated_volumes[3],
-                available_allocated_volumes[4]);
+                total_outflow, cont_error);
 
 	throw runtime_error(error);
 //        throw_with_nested(runtime_error(error));
@@ -351,12 +315,12 @@ void AllocatedReservoir::addCapacity(double capacity) {
 void AllocatedReservoir::addTreatmentCapacity(const double added_plant_treatment_capacity, int utility_id) {
     WaterSource::addTreatmentCapacity(added_plant_treatment_capacity, utility_id);
 
-    /// Add capacity to respective treatment allocation.
+    // Add capacity to respective treatment allocation.
     allocated_treatment_capacities[utility_id] +=
             added_plant_treatment_capacity;
 
-    /// Update treatment allocation fractions based on new allocated amounts
-    /// and new total treatment capacity.
+    // Update treatment allocation fractions based on new allocated amounts
+    // and new total treatment capacity.
     for (int i = 0; i < (int) utilities_with_allocations->size(); ++i) {
         allocated_treatment_fractions[i] = allocated_treatment_capacities[i]
                                            / total_treatment_capacity;
@@ -371,13 +335,13 @@ bool AllocatedReservoir::mass_balance_with_wq_pool(double net_inflow,
     double negative_utility_allocation = 0;
     for (int i = 0; i < (int) utilities_with_allocations->size() - 1; ++i) {
         u = (*utilities_with_allocations)[i];
-        /// Split inflows and evaporation among allocations and
-        /// subtract demands.
+        // Split inflows and evaporation among allocations and
+        // subtract demands.
         available_allocated_volumes[u] +=
                 net_inflow * allocated_fractions[u] -
                 demand_outflow[u];
 
-        /// Flag the occurrence of an allocation exceeding its capacity
+        // Flag the occurrence of an allocation exceeding its capacity
         if (!overallocation) {
             overallocation = available_allocated_volumes[u] >
                              allocated_capacities[u];
@@ -393,20 +357,20 @@ bool AllocatedReservoir::mass_balance_with_wq_pool(double net_inflow,
         }
     }
 
-    /// the water quality pool has no demand but provides the
-    /// minimum environmental flows.
+    // the water quality pool has no demand but provides the
+    // minimum environmental flows.
     u = utilities_with_allocations->back();
     available_allocated_volumes[u] +=
             net_inflow * allocated_fractions[u] -
             min_environmental_outflow + negative_utility_allocation;
 
-    /// Flag the occurrence of an allocation exceeding its capacity
+    // Flag the occurrence of an allocation exceeding its capacity
     if (!overallocation) {
         overallocation = available_allocated_volumes[u] >
                          allocated_capacities[u];
     }
 
-    /// Get water from water quality pool for supply. Check continuity for errors.
+    // Get water from water quality pool for supply. Check continuity for errors.
     if (available_allocated_volumes[u] < 0) {
         if (total_outflow + available_allocated_volumes[u] < 0) {
             continuity_error = total_outflow + available_allocated_volumes[u];
@@ -427,13 +391,13 @@ bool AllocatedReservoir::mass_balance_without_wq_pool(double net_inflow,
     bool overallocation = false;
     net_inflow -= min_environmental_outflow;
     for (int u : *utilities_with_allocations) {
-        /// Split inflows, min environmental outflows and evaporation among
-        /// allocations and subtract demands.
+        // Split inflows, min environmental outflows and evaporation among
+        // allocations and subtract demands.
         available_allocated_volumes[u] +=
                 net_inflow * allocated_fractions[u] -
                 demand_outflow[u];
 
-        /// Flag the occurrence of an allocation exceeding its capacity
+        // Flag the occurrence of an allocation exceeding its capacity
         if (!overallocation)
             overallocation = available_allocated_volumes[u] >
                              allocated_capacities[u];
@@ -445,9 +409,9 @@ bool AllocatedReservoir::mass_balance_without_wq_pool(double net_inflow,
 void AllocatedReservoir::setOnline() {
     Reservoir::setOnline();
 
-    /// start empty and gradually fill as inflows start coming in.
+    // start empty and gradually fill as inflows start coming in.
     available_volume = 0;
-    ///set all allocated volumes to zero
+    //set all allocated volumes to zero
     for (int u : *utilities_with_allocations) {
         available_allocated_volumes[u] = 0;
     }

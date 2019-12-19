@@ -289,6 +289,15 @@ int main(int argc, char *argv[]) {
     }
     problem_ptr = &problem;
 
+    vector<vector<double>> solutions;
+    if (strlen(solution_file.c_str()) > 2) {
+        solutions = Utils::parse2DCsvFile(system_io + solution_file);
+        if (standard_solution >= solutions.size())
+            throw invalid_argument("Number of solutions in file <= solution ID.\n");
+    } else {
+        throw invalid_argument("You must specify a solutions file.\n");
+    }
+
     // Set realizations to be run -- otherwise, n_realizations realizations will be run.
     if (!realizations_to_run.empty() && (n_sets <= 0 || n_bs_samples <= 0)) {
         auto realizations_to_run_ul = vector<unsigned long>(realizations_to_run[0].begin(),
@@ -310,15 +319,6 @@ int main(int argc, char *argv[]) {
             (first_solution != -1 && last_solution == -1))
             throw invalid_argument("If you set a first or last solution, you "
                                    "must set the other as well.");
-
-        vector<vector<double>> solutions;
-        if (strlen(solution_file.c_str()) > 2) {
-            solutions = Utils::parse2DCsvFile(system_io + solution_file);
-            if (standard_solution >= solutions.size())
-                throw invalid_argument("Number of solutions in file <= solution ID.\n");
-        } else {
-            throw invalid_argument("You must specify a solutions file.\n");
-        }
 
         // Run model
         if (first_solution == -1) {
