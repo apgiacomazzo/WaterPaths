@@ -228,68 +228,68 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     // CURVAS VOLUME X ÁREA DOS RESERVATÓRIOS
 
-    //Curva do Descoberto - baseado na Nota Técnica n° 58/2016 ADASA (volume útil)
+    //Curva do Descoberto - baseado na Nota Técnica n° 58/2016 ADASA (volume útil em hm³)
     vector<double> descoberto_storage = {0,
-                                         4508000 * table_gen_storage_multiplier,
-                                         9930000 * table_gen_storage_multiplier,
-                                         16269000 *
+                                         4.508 * table_gen_storage_multiplier,
+                                         9.930 * table_gen_storage_multiplier,
+                                         16.269 *
                                          table_gen_storage_multiplier,
-                                         23436000 *
+                                         23.436 *
                                          table_gen_storage_multiplier,
-                                         31282000 *
+                                         31.282 *
                                          table_gen_storage_multiplier,
-                                         40002000 *
+                                         40.002 *
                                          table_gen_storage_multiplier,
-                                         49843000 *
+                                         49.843 *
                                          table_gen_storage_multiplier,
-                                         60988000 *
+                                         60.988 *
                                          table_gen_storage_multiplier,
-                                         73357000 *
+                                         73.357 *
                                          table_gen_storage_multiplier,
-                                         86694000 *
+                                         86.694 *
                                          table_gen_storage_multiplier,
-                                         100862000 *
-                                         table_gen_storage_multiplier}; //dados do volume (m³) do reservatório do Descoberto
-    vector<double> descoberto_area = {4089530, 4948390, 5873730, 6782830,
-                                      7510750, 8218500, 9239830, 10493690,
-                                      11788470, 12901980, 13738240,
-                                      14610720}; //dados da area (m²) do reservatório do Descoberto (correspondente a cada volume acima)
+                                         100.862 *
+                                         table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Descoberto
+    vector<double> descoberto_area = {408.953, 494.839, 587.373, 678.283,
+                                      751.075, 821.850, 923.983, 1049.369,
+                                      1178.847, 1290.198, 1373.824,
+                                      1461.072}; //dados da área (hm²) do reservatório do Descoberto (correspondente a cada volume acima)
 
-    //Curva do Santa Maria - baseado na Nota Técnica n° 58/2016 ADASA (volume útil)
-    vector<double> tortoSM_storage = {0, 3584000 * table_gen_storage_multiplier,
-                                      7507000 * table_gen_storage_multiplier,
-                                      11758000 * table_gen_storage_multiplier,
-                                      16322000 * table_gen_storage_multiplier,
-                                      21228000 * table_gen_storage_multiplier,
-                                      24878000 * table_gen_storage_multiplier,
-                                      32122000 * table_gen_storage_multiplier,
-                                      38122000 * table_gen_storage_multiplier,
-                                      44504000 * table_gen_storage_multiplier,
-                                      51299000 * table_gen_storage_multiplier,
-                                      58507000 * table_gen_storage_multiplier,
-                                      66090000 * table_gen_storage_multiplier,
-                                      73954000 *
-                                      table_gen_storage_multiplier}; //dados do volume (m³) do reservatório de Santa Maria
-    vector<double> tortoSM_area = {3408300, 3753300, 4091800, 4406000, 4726900,
-                                   5084800, 5343800, 5807400, 6191500, 6584500,
-                                   7004000, 7408000, 7746400,
-                                   7931600}; //dados da area (m²) do reservatório de Santa Maria (correspondente a cada volume acima)
+    //Curva do Santa Maria - baseado na Nota Técnica n° 58/2016 ADASA (volume útil em hm³)
+    vector<double> tortoSM_storage = {0, 3.584 * table_gen_storage_multiplier,
+                                      7.507 * table_gen_storage_multiplier,
+                                      11.758 * table_gen_storage_multiplier,
+                                      16.322 * table_gen_storage_multiplier,
+                                      21.228 * table_gen_storage_multiplier,
+                                      24.878 * table_gen_storage_multiplier,
+                                      32.122 * table_gen_storage_multiplier,
+                                      38.122 * table_gen_storage_multiplier,
+                                      44.504 * table_gen_storage_multiplier,
+                                      51.299 * table_gen_storage_multiplier,
+                                      58.507 * table_gen_storage_multiplier,
+                                      66.090 * table_gen_storage_multiplier,
+                                      73.954 * table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório de Santa Maria
+
+    vector<double> tortoSM_area = {340.830, 375.330, 409.180, 440.600, 472.690,
+                                   508.480, 534.380, 580.740, 619.150, 658.450,
+                                   700.400, 740.800, 774.640,
+                                   793.160}; //dados da area (hm²) do reservatório de Santa Maria (correspondente a cada volume acima)
 
     //Curva do Paranoá - baseado na batimetria da CAESB, realizada em 2003 (volume total do lago)
-    vector<double> paranoa_storage = {0, 27773 * table_gen_storage_multiplier,
-                                      325307 * table_gen_storage_multiplier,
-                                      1580840 * table_gen_storage_multiplier,
-                                      7979477 * table_gen_storage_multiplier,
-                                      26169300 * table_gen_storage_multiplier,
-                                      62251080 * table_gen_storage_multiplier,
-                                      118494265 * table_gen_storage_multiplier,
-                                      193662316 * table_gen_storage_multiplier,
-                                      288836784 * table_gen_storage_multiplier,
-                                      460489632 *
-                                      table_gen_storage_multiplier}; //dados do volume (m³) do reservatório do Paranoá
-    vector<double> paranoa_area = {0, 27568, 151539, 816557, 3247850, 7637880,
-                                   13213364, 18746798, 24297885, 30069390,
-                                   38814515}; //dados da area (m²) do reservatório do Paranoá (correspondente a cada volume acima)
+    vector<double> paranoa_storage = {0, 0.0278 * table_gen_storage_multiplier,
+                                      0.325 * table_gen_storage_multiplier,
+                                      1.581 * table_gen_storage_multiplier,
+                                      7.979 * table_gen_storage_multiplier,
+                                      26.169 * table_gen_storage_multiplier,
+                                      62.251 * table_gen_storage_multiplier,
+                                      118.494 * table_gen_storage_multiplier,
+                                      193.662 * table_gen_storage_multiplier,
+                                      288.837 * table_gen_storage_multiplier,
+                                      460.490 * table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Paranoá
+
+    vector<double> paranoa_area = {0, 2.757, 15.154, 81.656, 324.785, 763.788,
+                                   1321.336, 1874.680, 2429.789, 3006.939,
+                                   3881.452}; //dados da area (hm²) do reservatório do Paranoá (correspondente a cada volume acima)
 
 
     DataSeries descoberto_storage_area(&descoberto_storage,
@@ -301,10 +301,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
 
     /// REGRAS RELACIONADAS ÀS VAZÕES REMANESCENTES (RESTRIÇÕES AMBIENTAIS)
-    // Valores de vazão em m³/s
+    // Valores de vazão em hm³/semana
 
     // Vazão remanescente do Descoberto - baseado no artigo de Rocha e Cézar (2015)
-    FixedMinEnvFlowControl descoberto_min_env_control(0, 0.6);
+    FixedMinEnvFlowControl descoberto_min_env_control(0, 0.6e-6 * 3600 * 24 * 7);
 
     // Vazão remanescente do Torto/Santa Maria - não tem, apenas verte a água
     FixedMinEnvFlowControl tortoSM_min_env_control(1, 0);
@@ -312,19 +312,19 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     // Vazão remanescente do Paranoá - baseado na resolução n° 33/2018 da ADASA
     vector<int> paranoa_weeks = {0, 18, 44,
                                  53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> paranoa_releases = {1.2, 0.7,
-                                       1.2}; // mínimo de 0,7 m³/s no período de estiagem e de 1,2 m³/s no período chuvoso
-    SeasonalMinEnvFlowControl paranoa_min_env_control(4, paranoa_weeks,
+    vector<double> paranoa_releases = {(1.2e-6 * 3600 * 24 * 7), (0.7e-6 * 3600 * 24 * 7),
+                                       (1.2e-6 * 3600 * 24 * 7)}; // mínimo de 0,7 m³/s no período de estiagem e de 1,2 m³/s no período chuvoso
+    SeasonalMinEnvFlowControl paranoa_min_env_control(3, paranoa_weeks,
                                                       paranoa_releases);
 
     // Vazão remanescente de Corumbá IV - baseado no EIA da UHE de Corumbá IV
-    FixedMinEnvFlowControl corumba_min_env_control(2, 16.8);
+    FixedMinEnvFlowControl corumba_min_env_control(2, 16.8e-6 * 3600 * 24 * 7);
 
     // Vazão remanescente do Ribeirão Bananal - baseado no gráfico de vazões remanescentes do córrego Bananal no PGIRH/DF (2012)
     vector<int> bananal_weeks = {0, 18, 44,
                                  53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> bananal_releases = {0.5, 0.36, 0.5};
-    SeasonalMinEnvFlowControl bananal_min_env_control(3, bananal_weeks,
+    vector<double> bananal_releases = {(0.5e-6 * 3600 * 24 * 7), (0.36e-6 * 3600 * 24 * 7), (0.5e-6 * 3600 * 24 * 7)};
+    SeasonalMinEnvFlowControl bananal_min_env_control(4, bananal_weeks,
                                                       bananal_releases);
 
     //FixedMinEnvFlowControl captacoes_gama();
@@ -352,37 +352,36 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Reservoir descoberto("Descoberto",//nome do reservatório
                          0,//número de identificação
                          bacia_descoberto,//vetor criado lá em cima - contém as vazões referentes aos afluentes do Descoberto
-                         100862000 *
-                         table_gen_storage_multiplier,//capacidade de armazenamento do reservatório
-                         6.0 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (m³/s)
+                         100.862 * table_gen_storage_multiplier, //capacidade de armazenamento do reservatório (hm³)
+                         6.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (m³/semana)
                          evaporation_descoberto,
                          &descoberto_storage_area);
 
     Reservoir tortoSM("Torto / Santa Maria", 1,
                       bacia_tortoSM,
-                      73954000 * table_gen_storage_multiplier,
-                      2.8 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Brasília (m³/s)
+                      73.954 * table_gen_storage_multiplier, //hm³
+                      2.8e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Brasília (hm³/semana)
                       evaporation_tortoSM,
                       &tortoSM_storage_area);
 
     // Corumbá IV parameters
-    double cIV_supply_caesb_capacity = 12849171 *
+    double cIV_supply_caesb_capacity = 12.849 *
                                        table_gen_storage_multiplier; //valor obtido baseado na proporção das vazões retiradas (conferir arquivo excel)
     double cIV_supply_saneago_capacity =
-            12849171 * table_gen_storage_multiplier;
-    double cIV_energy_capacity = 745701657 * table_gen_storage_multiplier;
-    double cIV_wq_capacity = 2936600000 * table_gen_storage_multiplier;
+            12.849 * table_gen_storage_multiplier;
+    double cIV_energy_capacity = 745.702 * table_gen_storage_multiplier;
+    double cIV_wq_capacity = 2936.6 * table_gen_storage_multiplier;
     double cIV_storage_capacity = cIV_wq_capacity + cIV_energy_capacity +
                                   cIV_supply_saneago_capacity +
                                   cIV_supply_caesb_capacity; //o armazenamento de água total é igual a soma da parte destinada a abastecimento, destinada a energia e e da parte destinada a preservação ambiental
 
     //Curva de Corumbá IV - baseado nos dados do portal da ANA (volume útil)
     vector<double> corumba_storage = {0,
-                                      2936600000 * table_gen_storage_multiplier,
+                                      2936.6 * table_gen_storage_multiplier, //hm³
                                       cIV_storage_capacity *
                                       table_gen_storage_multiplier}; //só obtive esses dados
-    vector<double> corumba_area = {0, 137120000,
-                                   173300000}; //só obtive esses dados
+    vector<double> corumba_area = {0, 13712.0, //hm²
+                                   17330.0}; //só obtive esses dados
     DataSeries corumba_storage_area(&corumba_storage, &corumba_area);
 
     vector<int> cIV_allocations_ids = {0,
@@ -399,7 +398,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                bacia_corumba,
                                cIV_storage_capacity *
                                table_gen_storage_multiplier,
-                               1.4 * 3600 * 24 * 7, //capacidade de tratamento da ETA Corumbá atualmente (1.4 m³/s)
+                               1.4e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Corumbá atualmente (1.4 hm³/semana)
                                evaporation_corumba,
                                &corumba_storage_area,
                                &cIV_allocations_ids,
@@ -407,10 +406,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                &cIV_treatment_allocation_fractions);
 
     /// Lago Paranoá parameters
-    double lp_supply_capacity = 36965656 *
-                                table_gen_storage_multiplier; //volume destinado a abastecimento em m³
-    double lp_wq_capacity = 423523976 *
-                            table_gen_storage_multiplier; //volume destinado a qualidade da água do lago em m³
+    double lp_supply_capacity = 36.966 *
+                                table_gen_storage_multiplier; //volume destinado a abastecimento em hm³
+    double lp_wq_capacity = 423.524 *
+                            table_gen_storage_multiplier; //volume destinado a qualidade da água do lago em hm³
     double lp_storage_capacity = lp_wq_capacity + lp_supply_capacity;
     vector<int> lp_allocations_ids = {1,
                                       WATER_QUALITY_ALLOCATION}; //1 é a id da companhia do TortoSM
@@ -423,7 +422,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     AllocatedReservoir paranoa("Lago Paranoa", 3,
                                bacia_paranoa,
                                lp_storage_capacity,
-                               0.7 * 3600 * 24 * 7, //capacidade de tratamento da ETA Lago Norte atual = 0,7 m³/s
+                               0.7e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Lago Norte atual = 0,7 hm³/semana
                                evaporation_paranoa,
                                &paranoa_storage_area,
                                &lp_allocations_ids,
@@ -431,9 +430,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                &lp_treatment_allocation_fractions);
 
     Intake ribeirao_bananal("Captacao no Ribeirao Bananal",
-                            4, //Obs: a série de vazão utilizada referente ao Bananal
-                            subsistema_bananal,                             //foi retirada de uma estação fluviométrica localizada
-                            0.73 * 3600 * 24 * 7); // 0,73 m³/s         //a justante do ponto de captação. Não há problema, pois a captação começou apenas ao final de 2017, então a série é basicamente composta pela vazão natural do ribeirão.
+                            4,                                                          //Obs: a série de vazão utilizada referente ao Bananal
+                            subsistema_bananal,                                             //foi retirada de uma estação fluviométrica localizada
+                            0.73e-6 * 3600 * 24 * 7); // 0,73 hm³/semana   //a justante do ponto de captação. Não há problema,
+                                                                                            // pois a captação começou apenas ao final de 2017,
+                                                                                            // então a série é basicamente composta pela vazão natural do ribeirão.
 
     LevelDebtServiceBond dummy_bond(5, 1., 1, 1., vector<int>(1, 0));
     Reservoir dummy_endpoint("Dummy Node", 5, vector<Catchment *>(), 1., 0,
@@ -454,8 +455,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                                                             0)); //Elevação do nível d'água da barragem do descoberto (aumento da capacidade de armazenamento em 25%)
     ReservoirExpansion descoberto_expansion(
             "Expansao da capacidade de armazenamento do Descoberto", 11, 0,
-            25215500,
-            construction_time_interval, //25215500 = aumento em m³ da capacidade de armazenamento do Descoberto
+            25.216,
+            construction_time_interval, //25.2155 = aumento em hm³ da capacidade de armazenamento do Descoberto
             0 * WEEKS_IN_YEAR,
             descoberto_exp_bond); //previsão: 2022 //acréscimo de 0.4 m³/s na vazão captável (PDSB, 2017).
 
@@ -474,9 +475,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     /// Expansão da ETA Corumbá (Sistema Corumbá)
 
     vector<double> capacity_ETA_corumba_upgrade_1 = {
-            1.4 * 3600 * 24 * 7}; //ampliação da capacidade de produção (+ 1,4 m³/s)
+            1.4e-6 * 3600 * 24 * 7}; //ampliação da capacidade de produção (+ 1,4 m³/s). A unidade está em hm³/semana
     vector<double> capacity_ETA_corumba_upgrade_2 = {
-            1.2 * 3600 * 24 * 7}; //ampliação da capacidade de produção (+ 1,2 m³/s)
+            1.2e-6 * 3600 * 24 * 7}; //ampliação da capacidade de produção (+ 1,2 m³/s)
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa2(
             "Etapa 2 de Corumba IV", 6, 2, 0, {6, 7},
@@ -495,19 +496,20 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     // ampliação da ETA Lago Norte (upgrade 1, com + 0.35 m³/s))
 
     vector<double> capacities_ETA_paranoaSul_upgrade_1 = {0,
-                                                          0.7 * 3600 * 24 * 7}; //capacidade de produção da ETA paranoá Sul na sua etapa 1 = 0.7 m³/s
+                                                          0.7e-6 * 3600 * 24 * 7}; //capacidade de produção da ETA paranoá Sul na sua etapa 1 = 0.7 m³/s
+                                                          //unidade em hm³/semana
 
     vector<double> cost_ETA_paranoaSul_upgrade_1 = {0,
                                                     60}; //custo do upgrade 1 da ETA Paranoá Sul = 60 milhões
 
     vector<double> capacities_ETA_paranoaSul_upgrade_2 = {0,
-                                                          0.7 * 3600 * 24 * 7}; //aumento da capacidade de produção da ETA Paranoá Sul na sua etapa 2 = 0.7 m³/s
+                                                          0.7e-6 * 3600 * 24 * 7}; //aumento da capacidade de produção da ETA Paranoá Sul na sua etapa 2 = 0.7 m³/s
 
     vector<double> cost_ETA_paranoaSul_upgrade_2 = {0,
                                                     60}; //custo do upgrade 2 da ETA Paranoá Sul = 60 milhões
 
     vector<double> capacities_ETA_paranoaSul_upgrade_3 = {0,
-                                                          0.7 * 3600 * 24 * 7}; // aumento da capacidade de produção da ETA paranoá Sul na sua etapa 3 = 0.350 m³/s
+                                                          0.7e-6 * 3600 * 24 * 7}; // aumento da capacidade de produção da ETA paranoá Sul na sua etapa 3 = 0.350 m³/s
 
     vector<double> cost_ETA_paranoaSul_upgrade_3 = {0,
                                                     60}; //custo do upgrade 3 da ETA Paranoá Sul = 60 milhões
@@ -720,7 +722,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     transfer_graph_tortoSM_descoberto.addEdge(1,
                                               0); // Água do tortoSM para o Descoberto
     Transfers transfer_tortoSM_descoberto(0, 1, 1, 0.1, {0},
-                                          {0.7},
+                                          {0.7e-6 * 3600 * 24 * 7}, //hm³/semana
                                           {caesb_descoberto_transfer_trigger}, //TortoSM transfere até 0.7 m³/s para o Descoberto
                                           transfer_graph_tortoSM_descoberto,
                                           vector<double>(), vector<int>());
@@ -729,7 +731,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     transfer_graph_descoberto_tortoSM.addEdge(0,
                                               1); // Água do tortoSM para o Descoberto
     Transfers transfer_descoberto_tortoSM(1, 0, 0, 0.1, {1},
-                                          {0.5},
+                                          {0.5e-6 * 3600 * 24 * 7},
                                           {caesb_tortoSM_transfer_trigger}, //Descoberto transfere até 0.5 m³/s para o TortoSM
                                           transfer_graph_descoberto_tortoSM,
                                           vector<double>(), vector<int>());
