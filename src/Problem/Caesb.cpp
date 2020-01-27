@@ -232,24 +232,15 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<double> descoberto_storage = {0,
                                          4.508 * table_gen_storage_multiplier,
                                          9.930 * table_gen_storage_multiplier,
-                                         16.269 *
-                                         table_gen_storage_multiplier,
-                                         23.436 *
-                                         table_gen_storage_multiplier,
-                                         31.282 *
-                                         table_gen_storage_multiplier,
-                                         40.002 *
-                                         table_gen_storage_multiplier,
-                                         49.843 *
-                                         table_gen_storage_multiplier,
-                                         60.988 *
-                                         table_gen_storage_multiplier,
-                                         73.357 *
-                                         table_gen_storage_multiplier,
-                                         86.694 *
-                                         table_gen_storage_multiplier,
-                                         100.862 *
-                                         table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Descoberto
+                                         16.269 * table_gen_storage_multiplier,
+                                         23.436 * table_gen_storage_multiplier,
+                                         31.282 * table_gen_storage_multiplier,
+                                         40.002 * table_gen_storage_multiplier,
+                                         49.843 * table_gen_storage_multiplier,
+                                         60.988 * table_gen_storage_multiplier,
+                                         73.357 * table_gen_storage_multiplier,
+                                         86.694 * table_gen_storage_multiplier,
+                                         100.862 * table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Descoberto
     vector<double> descoberto_area = {408.953, 494.839, 587.373, 678.283,
                                       751.075, 821.850, 923.983, 1049.369,
                                       1178.847, 1290.198, 1373.824,
@@ -331,7 +322,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<MinEnvFlowControl *> min_env_flow_controls; //criação do vetor min_env_flow_controls
     min_env_flow_controls.push_back(
-            &descoberto_min_env_control); //todos esses elementos (durham, falls, wheeler e etc) estão sendo jogados para dentro do vetor min_env_flow_controls
+            &descoberto_min_env_control); //todos esses elementos (tortoSM, paranoa..) estão sendo jogados para dentro do vetor min_env_flow_controls
     min_env_flow_controls.push_back(&tortoSM_min_env_control);
     min_env_flow_controls.push_back(&paranoa_min_env_control);
     min_env_flow_controls.push_back(&corumba_min_env_control);
@@ -353,7 +344,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                          0,//número de identificação
                          bacia_descoberto,//vetor criado lá em cima - contém as vazões referentes aos afluentes do Descoberto
                          100.862 * table_gen_storage_multiplier, //capacidade de armazenamento do reservatório (hm³)
-                         6.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (m³/semana)
+                         6.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana)
                          evaporation_descoberto,
                          &descoberto_storage_area);
 
@@ -367,13 +358,13 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     // Corumbá IV parameters
     double cIV_supply_caesb_capacity = 12.849 *
                                        table_gen_storage_multiplier; //valor obtido baseado na proporção das vazões retiradas (conferir arquivo excel)
-    double cIV_supply_saneago_capacity =
-            12.849 * table_gen_storage_multiplier;
+    double cIV_supply_saneago_capacity = 12.849 * table_gen_storage_multiplier;
     double cIV_energy_capacity = 745.702 * table_gen_storage_multiplier;
     double cIV_wq_capacity = 2936.6 * table_gen_storage_multiplier;
     double cIV_storage_capacity = cIV_wq_capacity + cIV_energy_capacity +
                                   cIV_supply_saneago_capacity +
-                                  cIV_supply_caesb_capacity; //o armazenamento de água total é igual a soma da parte destinada a abastecimento, destinada a energia e e da parte destinada a preservação ambiental
+                                  cIV_supply_caesb_capacity; //o armazenamento de água total é igual a soma da parte destinada a abastecimento,
+                                                            // destinada a energia e da parte destinada a preservação ambiental
 
     //Curva de Corumbá IV - baseado nos dados do portal da ANA (volume útil)
     vector<double> corumba_storage = {0,
@@ -390,8 +381,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             cIV_supply_caesb_capacity / cIV_storage_capacity,
             (cIV_wq_capacity + cIV_supply_saneago_capacity +
              cIV_energy_capacity) / cIV_storage_capacity};
-    vector<double> cIV_treatment_allocation_fractions = {
-            1.0};  //A companhia descoberto trata água do Corumbá IV. A companhia TortoSM não trata nada.
+    vector<double> cIV_treatment_allocation_fractions = {1.0};  //A companhia descoberto trata água do Corumbá IV. A companhia TortoSM não trata nada.
 
     AllocatedReservoir corumba("Corumba IV",
                                2, //colocar como alocated reservoir
@@ -416,13 +406,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<double> lp_allocation_fractions = {
             lp_supply_capacity / lp_storage_capacity,
             lp_wq_capacity / lp_storage_capacity};
-    vector<double> lp_treatment_allocation_fractions = {
-            1.0}; //A companhia descoberto não trata nenhuma água do Lago Paranoá. A companhia TortoSM trata.
+    vector<double> lp_treatment_allocation_fractions = {1.0}; //A companhia descoberto não trata nenhuma água do Lago Paranoá. A companhia TortoSM trata.
 
     AllocatedReservoir paranoa("Lago Paranoa", 3,
                                bacia_paranoa,
                                lp_storage_capacity,
-                               0.7e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Lago Norte atual = 0,7 hm³/semana
+                               0.7e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Lago Norte atual (hm³/semana)
                                evaporation_paranoa,
                                &paranoa_storage_area,
                                &lp_allocations_ids,
@@ -432,7 +421,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Intake ribeirao_bananal("Captacao no Ribeirao Bananal",
                             4,                                                          //Obs: a série de vazão utilizada referente ao Bananal
                             subsistema_bananal,                                             //foi retirada de uma estação fluviométrica localizada
-                            0.73e-6 * 3600 * 24 * 7); // 0,73 hm³/semana   //a justante do ponto de captação. Não há problema,
+                            0.73e-6 * 3600 * 24 * 7); // hm³/semana    //a justante do ponto de captação. Não há problema,
                                                                                             // pois a captação começou apenas ao final de 2017,
                                                                                             // então a série é basicamente composta pela vazão natural do ribeirão.
 
@@ -449,14 +438,18 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     // and a high expansion will provide 7.7BG more water than current. if small expansion happens, followed by a large
     // expansion, the maximum capacity through expansion is 7.7BG, NOT 2.5BG + 7.7BG.
 
-    //OBS: os custos estão em unidade de milhão. - Assumiu-se que todas as infraestruturas já tinham licença para serem construídas (permitting period = 0)
+    //OBS: Assumiu-se que todas as infraestruturas já tinham licença para serem construídas (permitting period = 0)
+    /* Tipos de empréstimos definidos no WaterPaths:
+        - Level Debt Service
+        - Ballon Payment
+        - Variable-Interest Bonds */
 
-    LevelDebtServiceBond descoberto_exp_bond(11, 7.5, 25, 0.05, vector<int>(1,
+    LevelDebtServiceBond descoberto_exp_bond(11, 7500000, 25, 0.05, vector<int>(1,
                                                                             0)); //Elevação do nível d'água da barragem do descoberto (aumento da capacidade de armazenamento em 25%)
     ReservoirExpansion descoberto_expansion(
             "Expansao da capacidade de armazenamento do Descoberto", 11, 0,
-            25.216,
-            construction_time_interval, //25.2155 = aumento em hm³ da capacidade de armazenamento do Descoberto
+            25.216, //25.216 = aumento em hm³ da capacidade de armazenamento do Descoberto (25%)
+            construction_time_interval,
             0 * WEEKS_IN_YEAR,
             descoberto_exp_bond); //previsão: 2022 //acréscimo de 0.4 m³/s na vazão captável (PDSB, 2017).
 
@@ -464,11 +457,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<Bond *> debendure_expansao_ETA_corumba_1 = {
             new BalloonPaymentBond(11, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(6, 220.844, 25, 0.05,
+            new LevelDebtServiceBond(6, 220844000, 25, 0.05,
                                      vector<int>(1, 0))}; //alterar 25, 0.05
     vector<Bond *> debendure_expansao_ETA_corumba_2 = {
             new BalloonPaymentBond(12, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(7, 250, 25, 0.05,
+            new LevelDebtServiceBond(7, 250000000, 25, 0.05,
                                      vector<int>(1, 0))}; //alterar 25, 0.05
 
 
@@ -493,39 +486,40 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
 
     //Sistema Paranoá - Construção da ETA Paranoá Sul (0.7 m³/s), sua primeira ampliação (upgrade 2, com + 0.7 m³/s), segunda ampliação (upgrade 3, com + 0.35 m³/s) e
-    // ampliação da ETA Lago Norte (upgrade 1, com + 0.35 m³/s))
+    // ampliação da ETA Lago Norte (upgrade 3, com + 0.35 m³/s))
 
     vector<double> capacities_ETA_paranoaSul_upgrade_1 = {0,
                                                           0.7e-6 * 3600 * 24 * 7}; //capacidade de produção da ETA paranoá Sul na sua etapa 1 = 0.7 m³/s
                                                           //unidade em hm³/semana
 
     vector<double> cost_ETA_paranoaSul_upgrade_1 = {0,
-                                                    60}; //custo do upgrade 1 da ETA Paranoá Sul = 60 milhões
+                                                    60000000}; //custo do upgrade 1 da ETA Paranoá Sul = 60 milhões
 
     vector<double> capacities_ETA_paranoaSul_upgrade_2 = {0,
                                                           0.7e-6 * 3600 * 24 * 7}; //aumento da capacidade de produção da ETA Paranoá Sul na sua etapa 2 = 0.7 m³/s
 
     vector<double> cost_ETA_paranoaSul_upgrade_2 = {0,
-                                                    60}; //custo do upgrade 2 da ETA Paranoá Sul = 60 milhões
+                                                    60000000}; //custo do upgrade 2 da ETA Paranoá Sul = 60 milhões
 
-    vector<double> capacities_ETA_paranoaSul_upgrade_3 = {0,
+    vector<double> capacities_ETAs_paranoa_upgrade_3 = {0,
                                                           0.7e-6 * 3600 * 24 * 7}; // aumento da capacidade de produção da ETA paranoá Sul na sua etapa 3 = 0.350 m³/s
+                                                                                    // + ampliação da ETA paranoá Norte em 0.350 m³/s
 
-    vector<double> cost_ETA_paranoaSul_upgrade_3 = {0,
-                                                    60}; //custo do upgrade 3 da ETA Paranoá Sul = 60 milhões
+    vector<double> cost_ETAs_paranoa_upgrade_3 = {0,
+                                                    60000000}; //custo do upgrade 3 da ETA Paranoá Sul e ETA Paranoá Norte = 60 milhões
 
 
-    /// Empréstimos para a implantação e ampliação da ETA Paranoá Sul
+    /// Empréstimos para a implantação e ampliação da ETA Paranoá Sul e Norte (Norte: apenas upgrade 3)
 
     vector<Bond *> debendure_expansao_ETA_paranoa_1 = {
             new BalloonPaymentBond(13, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(8, 60, 25, 0.05, vector<int>(1, 0))};
+            new LevelDebtServiceBond(8, 60000000, 25, 0.05, vector<int>(1, 0))}; //bond term = 25 anos
     vector<Bond *> debendure_expansao_ETA_paranoa_2 = {
             new BalloonPaymentBond(14, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(9, 60, 25, 0.05, vector<int>(1, 0))};
+            new LevelDebtServiceBond(9, 60000000, 25, 0.05, vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_paranoa_3 = {
             new BalloonPaymentBond(15, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(10, 60, 25, 0.05, vector<int>(1, 0))};
+            new LevelDebtServiceBond(10, 60000000, 25, 0.05, vector<int>(1, 0))};
 
     // ETA Paranoá Sul (Sistema Paranoá)
 
@@ -541,13 +535,14 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             debendure_expansao_ETA_paranoa_2, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2022
 
-    SequentialJointTreatmentExpansion etapa3_ETA_paranoaSul(
-            "Etapa 3 da ETA Paranoa Sul", 10, 3, 2, {8, 9, 10},
-            capacities_ETA_paranoaSul_upgrade_3,
+    SequentialJointTreatmentExpansion etapa3_ETAs_paranoa(
+            "Etapa 3 da ETA Paranoa Sul e Norte", 10, 3, 2, {8, 9, 10},
+            capacities_ETAs_paranoa_upgrade_3,
             debendure_expansao_ETA_paranoa_3, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2034 a 2037
 
-    vector<WaterSource *> water_sources; //water_sources é um vetor comum, que comportará todas as opções descritas acima de ampliação da infraestrutura de abastecimento
+    vector<WaterSource *> water_sources; //water_sources é um vetor comum, que comportará todas as
+                                        // opções descritas acima de ampliação da infraestrutura de abastecimento
     water_sources.push_back(&descoberto);
     water_sources.push_back(&tortoSM);
     water_sources.push_back(&corumba);
@@ -560,7 +555,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     water_sources.push_back(&ETA_corumba_etapa3);
     water_sources.push_back(&etapa1_ETA_paranoaSul);
     water_sources.push_back(&etapa2_ETA_paranoaSul);
-    water_sources.push_back(&etapa3_ETA_paranoaSul);
+    water_sources.push_back(&etapa3_ETAs_paranoa);
 
     water_sources.push_back(&dummy_endpoint);
 
@@ -594,7 +589,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      *
      */
 
-    Graph g(6); //graph é uma forma de estruturar dados que consiste em dois componentes: um conjunto finito de vértices denominado de nós; e um cojunto finito de pares ordenados (x,y), denominados de edges.
+    Graph g(6); //graph é uma forma de estruturar dados que consiste em dois componentes:
+                    // um conjunto finito de vértices denominado de nós; e um cojunto finito de pares ordenados (x,y), denominados de edges.
     g.addEdge(0,
               2); //essa conexão indica que existe uma aresta do vértice 0 ao vértice 2.
     g.addEdge(2, 5);
@@ -603,7 +599,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     g.addEdge(4, 5);
 
     auto demand_n_weeks = (int) std::round(40 *
-                                           WEEKS_IN_YEAR); //40 é o número de anos a serem simulados. A fç auto serve para declarar variáveis cujo tipo vai ser inferido pelo compilador a partir da inicialização delas
+                                           WEEKS_IN_YEAR); //40 é o número de anos a serem simulados. A fç auto serve para
+                                                            // declarar variáveis cujo tipo vai ser inferido pelo compilador a partir da inicialização delas
 
     // Criação dos vetores de vazão de retorno, relacionada aos efluentes lançados em corpos hídricos utilizados também para abastecimento urbano.
 
@@ -615,43 +612,44 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<int> caesb_tortoSM_ws_return_id = {
             3}; //ID do reservatório onde o efluente será lançado (montante desse reservatório) - 3 (ID do Paranoá)
-    WwtpDischargeRule wwtp_discharge_caesb_tortoSM( //em demand_to_waste_water_fraction, deve-se colocar a % de agua tratada (que sai da ETA - demanda) que vai voltar como vazão efluente para cada corpo receptor
-            demand_to_wastewater_fraction_caesb_tortoSM, // n° de séries (de demanda de vazão efluente) correspondentes ao n° de reservatórios onde os efluentes são lançados. Obs: se no meu estudo de caso, apenas o Paranoá for receptor, esse arquivo csv terá uma linha e 53 colunas (vazão efluente de cada semana)
+    WwtpDischargeRule wwtp_discharge_caesb_tortoSM(
+            demand_to_wastewater_fraction_caesb_tortoSM,
             caesb_tortoSM_ws_return_id); // id de cada reservatório/corpo receptor de efluente
+
+    //Criação das companhias de água. A descrição de cada termo está no arquivo .doc.
 
     Utility caesb_descoberto((char *) "CAESB Descoberto", 0,
                              demand_caesb_descoberto, demand_n_weeks,
-                             caesb_descoberto_annual_payment, //criação das companhias de água. A descrição de cada termo está no arquivo .doc.
+                             caesb_descoberto_annual_payment,
                              caesbDescobertoDemandClassesFractions,
                              caesbUserClassesWaterPrices,
                              wwtp_discharge_caesb_descoberto,
                              caesb_descoberto_inf_buffer,
                              rof_triggered_infra_order_caesb_descoberto,
-                             vector<int>(), rofs_infra_caesb_descoberto, 0.07,
+                             vector<int>(), rofs_infra_caesb_descoberto, 0.07, //taxa de desconto
                              25, 0.05);
 
     Utility caesb_tortoSM((char *) "CAESB Torto/Santa Maria", 1,
                           demand_caesb_tortoSM, demand_n_weeks,
-                          caesb_tortoSM_annual_payment, //criação das companhias de água. A descrição de cada termo está no arquivo .doc.
+                          caesb_tortoSM_annual_payment,
                           caesbTortoSMDemandClassesFractions,
                           caesbUserClassesWaterPrices,
                           wwtp_discharge_caesb_tortoSM,
                           caesb_tortoSM_inf_buffer,
                           rof_triggered_infra_order_caesb_tortoSM,
-                          vector<int>(), rofs_infra_caesb_tortoSM, 0.07, 25,
+                          vector<int>(), rofs_infra_caesb_tortoSM, 0.07, 25,  //0.07 = taxa de desconto
                           0.05);
 
 
     vector<Utility *> utilities; //vetor que junta as companhias criadas acima
     utilities.push_back(&caesb_descoberto);
     utilities.push_back(&caesb_tortoSM);
-    utilities[5];
 
     /// Water-source-utility connectivity matrix (each row corresponds to a utility and numbers are water
     /// sources IDs.
     vector<vector<int>> reservoir_utility_connectivity_matrix = {
             {0, 2, 11, 6, 7},  //CAESB Descoberto
-            {1, 3, 4,  8, 9, 10}  //CAESB Torto/Santa Maria
+            {1, 3, 4, 8, 9, 10}  //CAESB Torto/Santa Maria
     };
 
 //    @TODO: verificar se há necessidade de corrigir volumes de reservatórios construídos.
@@ -676,7 +674,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     //variáveis de decisão que representam os gatilhos para acionar o racionamento em cada companhia
 
     vector<double> restriction_stage_multipliers_caesb_descoberto = {0.98, 0.94,
-                                                                     0.86}; //São 3 estágios de racionamento. Os fatores 0.98, 0.96, 0.88 são as restrições da demanda. 0.98 significa que a demanda será restringida em 2% e assim por diante.
+                                                                     0.86}; //São 3 estágios de racionamento. Os fatores 0.98, 0.96, 0.88 são as restrições da demanda.
+                                                                            // 0.98 significa que a demanda será restringida em 2% e assim por diante.
     vector<double> restriction_stage_triggers_caesb_descoberto = {
             caesb_descoberto_restriction_trigger, //estágio 1 - 2% de redução (campanha de conscientização)
             caesb_descoberto_restriction_trigger +
@@ -686,10 +685,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     //Obs: o 1° estágio corresponde à campanha, o 2° à tarifa de contingência e o 3° ao racionamento.
     //Acumulou-se a campanha com os outros dois estágios.
     //Como a tarifa de contingência é uma medida bastante penosa, bem como o racionamento,
-    //optou-se por não acumular com o terceiro estágio.
+    //optou-se por não acumular ambas medidas.
 
     vector<double> restriction_stage_multipliers_caesb_tortoSM = {0.98, 0.94,
-                                                                  0.86}; //São 3 estágios de racionamento. Os fatores 0.98, 0.96, 0.88 são as restrições da demanda. 0.98 significa que a demanda será restringida em 2% e assim por diante.
+                                                                  0.86};
+
     vector<double> restriction_stage_triggers_caesb_tortoSM = {
             caesb_tortoSM_restriction_trigger, //estágio 1
             caesb_tortoSM_restriction_trigger +
@@ -697,24 +697,23 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             caesb_tortoSM_restriction_trigger +
             2 * delta_tortoSM_restriction_trigger}; //estágio 3
 
+    // Criação das políticas de restrição de uso da água (puxa o código Restrictions.h, que contém os comandos dessa política)
 
-    Restrictions restrictions_d(
-            0, // Criação das políticas de restrição de uso da água (puxa o código Restrictions.h, que contém os comandos dessa política)
+    Restrictions restrictions_descoberto(0,
             restriction_stage_multipliers_caesb_descoberto,
             restriction_stage_triggers_caesb_descoberto,
             &caesbDescobertoDemandClassesFractions,
             &caesbUserClassesWaterPrices,
             &caesbPriceRestrictionMultipliers);
 
-    Restrictions restrictions_t(
-            1, // Criação das políticas de restrição de uso da água (puxa o código Restrictions.h, que contém os comandos dessa política)
+    Restrictions restrictions_tortoSM(1,
             restriction_stage_multipliers_caesb_tortoSM,
             restriction_stage_triggers_caesb_tortoSM,
             &caesbTortoSMDemandClassesFractions,
             &caesbUserClassesWaterPrices,
             &caesbPriceRestrictionMultipliers);
 
-    drought_mitigation_policies = {&restrictions_d, &restrictions_t};
+    drought_mitigation_policies = {&restrictions_descoberto, &restrictions_tortoSM};
 
     // POLÍTICA DE TRANSFERÊNCIA
 
@@ -729,7 +728,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     Graph transfer_graph_descoberto_tortoSM(2);
     transfer_graph_descoberto_tortoSM.addEdge(0,
-                                              1); // Água do tortoSM para o Descoberto
+                                              1); // Água do Descoberto para o TortoSM
     Transfers transfer_descoberto_tortoSM(1, 0, 0, 0.1, {1},
                                           {0.5e-6 * 3600 * 24 * 7},
                                           {caesb_tortoSM_transfer_trigger}, //Descoberto transfere até 0.5 m³/s para o TortoSM
@@ -824,7 +823,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 int Caesb::simulationExceptionHander(const std::exception &e,
                                      Simulation *s, // :: significa "resolução de escopo"
                                      double *objs, const double *vars) {
-    int num_dec_var = 18; //número de variáveis desse estudo de caso - alterar para o valor do meu estudo
+    int num_dec_var = 18; //número de variáveis desse estudo de caso
 //        printf("Exception called during calculations. Decision variables are below:\n");
     ofstream sol;
     int world_rank;
