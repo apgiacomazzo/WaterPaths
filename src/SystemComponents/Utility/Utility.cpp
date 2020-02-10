@@ -842,3 +842,7 @@ const InfrastructureManager &Utility::getInfrastructure_construction_manager() c
 double Utility::getDemand_offset() const {
     return demand_offset;
 }
+
+double Utility::getInfraDiscountRate() const {
+    return infra_discount_rate;
+}
