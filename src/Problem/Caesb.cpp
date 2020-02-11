@@ -444,7 +444,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
         - Ballon Payment
         - Variable-Interest Bonds */
 
-    LevelDebtServiceBond descoberto_exp_bond(11, 7500000, 25, 0.05, vector<int>(1,
+    LevelDebtServiceBond descoberto_exp_bond(11, 7541502, 20, 0.07, vector<int>(1,
                                                                             0)); //Elevação do nível d'água da barragem do descoberto (aumento da capacidade de armazenamento em 25%)
     ReservoirExpansion descoberto_expansion(
             "Expansao da capacidade de armazenamento do Descoberto", 11, 0,
@@ -456,12 +456,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     //Empréstimo para Expansão da ETA Corumbá (Sistema Corumbá)
 
     vector<Bond *> debendure_expansao_ETA_corumba_1 = {
-            new BalloonPaymentBond(11, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(6, 220844000, 25, 0.05,
+            new BalloonPaymentBond(11, 0, 20, 0.07, vector<int>(1, 0)),
+            new LevelDebtServiceBond(6, 222066142.8, 20, 0.07,
                                      vector<int>(1, 0))}; //alterar 25, 0.05
     vector<Bond *> debendure_expansao_ETA_corumba_2 = {
-            new BalloonPaymentBond(12, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(7, 250000000, 25, 0.05,
+            new BalloonPaymentBond(12, 0, 20, 0.07, vector<int>(1, 0)),
+            new LevelDebtServiceBond(7, 251383400, 20, 0.07,
                                      vector<int>(1, 0))}; //alterar 25, 0.05
 
 
@@ -493,33 +493,33 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                                           //unidade em hm³/semana
 
     vector<double> cost_ETA_paranoaSul_upgrade_1 = {0,
-                                                    60000000}; //custo do upgrade 1 da ETA Paranoá Sul = 60 milhões
+                                                    60332016}; //custo do upgrade 1 da ETA Paranoá Sul = 60 milhões
 
     vector<double> capacities_ETA_paranoaSul_upgrade_2 = {0,
                                                           0.7e-6 * 3600 * 24 * 7}; //aumento da capacidade de produção da ETA Paranoá Sul na sua etapa 2 = 0.7 m³/s
 
     vector<double> cost_ETA_paranoaSul_upgrade_2 = {0,
-                                                    60000000}; //custo do upgrade 2 da ETA Paranoá Sul = 60 milhões
+                                                    60332016}; //custo do upgrade 2 da ETA Paranoá Sul = 60 milhões
 
     vector<double> capacities_ETAs_paranoa_upgrade_3 = {0,
                                                           0.7e-6 * 3600 * 24 * 7}; // aumento da capacidade de produção da ETA paranoá Sul na sua etapa 3 = 0.350 m³/s
                                                                                     // + ampliação da ETA paranoá Norte em 0.350 m³/s
 
     vector<double> cost_ETAs_paranoa_upgrade_3 = {0,
-                                                    60000000}; //custo do upgrade 3 da ETA Paranoá Sul e ETA Paranoá Norte = 60 milhões
+                                                    60332016}; //custo do upgrade 3 da ETA Paranoá Sul e ETA Paranoá Norte = 60 milhões
 
 
     /// Empréstimos para a implantação e ampliação da ETA Paranoá Sul e Norte (Norte: apenas upgrade 3)
 
     vector<Bond *> debendure_expansao_ETA_paranoa_1 = {
-            new BalloonPaymentBond(13, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(8, 60000000, 25, 0.05, vector<int>(1, 0))}; //bond term = 25 anos
+            new BalloonPaymentBond(13, 0, 20, 0.07, vector<int>(1, 0)),
+            new LevelDebtServiceBond(8, 60332016, 20, 0.07, vector<int>(1, 0))}; //bond term = 25 anos
     vector<Bond *> debendure_expansao_ETA_paranoa_2 = {
-            new BalloonPaymentBond(14, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(9, 60000000, 25, 0.05, vector<int>(1, 0))};
+            new BalloonPaymentBond(14, 0, 20, 0.07, vector<int>(1, 0)),
+            new LevelDebtServiceBond(9, 60332016, 20, 0.07, vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_paranoa_3 = {
-            new BalloonPaymentBond(15, 0, 25, 0.05, vector<int>(1, 0)),
-            new LevelDebtServiceBond(10, 60000000, 25, 0.05, vector<int>(1, 0))};
+            new BalloonPaymentBond(15, 0, 20, 0.07, vector<int>(1, 0)),
+            new LevelDebtServiceBond(10, 60332016, 20, 0.07, vector<int>(1, 0))};
 
     // ETA Paranoá Sul (Sistema Paranoá)
 
@@ -626,8 +626,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                              wwtp_discharge_caesb_descoberto,
                              caesb_descoberto_inf_buffer,
                              rof_triggered_infra_order_caesb_descoberto,
-                             vector<int>(), rofs_infra_caesb_descoberto, 0.07, //taxa de desconto
-                             25, 0.05);
+                             vector<int>(), rofs_infra_caesb_descoberto, 0.04, //taxa de desconto
+                             20, 0.07);
 
     Utility caesb_tortoSM((char *) "CAESB Torto/Santa Maria", 1,
                           demand_caesb_tortoSM, demand_n_weeks,
@@ -637,8 +637,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                           wwtp_discharge_caesb_tortoSM,
                           caesb_tortoSM_inf_buffer,
                           rof_triggered_infra_order_caesb_tortoSM,
-                          vector<int>(), rofs_infra_caesb_tortoSM, 0.07, 25,  //0.07 = taxa de desconto
-                          0.05);
+                          vector<int>(), rofs_infra_caesb_tortoSM, 0.04, 20,  //0.04 = taxa de desconto
+                          0.07);
 
 
     vector<Utility *> utilities; //vetor que junta as companhias criadas acima
