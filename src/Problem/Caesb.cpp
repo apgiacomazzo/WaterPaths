@@ -153,7 +153,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     if (utilities_rdm.empty()) {
         /// All matrices below have dimensions n_realizations x nr_rdm_factors
         utilities_rdm = std::vector<vector<double>>(
-                n_realizations, vector<double>(4, 1.));
+                n_realizations, vector<double>(5, 1.));
         water_sources_rdm = std::vector<vector<double>>(
                 n_realizations, vector<double>(51,
                                                1.)); //alterar número "51" para (1 + 2 * N° de novas infraestruturas), caso eu opte por não fazer as análises de deep uncertainty.

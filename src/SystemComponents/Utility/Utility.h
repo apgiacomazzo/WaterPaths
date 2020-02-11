@@ -225,6 +225,8 @@ public:
     const InfrastructureManager &getInfrastructure_construction_manager() const;
 
     double getDemand_offset() const;
+
+    double getInfraDiscountRate() const;
 };
 
 
