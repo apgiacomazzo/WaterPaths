@@ -679,6 +679,10 @@ void Utility::setRealization(unsigned long r, vector<double>& rdm_factors) {
     // Set peaking demand factor.
     weekly_peaking_factor = calculateWeeklyPeakingFactor
             (&demands_all_realizations.at(r));
+
+    for (double &awp : weekly_average_volumetric_price) {
+        awp *= rdm_factors.at(4);
+    }
 }
 
 vector<double> Utility::calculateWeeklyPeakingFactor(vector<double> *demands) {
