@@ -155,8 +155,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
         utilities_rdm = std::vector<vector<double>>(
                 n_realizations, vector<double>(5, 1.));
         water_sources_rdm = std::vector<vector<double>>(
-                n_realizations, vector<double>(51,
-                                               1.)); //alterar número "51" para (1 + 2 * N° de novas infraestruturas), caso eu opte por não fazer as análises de deep uncertainty.
+                n_realizations, vector<double>(25,
+                                               1.)); //n corresponde a: 1 + 2 * N° de infraestruturas.
         policies_rdm = std::vector<vector<double>>(
                 n_realizations, vector<double>(2, 1.));
     }
@@ -187,7 +187,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     EvaporationSeries evaporation_paranoa(
             &evap_paranoa,
             streamflow_n_weeks);
-    EvaporationSeries evaporation_corumba(&evap_corumba, streamflow_n_weeks);
+    EvaporationSeries evaporation_corumba(&evap_corumba, streamflow_n_weeks); //evaporação obtida por meio da evap do Paranoá (multiplicada por 4.478)
 
     // CRIAÇÃO DOS VETORES RELACIONADOS ÀS VAZÕES AFLUENTES DE CADA RESERVATÓRIO
 
