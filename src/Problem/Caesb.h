@@ -17,33 +17,14 @@ class Caesb : public Problem {
 private:
     const int n_utilities = 1;
 //obs: não inseri os streamflows do subsistema gama (provavelmente será excluído da análise)
-    vector<vector<double>> streamflows_chacara89; //descoberto
-    vector<vector<double>> streamflows_chapadinha; //descoberto
-    vector<vector<double>> streamflows_olaria; //descoberto
-    vector<vector<double>> streamflows_rodeador; //descoberto
-    vector<vector<double>> streamflows_capao_comp; //descoberto
-    vector<vector<double>> streamflows_pedras; //descoberto
     vector<vector<double>> streamflows_descoberto; //descoberto
-    vector<vector<double>> streamflows_santa_maria; //tortoSM
-    vector<vector<double>> streamflows_milho_cozido; //tortoSM
-    vector<vector<double>> streamflows_vargem_grande; //tortoSM
-    vector<vector<double>> streamflows_tortoSM; //tortoSM
+    vector<vector<double>> streamflows_tortoSM; //captação no Santa Maria
     vector<vector<double>> streamflows_bananal; //subsistema bananal e lago paranoa
-    vector<vector<double>> streamflows_torto; //subsistema lago norte e lago paranoa
-    vector<vector<double>> streamflows_riacho_fundo; //lago paranoa
-    vector<vector<double>> streamflows_gama; //lago paranoa
-    vector<vector<double>> streamflows_cabeca_veado; //lago paranoa
+    vector<vector<double>> streamflows_torto; //captação no torto
     vector<vector<double>> streamflows_paranoa; //lago paranoa
-    vector<vector<double>> streamflows_areias; //corumba
-    vector<vector<double>> streamflows_engenho_lajes; //corumba
-    vector<vector<double>> streamflows_alagado; //corumba
-    vector<vector<double>> streamflows_fazenda_beira; //corumba
-    vector<vector<double>> streamflows_campo_limpo; //corumba
     vector<vector<double>> streamflows_corumbaIV; //corumba
     vector<vector<double>> demand_caesb_descoberto;
     vector<vector<double>> demand_caesb_tortoSM;
-    vector<vector<double>> demand_caesb_paranoa;
-    vector<vector<double>> demand_caesb_corumbaIV;
     vector<vector<double>> evap_descoberto;
     vector<vector<double>> evap_tortoSM;
     vector<vector<double>> evap_paranoa;
