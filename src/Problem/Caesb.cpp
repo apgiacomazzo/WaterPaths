@@ -234,7 +234,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     // CURVAS VOLUME X ÁREA DOS RESERVATÓRIOS
 
-    //Curva do Descoberto - baseado na Nota Técnica n° 58/2016 ADASA (volume útil em hm³)
+    //Curva do Descoberto - baseado no arquivo de batimetria passado pela CAESB (volume útil em hm³)
     vector<double> descoberto_storage = {0,
                                          4.508 * table_gen_storage_multiplier,
                                          9.930 * table_gen_storage_multiplier,
@@ -252,7 +252,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                       1178.847, 1290.198, 1373.824,
                                       1461.072}; //dados da área (hm²) do reservatório do Descoberto (correspondente a cada volume acima)
 
-    //Curva do Santa Maria - baseado na Nota Técnica n° 58/2016 ADASA (volume útil em hm³)
+    //Curva do Santa Maria - baseado no arquivo de batimetria passado pela CAESB (volume útil em hm³)
     vector<double> tortoSM_storage = {0, 3.584 * table_gen_storage_multiplier,
                                       7.507 * table_gen_storage_multiplier,
                                       11.758 * table_gen_storage_multiplier,
@@ -317,17 +317,23 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     // Vazão remanescente de Corumbá IV - baseado no EIA da UHE de Corumbá IV e na ação civil pública
     FixedMinEnvFlowControl corumba_min_env_control(2, 5.3e-6 * 3600 * 24 * 7);
 
-    // Vazão remanescente do Ribeirão Bananal - baseado no gráfico de vazões remanescentes do córrego Bananal no PGIRH/DF (2012)
-    vector<int> bananal_weeks = {0, 18, 44,
+    // Vazão remanescente do Ribeirão Bananal - baseado no ato de outorga da ADASA para a captação no Bananal
+    vector<int> bananal_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
                                  53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> bananal_releases = {(0.5e-6 * 3600 * 24 * 7), (0.36e-6 * 3600 * 24 * 7), (0.5e-6 * 3600 * 24 * 7)};
+    vector<double> bananal_releases = {(0.422e-6 * 3600 * 24 * 7), (0.446e-6 * 3600 * 24 * 7), (0.474e-6 * 3600 * 24 * 7),
+                                       (0.464e-6 * 3600 * 24 * 7), (0.406e-6 * 3600 * 24 * 7), (0.358e-6 * 3600 * 24 * 7),
+                                       (0.322e-6 * 3600 * 24 * 7), (0.286e-6 * 3600 * 24 * 7), (0.258e-6 * 3600 * 24 * 7),
+                                       (0.258e-6 * 3600 * 24 * 7), (0.314e-6 * 3600 * 24 * 7), (0.372e-6 * 3600 * 24 * 7)};
     SeasonalMinEnvFlowControl bananal_min_env_control(4, bananal_weeks,
                                                       bananal_releases);
 
-    // Vazão remanescente do Ribeirão do Torto - baseado no gráfico de vazões remanescentes do Ribeirão do Torto no PGIRH/DF (2012)
-    vector<int> torto_weeks = {0, 18, 44,
-                                 53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> torto_releases = {(0.45e-6 * 3600 * 24 * 7), (0.2e-6 * 3600 * 24 * 7), (0.45e-6 * 3600 * 24 * 7)};
+    // Vazão remanescente do Ribeirão do Torto - dado fornecido pela Caesb - exigência do PGIRH/DF (os valores correspondem a 20% da vazão média mínima mensal)
+    vector<int> torto_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
+                               53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
+    vector<double> torto_releases = {(0.410e-6 * 3600 * 24 * 7), (0.560e-6 * 3600 * 24 * 7), (0.450e-6 * 3600 * 24 * 7),
+                                     (0.410e-6 * 3600 * 24 * 7), (0.260e-6 * 3600 * 24 * 7), (0.140e-6 * 3600 * 24 * 7),
+                                     (0.110e-6 * 3600 * 24 * 7), (0.90e-6 * 3600 * 24 * 7), (0.80e-6 * 3600 * 24 * 7),
+                                     (0.100e-6 * 3600 * 24 * 7), (0.170e-6 * 3600 * 24 * 7), (0.310e-6 * 3600 * 24 * 7)};
     SeasonalMinEnvFlowControl torto_min_env_control(5, torto_weeks,
                                                       torto_releases);
 
@@ -377,8 +383,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     double cIV_wq_capacity = 2936.6 * table_gen_storage_multiplier;
     double cIV_storage_capacity = cIV_wq_capacity + cIV_energy_capacity +
                                   cIV_supply_saneago_capacity +
-                                  cIV_supply_caesb_capacity; //o armazenamento de água total é igual a soma da parte destinada a abastecimento,
-                                                            // destinada a energia e da parte destinada a preservação ambiental
+                                  cIV_supply_caesb_capacity; //o armazenamento de água total é igual a soma da parte destinada à abastecimento,
+                                                            // destinada à energia e da parte destinada à preservação ambiental
 
     //Curva de Corumbá IV - baseado nos dados do portal da ANA (volume útil)
     vector<double> corumba_storage = {0,
@@ -402,7 +408,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                bacia_corumba,
                                cIV_storage_capacity *
                                table_gen_storage_multiplier,
-                               1.4e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Corumbá atualmente (1.4 hm³/semana)
+                               1.4e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Corumbá atualmente (1.4 hm³/semana) - PDSB (2017)
                                evaporation_corumba,
                                &corumba_storage_area,
                                &cIV_allocations_ids,
@@ -435,13 +441,13 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Intake ribeirao_bananal("Captacao no Ribeirao Bananal",
                             4,                                                          //Obs: a série de vazão utilizada referente ao Bananal
                             subsistema_bananal,                                             //foi retirada de uma estação fluviométrica localizada
-                            0.70e-6 * 3600 * 24 * 7); // hm³/semana    //a justante do ponto de captação. Não há problema,
+                            0.750e-6 * 3600 * 24 * 7); // hm³/semana    //a justante do ponto de captação. Não há problema,
                                                                                             // pois a captação começou apenas ao final de 2017,
                                                                                             // então a série é basicamente composta pela vazão natural do ribeirão.
     Intake ribeirao_torto("Captacao no Ribeirao do Torto",
                             5,
                             sistema_torto,
-                            0.802e-6 * 3600 * 24 * 7); //0.802 m³/s foi retirado do PDSB (2017) e corresponde a 2015.
+                            1.647e-6 * 3600 * 24 * 7); //1.647 m³/s corresponde à outorga do Ribeirão do Torto.
 
     LevelDebtServiceBond dummy_bond(6, 1., 1, 1., vector<int>(1, 0));
     Reservoir dummy_endpoint("Dummy Node", 6, vector<Catchment *>(), 1., 0,
@@ -476,11 +482,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<Bond *> debendure_expansao_ETA_corumba_1 = {
             new BalloonPaymentBond(11, 0, 20, 0.07, vector<int>(1, 0)),
             new LevelDebtServiceBond(7, 222066142.8, 20, 0.07,
-                                     vector<int>(1, 0))}; //alterar 25, 0.05
+                                     vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_corumba_2 = {
             new BalloonPaymentBond(12, 0, 20, 0.07, vector<int>(1, 0)),
             new LevelDebtServiceBond(8, 251383400, 20, 0.07,
-                                     vector<int>(1, 0))}; //alterar 25, 0.05
+                                     vector<int>(1, 0))};
 
 
     /// Expansão da ETA Corumbá (Sistema Corumbá)
@@ -500,7 +506,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             "Etapa 3 de Corumba IV", 8, 2, 1, {7, 8},
             capacity_ETA_corumba_upgrade_2,
             debendure_expansao_ETA_corumba_2, construction_time_interval,
-            0 * WEEKS_IN_YEAR); //previsão: depois de 2037
+            5 * WEEKS_IN_YEAR); //previsão: depois de 2037
 
 
     //Sistema Paranoá - Construção da ETA Paranoá Sul (0.7 m³/s), sua primeira ampliação (upgrade 2, com + 0.7 m³/s), segunda ampliação (upgrade 3, com + 0.35 m³/s) e
