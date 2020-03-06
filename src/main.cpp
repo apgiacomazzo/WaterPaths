@@ -427,8 +427,8 @@ int main(int argc, char *argv[]) {
 
         int rank; // different seed on each processor
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        string rank_out_file = "diagnostic_output/DVs_rank_" + to_string(rank) + ".csv";
-        sol_out.open(rank_out_file.c_str());
+        //string rank_out_file = "diagnostic_output/DVs_rank_" + to_string(rank) + ".csv";
+        //sol_out.open(rank_out_file.c_str());
 
         //int rank; // different seed on each processor
         //MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -446,7 +446,7 @@ int main(int argc, char *argv[]) {
             }
             BORG_Archive_print(result, outputFile);
             BORG_Archive_destroy(result);
-            sol_out.close();
+            //sol_out.close();
             fclose(outputFile);
         }
 

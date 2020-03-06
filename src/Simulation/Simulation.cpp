@@ -343,7 +343,7 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
     string error_file_content = "#";
 
     // Run realizations.
-//#pragma omp parallel for ordered num_threads(n_threads) shared(had_catch, realizations_to_run_unique, error_m, error_file_name, error_file_content) default(none)
+#pragma omp parallel for ordered num_threads(n_threads) shared(had_catch, realizations_to_run_unique, error_m, error_file_name, error_file_content) default(none)
     for (unsigned long r = 0; r < realizations_to_run_unique.size(); ++r) {
         unsigned long realization = realizations_to_run_unique[r];
         //printf("Realization %lu\n", r);
@@ -360,8 +360,8 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
                 realization_model->getContinuity_utilities(),
                 realization);
 
-//        try {
-        //double start = omp_get_wtime();
+        try {
+        double start = omp_get_wtime();
         for (int w = 0; w < (int) total_simulation_time; ++w) {
             // DO NOT change the order of the steps. This would mess up
             // important dependencies.
@@ -388,21 +388,21 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
         if (import_export_rof_tables == EXPORT_ROF_TABLES) {
             rof_model->printROFTable(rof_tables_folder);
         }
-        // printf("Realization %lu took %f seconds.\n", r, omp_get_wtime() - start);
+        printf("Realization %lu took %f seconds.\n", r, omp_get_wtime() - start);
 
-#pragma omp critical
-        printProgress(
-                (double) master_data_collector->getRealizations_created() /
-                (double) realizations_to_run_unique.size());
+// #pragma omp critical
+//         printProgress(
+//                 (double) master_data_collector->getRealizations_created() /
+//                 (double) realizations_to_run_unique.size());
 
-//        } catch (...) {
-//#pragma omp atomic
-//            ++had_catch;
-//            error_m += to_string(realization) + " ";
-//            error_file_name += "_" + to_string(realization);
-//            error_file_content += to_string(realization) + ",";
-//            master_data_collector->removeRealization(realization);
-//        }
+        } catch (...) {
+#pragma omp atomic
+            ++had_catch;
+            error_m += to_string(realization) + " ";
+            error_file_name += "_" + to_string(realization);
+            error_file_content += to_string(realization) + ",";
+            master_data_collector->removeRealization(realization);
+        }
 
         delete realization_model;
         delete rof_model;
