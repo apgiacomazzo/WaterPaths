@@ -361,7 +361,7 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
                 realization);
 
         try {
-        double start = omp_get_wtime();
+//        double start = omp_get_wtime();
         for (int w = 0; w < (int) total_simulation_time; ++w) {
             // DO NOT change the order of the steps. This would mess up
             // important dependencies.
@@ -388,7 +388,7 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
         if (import_export_rof_tables == EXPORT_ROF_TABLES) {
             rof_model->printROFTable(rof_tables_folder);
         }
-        printf("Realization %lu took %f seconds.\n", r, omp_get_wtime() - start);
+//        printf("Realization %lu took %f seconds.\n", r, omp_get_wtime() - start);
 
 // #pragma omp critical
 //         printProgress(

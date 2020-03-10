@@ -72,6 +72,7 @@ void Caesb::setProblemDefinition(BORG_Problem &problem) //void = vazio. O tipo v
 
  */
 int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
+    double realization_start = omp_get_wtime();
 
 //    cout << "Building Caesb Problem." << endl;
     // ===================== SET UP DECISION VARIABLES  =====================
@@ -764,7 +765,6 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     drought_mitigation_policies.push_back(&transfer_descoberto_tortoSM);
 
     /// Creates simulation object depending on use (or lack thereof) ROF tables
-//    double start_time = omp_get_wtime();
     if (import_export_rof_tables == EXPORT_ROF_TABLES) {
         s = new Simulation(water_sources,
                            g,
@@ -815,9 +815,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 //    double end_time = omp_get_wtime();
 //	printf("Function evaluation time: %f s\n", end_time - start_time);
 
-    //double realization_end = omp_get_wtime();
-    //std::cout << "Simulation took  " << realization_end - realization_start
-    //      << "s" << std::endl;
+    double realization_end = omp_get_wtime();
+    std::cout << "Simulation took  " << realization_end - realization_start
+          << "s" << std::endl;
 
     /// Calculate objectives and store them in Borg decision variables array.
 #ifdef  PARALLEL
