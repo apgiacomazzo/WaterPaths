@@ -372,7 +372,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Reservoir tortoSM("Torto / Santa Maria", 1,
                       bacia_tortoSM,
                       73.954 * table_gen_storage_multiplier, //hm³
-                      2.8e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Brasília (hm³/semana)
+                      1.1e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Brasília (hm³/semana)
                       evaporation_tortoSM,
                       &tortoSM_storage_area);
 
@@ -405,10 +405,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<double> cIV_treatment_allocation_fractions = {1.0};  //A companhia descoberto trata água do Corumbá IV. A companhia TortoSM não trata nada.
 
     AllocatedReservoir corumba("Corumba IV",
-                               2, //colocar como alocated reservoir
+                               2,
                                bacia_corumba,
-                               cIV_storage_capacity *
-                               table_gen_storage_multiplier,
+                               cIV_storage_capacity * table_gen_storage_multiplier,
                                1.4e-6 * 3600 * 24 * 7, //capacidade de tratamento da ETA Corumbá atualmente (1.4 hm³/semana) - PDSB (2017)
                                evaporation_corumba,
                                &corumba_storage_area,
@@ -442,13 +441,13 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Intake ribeirao_bananal("Captacao no Ribeirao Bananal",
                             4,                                                          //Obs: a série de vazão utilizada referente ao Bananal
                             subsistema_bananal,                                             //foi retirada de uma estação fluviométrica localizada
-                            0.750e-6 * 3600 * 24 * 7); // hm³/semana    //a justante do ponto de captação. Não há problema,
+                            0.75e-6 * 3600 * 24 * 7); // hm³/semana    //a justante do ponto de captação. Não há problema,
                                                                                             // pois a captação começou apenas ao final de 2017,
                                                                                             // então a série é basicamente composta pela vazão natural do ribeirão.
     Intake ribeirao_torto("Captacao no Ribeirao do Torto",
                             5,
                             sistema_torto,
-                            1.647e-6 * 3600 * 24 * 7); //1.647 m³/s corresponde à outorga do Ribeirão do Torto.
+                            0.95e-6 * 3600 * 24 * 7); //1.647 m³/s corresponde à outorga do Ribeirão do Torto.
 
     LevelDebtServiceBond dummy_bond(6, 1., 1, 1., vector<int>(1, 0));
     Reservoir dummy_endpoint("Dummy Node", 6, vector<Catchment *>(), 1., 0,
@@ -595,9 +594,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      *                                  1 (Santa Maria)
      *      0(12)                       |
      *       \                          |
-     *        \                         |--4     5 (Torto)
-     *         \                        |   \   |
-     *          \                       |    \ |
+     *        \                         |--4(Ban)   5 (Torto)
+     *         \                        |   \      /
+     *          \                       |    \ __/
      *           \                      |     3 (Paranoá) (9, 10, 11)
      *            \                     |     |
      *             \                    |    |
