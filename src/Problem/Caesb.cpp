@@ -594,7 +594,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      *                                  1 (Santa Maria)
      *      0(12)                       |
      *       \                          |
-     *        \                         |--4(Ban)   5 (Torto)
+     *        \                         |  4(Ban)   5 (Torto)
      *         \                        |   \      /
      *          \                       |    \ __/
      *           \                      |     3 (Paranoá) (9, 10, 11)
