@@ -188,7 +188,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     EvaporationSeries evaporation_paranoa(
             &evap_paranoa,
             streamflow_n_weeks);
-    EvaporationSeries evaporation_corumba(&evap_corumba, streamflow_n_weeks); //evaporação obtida por meio da evap do Paranoá (multiplicada por 4.478)
+    EvaporationSeries evaporation_corumba(&evap_corumba,
+            streamflow_n_weeks); //evaporação obtida por meio da evap do Paranoá (multiplicada por 4.478)
 
     // CRIAÇÃO DOS VETORES RELACIONADOS ÀS VAZÕES AFLUENTES DE CADA RESERVATÓRIO
 
@@ -307,6 +308,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     // Vazão remanescente do Torto/Santa Maria - não tem, apenas verte a água
     FixedMinEnvFlowControl tortoSM_min_env_control(1, 0);
 
+    // Vazão remanescente de Corumbá IV - baseado no EIA da UHE de Corumbá IV e na ação civil pública
+    FixedMinEnvFlowControl corumba_min_env_control(2, 5.3e-6 * 3600 * 24 * 7);
+
     // Vazão remanescente do Paranoá - baseado na resolução n° 33/2018 da ADASA
     vector<int> paranoa_weeks = {0, 18, 44,
                                  53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
@@ -314,9 +318,6 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                        (1.2e-6 * 3600 * 24 * 7)}; // mínimo de 0,7 m³/s no período de estiagem e de 1,2 m³/s no período chuvoso
     SeasonalMinEnvFlowControl paranoa_min_env_control(3, paranoa_weeks,
                                                       paranoa_releases);
-
-    // Vazão remanescente de Corumbá IV - baseado no EIA da UHE de Corumbá IV e na ação civil pública
-    FixedMinEnvFlowControl corumba_min_env_control(2, 5.3e-6 * 3600 * 24 * 7);
 
     // Vazão remanescente do Ribeirão Bananal - baseado no ato de outorga da ADASA para a captação no Bananal
     vector<int> bananal_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
@@ -661,8 +662,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                           wwtp_discharge_caesb_tortoSM,
                           caesb_tortoSM_inf_buffer,
                           rof_triggered_infra_order_caesb_tortoSM,
-                          vector<int>(), rofs_infra_caesb_tortoSM, 0.04, 20,  //0.04 = taxa de desconto
-                          0.07);
+                          vector<int>(), rofs_infra_caesb_tortoSM, 0.04, //0.04 = taxa de desconto
+                          20, 0.07);
 
 
     vector<Utility *> utilities; //vetor que junta as companhias criadas acima
@@ -845,7 +846,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 int Caesb::simulationExceptionHander(const std::exception &e,
                                      Simulation *s, // :: significa "resolução de escopo"
                                      double *objs, const double *vars) {
-    int num_dec_var = 18; //número de variáveis desse estudo de caso
+    int num_dec_var = 19; //número de variáveis desse estudo de caso
 //        printf("Exception called during calculations. Decision variables are below:\n");
     ofstream sol;
     int world_rank;
