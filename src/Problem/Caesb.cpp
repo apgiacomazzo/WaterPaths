@@ -113,16 +113,16 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     //IDENTIFICADOR DE CADA INFRAESTRUTURA FUTURA. Obs: as infraestruturas já existentes devem ser numeradas antes, começando do 0.
 
     vector<infraRank> caesb_descoberto_infra_order_raw = { //A Companhia Caesb Descoberto abrange os reservatórios do Descoberto e de Corumbá IV
-            infraRank(7, ETA_corumba_upgrade1_ranking),
-            infraRank(8, ETA_corumba_upgrade2_ranking),
-            infraRank(9, ETA_corumba_upgrade3_ranking),
-            infraRank(13, descoberto_expansao_ranking)
+            infraRank(6, ETA_corumba_upgrade1_ranking),
+            infraRank(7, ETA_corumba_upgrade2_ranking),
+            infraRank(8, ETA_corumba_upgrade3_ranking),
+            infraRank(12, descoberto_expansao_ranking)
     };
 
     vector<infraRank> caesb_tortoSM_infra_order_raw = { //A Companhia Caesb TortoSM abrange os reservatórios do TortoSM e do Lago Paranoá
-            infraRank(10, ETA_paranoaSul_upgrade1_ranking),
-            infraRank(11, ETA_paranoaSul_upgrade2_ranking),
-            infraRank(12, ETA_paranoaSul_upgrade3_ranking)
+            infraRank(9, ETA_paranoaSul_upgrade1_ranking),
+            infraRank(10, ETA_paranoaSul_upgrade2_ranking),
+            infraRank(11, ETA_paranoaSul_upgrade3_ranking)
     };
 
     // GET INFRASTRUCTURE CONSTRUCTION ORDER BASED ON DECISION VARIABLES
@@ -156,7 +156,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
         utilities_rdm = std::vector<vector<double>>(
                 n_realizations, vector<double>(5, 1.));
         water_sources_rdm = std::vector<vector<double>>(
-                n_realizations, vector<double>(29,
+                n_realizations, vector<double>(27,
                                                1.)); //n corresponde a: 1 + 2 * N° de infraestruturas.
         policies_rdm = std::vector<vector<double>>(
                 n_realizations, vector<double>(2, 1.));
@@ -207,18 +207,18 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<Catchment *> bacia_tortoSM;
     bacia_tortoSM.push_back(&tortoSM_inflows);
 
-    //Subsistema Bananal
-    Catchment bananal_inflow(&streamflows_bananal,
+    //Sistema Bananal e Torto (Reforçam o Santa Maria) - CAP.TOR.001 (Torto)
+    Catchment bananal_torto_inflows(&streamflows_bananal_torto,
                              streamflow_n_weeks); //esse subsistema reforça o Torto/Santa Maria -> a água captada
-                                                    //no riberião Bananal é bombeada para a ETA Brasília
-    vector<Catchment *> subsistema_bananal;
-    subsistema_bananal.push_back(&bananal_inflow);
+                                                    //no riberião Bananal e no Torto é bombeada para a ETA Brasília
+    vector<Catchment *> sistema_bananal_torto;
+    sistema_bananal_torto.push_back(&bananal_torto_inflows);
 
-    //Captação no Torto (Torto reforça o Santa Maria) - Captação CAP.TOR.001
-    Catchment torto_inflows(&streamflows_torto,
-                            streamflow_n_weeks);
-    vector<Catchment *> sistema_torto;
-    sistema_torto.push_back(&torto_inflows);
+//    //Captação no Torto (Torto reforça o Santa Maria) - Captação CAP.TOR.001
+//    Catchment torto_inflows(&streamflows_torto,
+//                            streamflow_n_weeks);
+//    vector<Catchment *> sistema_torto;
+//    sistema_torto.push_back(&torto_inflows);
 
     // Lago Paranoá (Obs: o Subsistema Lago Norte capta água no Lago Paranoá, precisamente no braço do Torto)
     Catchment paranoa_inflows(&streamflows_paranoa,
@@ -319,25 +319,35 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     SeasonalMinEnvFlowControl paranoa_min_env_control(3, paranoa_weeks,
                                                       paranoa_releases);
 
-    // Vazão remanescente do Ribeirão Bananal - baseado no ato de outorga da ADASA para a captação no Bananal
-    vector<int> bananal_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
-                                 53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> bananal_releases = {(0.422e-6 * 3600 * 24 * 7), (0.446e-6 * 3600 * 24 * 7), (0.474e-6 * 3600 * 24 * 7),
-                                       (0.464e-6 * 3600 * 24 * 7), (0.406e-6 * 3600 * 24 * 7), (0.358e-6 * 3600 * 24 * 7),
-                                       (0.322e-6 * 3600 * 24 * 7), (0.286e-6 * 3600 * 24 * 7), (0.258e-6 * 3600 * 24 * 7),
-                                       (0.258e-6 * 3600 * 24 * 7), (0.314e-6 * 3600 * 24 * 7), (0.372e-6 * 3600 * 24 * 7)};
-    SeasonalMinEnvFlowControl bananal_min_env_control(4, bananal_weeks,
-                                                      bananal_releases);
+    //Vazão remanescente do Ribeirão Bananal e do Torto - combinação entre as duas water sources
+    vector<int> bananal_torto_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
+                                        53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
+    vector<double> bananal_torto_releases = {(0.416e-6 * 3600 * 24 * 7), (0.503e-6 * 3600 * 24 * 7), (0.462e-6 * 3600 * 24 * 7),
+                                             (0.437e-6 * 3600 * 24 * 7), (0.333e-6 * 3600 * 24 * 7), (0.249e-6 * 3600 * 24 * 7),
+                                             (0.216e-6 * 3600 * 24 * 7), (0.593e-6 * 3600 * 24 * 7), (0.529e-6 * 3600 * 24 * 7),
+                                             (0.179e-6 * 3600 * 24 * 7), (0.242e-6 * 3600 * 24 * 7), (0.341e-6 * 3600 * 24 * 7)};
+    SeasonalMinEnvFlowControl bananal_torto_min_env_control(4, bananal_torto_weeks,
+                                                      bananal_torto_releases);
 
-    // Vazão remanescente do Ribeirão do Torto - dado fornecido pela Caesb - exigência do PGIRH/DF (os valores correspondem a 20% da vazão média mínima mensal)
-    vector<int> torto_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
-                               53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> torto_releases = {(0.410e-6 * 3600 * 24 * 7), (0.560e-6 * 3600 * 24 * 7), (0.450e-6 * 3600 * 24 * 7),
-                                     (0.410e-6 * 3600 * 24 * 7), (0.260e-6 * 3600 * 24 * 7), (0.140e-6 * 3600 * 24 * 7),
-                                     (0.110e-6 * 3600 * 24 * 7), (0.90e-6 * 3600 * 24 * 7), (0.80e-6 * 3600 * 24 * 7),
-                                     (0.100e-6 * 3600 * 24 * 7), (0.170e-6 * 3600 * 24 * 7), (0.310e-6 * 3600 * 24 * 7)};
-    SeasonalMinEnvFlowControl torto_min_env_control(5, torto_weeks,
-                                                      torto_releases);
+//    // Vazão remanescente do Ribeirão Bananal - baseado no ato de outorga da ADASA para a captação no Bananal
+//    vector<int> bananal_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
+//                                 53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
+//    vector<double> bananal_releases = {(0.422e-6 * 3600 * 24 * 7), (0.446e-6 * 3600 * 24 * 7), (0.474e-6 * 3600 * 24 * 7),
+//                                       (0.464e-6 * 3600 * 24 * 7), (0.406e-6 * 3600 * 24 * 7), (0.358e-6 * 3600 * 24 * 7),
+//                                       (0.322e-6 * 3600 * 24 * 7), (0.286e-6 * 3600 * 24 * 7), (0.258e-6 * 3600 * 24 * 7),
+//                                       (0.258e-6 * 3600 * 24 * 7), (0.314e-6 * 3600 * 24 * 7), (0.372e-6 * 3600 * 24 * 7)};
+//    SeasonalMinEnvFlowControl bananal_min_env_control(4, bananal_weeks,
+//                                                      bananal_releases);
+//
+//    // Vazão remanescente do Ribeirão do Torto - dado fornecido pela Caesb - exigência do PGIRH/DF (os valores correspondem a 20% da vazão média mínima mensal)
+//    vector<int> torto_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44, 48,
+//                               53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
+//    vector<double> torto_releases = {(0.410e-6 * 3600 * 24 * 7), (0.560e-6 * 3600 * 24 * 7), (0.450e-6 * 3600 * 24 * 7),
+//                                     (0.410e-6 * 3600 * 24 * 7), (0.260e-6 * 3600 * 24 * 7), (0.140e-6 * 3600 * 24 * 7),
+//                                     (0.110e-6 * 3600 * 24 * 7), (0.90e-6 * 3600 * 24 * 7), (0.80e-6 * 3600 * 24 * 7),
+//                                     (0.100e-6 * 3600 * 24 * 7), (0.170e-6 * 3600 * 24 * 7), (0.310e-6 * 3600 * 24 * 7)};
+//    SeasonalMinEnvFlowControl torto_min_env_control(5, torto_weeks,
+//                                                      torto_releases);
 
     //FixedMinEnvFlowControl captacoes_gama();
 
@@ -347,8 +357,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     min_env_flow_controls.push_back(&tortoSM_min_env_control);
     min_env_flow_controls.push_back(&paranoa_min_env_control);
     min_env_flow_controls.push_back(&corumba_min_env_control);
-    min_env_flow_controls.push_back(&bananal_min_env_control);
-    min_env_flow_controls.push_back(&torto_min_env_control);
+    min_env_flow_controls.push_back(&bananal_torto_min_env_control);
+    //min_env_flow_controls.push_back(&torto_min_env_control);
     //min_env_flow_controls.push_back(&captacoes_gama_min_env_control);
 
 
@@ -408,7 +418,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                2,
                                bacia_corumba,
                                cIV_storage_capacity * table_gen_storage_multiplier,
-                               0, //capacidade de tratamento da ETA Corumbá atualmente (1.4 hm³/semana) - PDSB (2017)
+                               0,
                                evaporation_corumba,
                                &corumba_storage_area,
                                &cIV_allocations_ids,
@@ -438,19 +448,19 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                &lp_allocation_fractions,
                                &lp_treatment_allocation_fractions);
 
-    Intake ribeirao_bananal("Captacao no Ribeirao Bananal",
+    Intake ribeirao_bananal_torto("Captacao no Ribeirao Bananal e Ribeiro do Torto",
                             4,                                                          //Obs: a série de vazão utilizada referente ao Bananal
-                            subsistema_bananal,                                             //foi retirada de uma estação fluviométrica localizada
-                            0.75e-6 * 3600 * 24 * 7); // hm³/semana    //a justante do ponto de captação. Não há problema,
+                            sistema_bananal_torto,                                          //foi retirada de uma estação fluviométrica localizada
+                            1.7e-6 * 3600 * 24 * 7); // hm³/semana      //a justante do ponto de captação. Não há problema,
                                                                                             // pois a captação começou apenas ao final de 2017,
                                                                                             // então a série é basicamente composta pela vazão natural do ribeirão.
-    Intake ribeirao_torto("Captacao no Ribeirao do Torto",
-                            5,
-                            sistema_torto,
-                            0.95e-6 * 3600 * 24 * 7); //950 m³/s corresponde à captação média no Torto.
+//    Intake ribeirao_torto("Captacao no Ribeirao do Torto",
+//                            5,
+//                            sistema_torto,
+//                            0.95e-6 * 3600 * 24 * 7); //950 m³/s corresponde à captação média no Torto.
 
-    LevelDebtServiceBond dummy_bond(6, 1., 1, 1., vector<int>(1, 0));
-    Reservoir dummy_endpoint("Dummy Node", 6, vector<Catchment *>(), 1., 0,
+    LevelDebtServiceBond dummy_bond(5, 1., 1, 1., vector<int>(1, 0));
+    Reservoir dummy_endpoint("Dummy Node", 5, vector<Catchment *>(), 1., 0,
                              evaporation_corumba, 1,
                              construction_time_interval, 0, dummy_bond);
 
@@ -481,31 +491,31 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<Bond *> debendure_expansao_ETA_corumba_1 = {
             new BalloonPaymentBond(11, 0, 20, 0.07, vector<int>(1, 0)),
-            new LevelDebtServiceBond(7, 276521740.0, 20, 0.07,
+            new LevelDebtServiceBond(6, 276521740.0, 20, 0.07,
                                      vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_corumba_2 = {
             new BalloonPaymentBond(12, 0, 20, 0.07, vector<int>(1, 0)),
-            new LevelDebtServiceBond(8, 222066142.8, 20, 0.07,
+            new LevelDebtServiceBond(7, 222066142.8, 20, 0.07,
                                      vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_corumba_3 = {
             new BalloonPaymentBond(13, 0, 20, 0.07, vector<int>(1, 0)),
-            new LevelDebtServiceBond(9, 251383400, 20, 0.07,
+            new LevelDebtServiceBond(8, 251383400, 20, 0.07,
                                      vector<int>(1, 0))};
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa1(
-            "Etapa 1 de Corumba IV", 7, 2, 0, {7, 8, 9},
+            "Etapa 1 de Corumba IV", 6, 2, 0, {6, 7, 8},
             capacity_ETA_corumba_upgrade_1,
             debendure_expansao_ETA_corumba_1, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2020
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa2(
-            "Etapa 2 de Corumba IV", 8, 2, 1, {7, 8, 9},
+            "Etapa 2 de Corumba IV", 7, 2, 1, {6, 7, 8},
             capacity_ETA_corumba_upgrade_2,
             debendure_expansao_ETA_corumba_2, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2030 a 2033
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa3(
-            "Etapa 3 de Corumba IV", 9, 2, 2, {7, 8, 9},
+            "Etapa 3 de Corumba IV", 8, 2, 2, {6, 7, 8},
             capacity_ETA_corumba_upgrade_3,
             debendure_expansao_ETA_corumba_3, construction_time_interval,
             5 * WEEKS_IN_YEAR); //previsão: depois de 2037
@@ -526,39 +536,39 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<Bond *> debendure_expansao_ETA_paranoa_1 = {
             new BalloonPaymentBond(14, 0, 20, 0.07, vector<int>(1, 0)),
-            new LevelDebtServiceBond(10, 60332016, 20, 0.07, vector<int>(1, 0))}; //bond term = 25 anos
+            new LevelDebtServiceBond(9, 60332016, 20, 0.07, vector<int>(1, 0))}; //bond term = 25 anos
     vector<Bond *> debendure_expansao_ETA_paranoa_2 = {
             new BalloonPaymentBond(15, 0, 20, 0.07, vector<int>(1, 0)),
-            new LevelDebtServiceBond(11, 60332016, 20, 0.07, vector<int>(1, 0))};
+            new LevelDebtServiceBond(10, 60332016, 20, 0.07, vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_paranoa_3 = {
             new BalloonPaymentBond(16, 0, 20, 0.07, vector<int>(1, 0)),
-            new LevelDebtServiceBond(12, 60332016, 20, 0.07, vector<int>(1, 0))};
+            new LevelDebtServiceBond(11, 60332016, 20, 0.07, vector<int>(1, 0))};
 
 
     SequentialJointTreatmentExpansion etapa1_ETA_paranoaSul(
-            "Etapa 1 da ETA Paranoa Sul ", 10, 3, 0, {10, 11, 12},
+            "Etapa 1 da ETA Paranoa Sul ", 9, 3, 0, {9, 10, 11},
             capacities_ETA_paranoaSul_upgrade_1,
             debendure_expansao_ETA_paranoa_1, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2020
 
     SequentialJointTreatmentExpansion etapa2_ETA_paranoaSul(
-            "Etapa 2 da ETA Paranoa Sul", 11, 3, 1, {10, 11, 12},
+            "Etapa 2 da ETA Paranoa Sul", 10, 3, 1, {9, 10, 11},
             capacities_ETA_paranoaSul_upgrade_2,
             debendure_expansao_ETA_paranoa_2, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2022
 
     SequentialJointTreatmentExpansion etapa3_ETAs_paranoa(
-            "Etapa 3 da ETA Paranoa Sul e Norte", 12, 3, 2, {10, 11, 12},
+            "Etapa 3 da ETA Paranoa Sul e Norte", 11, 3, 2, {9, 10, 11},
             capacities_ETAs_paranoa_upgrade_3,
             debendure_expansao_ETA_paranoa_3, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2034 a 2037
 
     // Expansão do Reservatório do Descoberto
 
-    LevelDebtServiceBond descoberto_exp_bond(13, 7541502, 20, 0.07, vector<int>(1,
+    LevelDebtServiceBond descoberto_exp_bond(12, 7541502, 20, 0.07, vector<int>(1,
                                                                                 0)); //Elevação do nível d'água da barragem do descoberto (aumento da capacidade de armazenamento em 25%)
     ReservoirExpansion descoberto_expansion(
-            "Expansao da capacidade de armazenamento do Descoberto", 13, 0,
+            "Expansao da capacidade de armazenamento do Descoberto", 12, 0,
             25.216, //25.216 = aumento em hm³ da capacidade de armazenamento do Descoberto (25%)
             construction_time_interval,
             0 * WEEKS_IN_YEAR,
@@ -570,8 +580,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     water_sources.push_back(&tortoSM);
     water_sources.push_back(&corumba);
     water_sources.push_back(&paranoa);
-    water_sources.push_back(&ribeirao_bananal);
-    water_sources.push_back(&ribeirao_torto);
+    water_sources.push_back(&ribeirao_bananal_torto);
+//    water_sources.push_back(&ribeirao_bananal);
+//    water_sources.push_back(&ribeirao_torto);
 
     water_sources.push_back(&ETA_corumba_etapa1);
     water_sources.push_back(&ETA_corumba_etapa2);
@@ -594,10 +605,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      *                                  1 (Santa Maria)
      *      0(13)                       |
      *       \                          |
-     *        \                         |  4(Ban)   5 (Torto)
+     *        \                         |  4(Ban)   4 (Torto)
      *         \                        |   \      /
      *          \                       |    \ __/
-     *           \                      |     3 (Paranoá) (10, 11, 12)
+     *           \                      |     3 (Paranoá) (9, 10, 11)
      *            \                     |     |
      *             \                    |    |
      *              \                   |   |
@@ -606,22 +617,21 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      *                 \               /
      *                  \             /
      *                   \           /
-     *                2(7, 8, 9)_   /
+     *                2(6, 7, 8)_   /
      *                           \ /
      *                           \/
-     *                           6 (dummy)
+     *                           5 (dummy)
      *
      */
 
-    Graph g(7); //graph é uma forma de estruturar dados que consiste em dois componentes:
+    Graph g(6); //graph é uma forma de estruturar dados que consiste em dois componentes:
                     // um conjunto finito de vértices denominado de nós; e um cojunto finito de pares ordenados (x,y), denominados de edges.
-    g.addEdge(0,
-              2); //essa conexão indica que existe uma aresta do vértice 0 ao vértice 2.
-    g.addEdge(2, 6);
-    g.addEdge(1, 6);
+    g.addEdge(0, 2); //essa conexão indica que existe uma aresta do vértice 0 ao vértice 2.
+    g.addEdge(2, 5);
+    g.addEdge(1, 5);
     g.addEdge(4, 3);
-    g.addEdge(5, 3);
-    g.addEdge(3, 6);
+    //g.addEdge(5, 3);
+    g.addEdge(3, 5);
 
     auto demand_n_weeks = (int) std::round(40 *
                                            WEEKS_IN_YEAR); //40 é o número de anos a serem simulados. A fç auto serve para
@@ -673,8 +683,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     /// Water-source-utility connectivity matrix (each row corresponds to a utility and numbers are water
     /// sources IDs.
     vector<vector<int>> reservoir_utility_connectivity_matrix = {
-            {0, 2, 7, 8, 9, 13},  //CAESB Descoberto
-            {1, 3, 4, 5, 10, 11, 12}  //CAESB Torto/Santa Maria
+            {0, 2, 6, 7, 8, 12},  //CAESB Descoberto
+            {1, 3, 4, 9, 10, 11}  //CAESB Torto/Santa Maria
     };
 
 //    @TODO: verificar se há necessidade de corrigir volumes de reservatórios construídos.
@@ -706,7 +716,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             caesb_descoberto_restriction_trigger +
             delta_descoberto_restriction_trigger, // estágio 2 - 4% de redução (tarifa de conting) + 2% do primeiro
             caesb_descoberto_restriction_trigger + 2 *
-                                                   delta_descoberto_restriction_trigger}; //estágio 3 - 12% de redução (racionamento) + 2% do primeiro
+            delta_descoberto_restriction_trigger}; //estágio 3 - 12% de redução (racionamento) + 2% do primeiro
     //Obs: o 1° estágio corresponde à campanha, o 2° à tarifa de contingência e o 3° ao racionamento.
     //Acumulou-se a campanha com os outros dois estágios.
     //Como a tarifa de contingência é uma medida bastante penosa, bem como o racionamento,
@@ -771,9 +781,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                            utilities,
                            drought_mitigation_policies,
                            min_env_flow_controls,
-                           utilities_rdm, //comentar essa linha (até eu gerar esse arquivo - se refere aos fatores de DU)
-                           water_sources_rdm, //comentar essa linha (até eu gerar esse arquivo - se refere aos fatores de DU)
-                           policies_rdm, //comentar essa linha (até eu gerar esse arquivo - se refere aos fatores de DU)
+                           utilities_rdm,
+                           water_sources_rdm,
+                           policies_rdm,
                            n_weeks,
                            realizations_to_run,
                            rof_tables_directory);
@@ -786,9 +796,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                            utilities,
                            drought_mitigation_policies,
                            min_env_flow_controls,
-                           utilities_rdm, //comentar essa linha (até eu gerar esse arquivo - se refere aos fatores de DU)
-                           water_sources_rdm, //comentar essa linha (até eu gerar esse arquivo - se refere aos fatores de DU)
-                           policies_rdm, //comentar essa linha (até eu gerar esse arquivo - se refere aos fatores de DU)
+                           utilities_rdm,
+                           water_sources_rdm,
+                           policies_rdm,
                            n_weeks,
                            realizations_to_run,
                            rof_tables,
@@ -920,15 +930,15 @@ Caesb::readInputData() { //A partir dessa linha serão inseridos os dados de ent
                 evap_inflows_suffix +
                 BAR + "tortoSM_inflows.csv", n_realizations);
 #pragma omp single
-        streamflows_bananal = Utils::parse2DCsvFile( //inserção dos dados de vazão
+        streamflows_bananal_torto = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" +
                 evap_inflows_suffix +
-                BAR + "subsistema_bananal_inflows.csv", n_realizations);
-#pragma omp single
-        streamflows_torto = Utils::parse2DCsvFile( //inserção dos dados de vazão
-                io_directory + DEFAULT_DATA_DIR + "inflows" +
-                evap_inflows_suffix +
-                BAR + "torto_inflows.csv", n_realizations);
+                BAR + "bananal_torto_inflows.csv", n_realizations);
+//#pragma omp single
+//        streamflows_torto = Utils::parse2DCsvFile( //inserção dos dados de vazão
+//                io_directory + DEFAULT_DATA_DIR + "inflows" +
+//                evap_inflows_suffix +
+//                BAR + "torto_inflows.csv", n_realizations);
         // }
 #pragma omp single
         streamflows_paranoa = Utils::parse2DCsvFile( //inserção dos dados de vazão

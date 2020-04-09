@@ -15,12 +15,12 @@ using namespace std;
 
 class Caesb : public Problem {
 private:
-    const int n_utilities = 1;
+    const int n_utilities = 2;
 //obs: não inseri os streamflows do subsistema gama (provavelmente será excluído da análise)
     vector<vector<double>> streamflows_descoberto; //descoberto
     vector<vector<double>> streamflows_tortoSM; //captação no Santa Maria
-    vector<vector<double>> streamflows_bananal; //subsistema bananal e lago paranoa
-    vector<vector<double>> streamflows_torto; //captação no torto
+    vector<vector<double>> streamflows_bananal_torto; //captação no bananal e no torto
+    //vector<vector<double>> streamflows_torto; //captação no torto
     vector<vector<double>> streamflows_paranoa; //lago paranoa
     vector<vector<double>> streamflows_corumbaIV; //corumba
     vector<vector<double>> demand_caesb_descoberto;
