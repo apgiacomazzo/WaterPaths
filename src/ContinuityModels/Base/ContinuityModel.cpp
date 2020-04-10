@@ -208,6 +208,7 @@ void ContinuityModel::continuityStep(
         continuity_water_sources[i]->continuityWaterSource(
                 week - delta_realization_weeks[rof_realization + 1],
                 upstream_spillage[i], wastewater_discharges[i], demands[i]);
+        demands[i] = vector<double>(n_utilities, 0.);
     }
 
     // updates combined storage for utilities.
