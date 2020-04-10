@@ -38,19 +38,23 @@ void Caesb::setProblemDefinition(BORG_Problem &problem) //void = vazio. O tipo v
     // The parameter bounds are the same for all formulations
     BORG_Problem_set_bounds(problem, 0, 0.001, 1.0); //Gatilho para acionar a restrição de uso da água - descoberto
     BORG_Problem_set_bounds(problem, 1, 0.001, 1.0); //Gatilho para acionar a restrição de uso da água - tortoSM
-    BORG_Problem_set_bounds(problem, 2, 0.001, 1.0); //Gatilho para acionar a transferência de água entre sistemas - descoberto
-    BORG_Problem_set_bounds(problem, 3, 0.0, 0.1); // Percentual da receita anual alocada para o fundo de contingência da Caesb. O limite superior representa 10% da receita anual.
-    BORG_Problem_set_bounds(problem, 4, 0.001, 1.0); //Gatilho para acionar construção de infraestrutura pela Caesb - descoberto
-    BORG_Problem_set_bounds(problem, 5, 0.001, 1.0); //Gatilho para acionar construção de infraestrutura pela Caesb - paranoa
-    BORG_Problem_set_bounds(problem, 6, 0.001, 1.0); //Gatilho para acionar construção de infraestrutura pela Caesb - corumba IV
-    BORG_Problem_set_bounds(problem, 7, 0.0, 1.0); //Ordem de "construção" do upgrade 1 da ETA Paranoá Sul (ampliação da capacidade de produção - 700 l/s)
-    BORG_Problem_set_bounds(problem, 8, 0.0, 1.0); //Ordem de "construção" do upgrade 2 da ETA Paranoá Sul (ampliação da capacidade de produção - 700 l/s)
-    BORG_Problem_set_bounds(problem, 9, 0.0, 1.0); //Ordem de "construção" do upgrade 3 da ETA Paranoá Sul (ampliação da capacidade de produção - 350 l/s)
-    BORG_Problem_set_bounds(problem, 10, 0.0, 1.0); //Ordem de "construção" do upgrade da ETA Lago Norte (ampliação da capacidade de produção - 350 l/s)
-    BORG_Problem_set_bounds(problem, 11, 0.0, 1.0); //Ordem de "construção" do upgrade 1 da ETA Valparaíso de Corumbá IV (implantação de + 1.400 l/s só pra CAESB)
-    BORG_Problem_set_bounds(problem, 12, 0.0, 1.0); //Ordem de "construção" do upgrade 2 da ETA Valparaíso de Corumbá IV (implantação de + 1.200 l/s só pra CAESB)
-    BORG_Problem_set_bounds(problem, 13, 0.0, 1.0); //Ordem de "construção" da elevação do nível da barragem do Descoberto
-    BORG_Problem_set_bounds(problem, 14, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb
+    BORG_Problem_set_bounds(problem, 2, 0.001, 1.0); //Diferença entre um estágio de maior restrição para o estágio de menor restrição - descoberto
+    BORG_Problem_set_bounds(problem, 3, 0.001, 1.0); //Diferença entre um estágio de maior restrição para o estágio de menor restrição - tortoSM
+    BORG_Problem_set_bounds(problem, 4, 0.001, 1.0); //Gatilho para acionar a transferência de água entre sistemas - descoberto
+    BORG_Problem_set_bounds(problem, 5, 0.001, 1.0); //Gatilho para acionar a transferência de água entre sistemas - tortoSM
+    BORG_Problem_set_bounds(problem, 6, 0.0, 0.1); // Percentual da receita anual alocada para o fundo de contingência da companhia 0. O limite superior representa 10% da receita anual.
+    BORG_Problem_set_bounds(problem, 7, 0.0, 0.1); // Percentual da receita anual alocada para o fundo de contingência da companhia 1. O limite superior representa 10% da receita anual.
+    BORG_Problem_set_bounds(problem, 8, 0.001, 1.0); //Gatilho para acionar construção de infraestrutura pela Caesb - descoberto
+    BORG_Problem_set_bounds(problem, 9, 0.001, 1.0); //Gatilho para acionar construção de infraestrutura pela Caesb - tortoSM
+    BORG_Problem_set_bounds(problem, 10, 0.0, 1.0); //Ordem de "construção" do upgrade 1 da ETA Paranoá Sul (ampliação da capacidade de produção - 700 l/s)
+    BORG_Problem_set_bounds(problem, 11, 0.0, 1.0); //Ordem de "construção" do upgrade 2 da ETA Paranoá Sul (ampliação da capacidade de produção - 700 l/s)
+    BORG_Problem_set_bounds(problem, 12, 0.0, 1.0); //Ordem de "construção" do upgrade 3 da ETA Paranoá (ampliação da capacidade de produção - 700 l/s)
+    BORG_Problem_set_bounds(problem, 13, 0.0, 1.0); //Ordem de "construção" do upgrade 1 da ETA Corumbá (implantação da ETA - 1400 l/s)
+    BORG_Problem_set_bounds(problem, 14, 0.0, 1.0); //Ordem de "construção" do upgrade 2 da ETA Corumbá (ampliação da capacidade de produção - 1400 l/s)
+    BORG_Problem_set_bounds(problem, 15, 0.0, 1.0); //Ordem de "construção" do upgrade 3 da ETA Corumbá (implantação de + 1.200 l/s só pra CAESB)
+    BORG_Problem_set_bounds(problem, 16, 0.0, 1.0); //Ordem de "construção" da elevação do nível da barragem do Descoberto
+    BORG_Problem_set_bounds(problem, 17, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb - descoberto
+    BORG_Problem_set_bounds(problem, 18, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb - tortoSM
 
     // Set epsilons for objectives //(problem, n° de identificação da função objetivo, valor do epsilon). O valor do epsilon indica a precisão das funções objetivo.
     BORG_Problem_set_epsilon(problem, 0, 0.002);
@@ -376,8 +380,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                          0,//número de identificação
                          bacia_descoberto,//vetor criado lá em cima - contém as vazões referentes aos afluentes do Descoberto
                          100.862 * table_gen_storage_multiplier, //capacidade de armazenamento do reservatório (hm³)
-                         6.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana)
-                         evaporation_descoberto,
+                         5.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana) - e-mail da ADASA
+                         evaporation_descoberto,                //obs: outorga da represa de Sta Maria é de 1.478 l/s (PDSB, 2017)
                          &descoberto_storage_area);
 
     Reservoir tortoSM("Torto / Santa Maria", 1,
