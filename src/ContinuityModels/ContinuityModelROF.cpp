@@ -100,8 +100,9 @@ vector<double> ContinuityModelROF::calculateLongTermROF(int week) {
             // that utility by 1 (FAILURE).
             for (int u = 0; u < n_utilities; ++u)
                 if (continuity_utilities[u]->getStorageToCapacityRatio() <=
-                    STORAGE_CAPACITY_RATIO_FAIL)
+                    STORAGE_CAPACITY_RATIO_FAIL || continuity_utilities[u]->getUnfulfilled_demand() > 0) {
                     year_failure[u] = FAILURE;
+                }
         }
 
         // Count failures and reset failures counter.
@@ -207,7 +208,8 @@ vector<double> ContinuityModelROF::calculateShortTermROFFullCalcs(int week) {
             // than the fail ration, increase the number of failed years of
             // that utility by 1 (FAILURE).
             for (int u = 0; u < n_utilities; ++u)
-                if (continuity_utilities[u]->getStorageToCapacityRatio() <= STORAGE_CAPACITY_RATIO_FAIL) {
+                if (continuity_utilities[u]->getStorageToCapacityRatio() <=
+                    STORAGE_CAPACITY_RATIO_FAIL || continuity_utilities[u]->getUnfulfilled_demand() > 0.) {
                     year_failure[u] = FAILURE;
                 }
 
