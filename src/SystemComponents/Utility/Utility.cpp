@@ -373,6 +373,7 @@ void Utility::checkErrorsAddWaterSourceOnline(WaterSource *water_source) {
  * allocations in reservoirs.
  * @param week
  */
+#pragma GCC optimize ("O0")
 void Utility::splitDemands(
         int week, vector<vector<double>> &demands,
         bool apply_demand_buffer) {
@@ -386,6 +387,7 @@ void Utility::splitDemands(
     if (week == 194 && id == 1)
         int slfdj = 0;
     double demand_non_priority_sources = restricted_demand;
+    double total_serviced_demand = 0;
 
     // Allocates demand to intakes and reuse based on allocated volume to
     // this utility.
@@ -395,6 +397,7 @@ void Utility::splitDemands(
                     water_sources[ws]->getAvailableAllocatedVolume(id));
         demands[ws][this->id] = source_demand;
         demand_non_priority_sources -= source_demand;
+        total_serviced_demand += source_demand;
     }
 
     // Allocates remaining demand to reservoirs based on allocated available
@@ -432,6 +435,7 @@ void Utility::splitDemands(
             sum_not_alloc_demand_fraction += demand_fraction[ws];
             not_over_allocated_sources++;
         }
+        total_serviced_demand += demands[ws][id];
     }
 
     // Do one iteration of demand reallocation among sources whose treatment
@@ -447,6 +451,7 @@ void Utility::splitDemands(
 
     // Update contingency fund
     if (used_for_realization) {
+        unfulfilled_demand = restricted_demand - total_serviced_demand;
         updateContingencyFundAndDebtService(unrestricted_demand,
                                             demand_multiplier,
                                             demand_offset,
