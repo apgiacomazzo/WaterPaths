@@ -380,7 +380,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                          0,//número de identificação
                          bacia_descoberto,//vetor criado lá em cima - contém as vazões referentes aos afluentes do Descoberto
                          100.862 * table_gen_storage_multiplier, //capacidade de armazenamento do reservatório (hm³)
-                         5.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana) - e-mail da ADASA
+                         6.0e-6 * 3600 * 24 * 7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana)
                          evaporation_descoberto,                //obs: outorga da represa de Sta Maria é de 1.478 l/s (PDSB, 2017)
                          &descoberto_storage_area);
 
