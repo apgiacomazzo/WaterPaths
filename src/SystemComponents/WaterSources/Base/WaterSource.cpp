@@ -670,7 +670,7 @@ double WaterSource::getAllocatedTreatmentCapacity(int utility_id) const {
     return total_treatment_capacity;
 }
 
-double WaterSource::getTotal_treatment_capacity(int utility_id) const {
+double WaterSource::getTotal_treatment_capacity() const {
     return total_treatment_capacity;
 }
 
@@ -701,6 +701,10 @@ void WaterSource::setAvailableAllocatedVolumes(
 
 vector<double> WaterSource::getAvailable_allocated_volumes() const {
     return available_allocated_volumes;
+}
+
+const vector<double> &WaterSource::getAllocatedTreatmentCapacities() const {
+    return allocated_treatment_capacities;
 }
 
 vector<int> *WaterSource::getUtilities_with_allocations() const {

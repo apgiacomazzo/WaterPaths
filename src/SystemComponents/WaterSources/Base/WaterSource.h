@@ -147,7 +147,7 @@ public:
 
     virtual double getAllocatedTreatmentCapacity(int utility_id) const;
 
-    double getTotal_treatment_capacity(int utility_id) const;
+    double getTotal_treatment_capacity() const;
 
     void setAllocations(
             vector<int> *utilities_with_allocations,
@@ -184,6 +184,8 @@ public:
     static void unsetSeed();
 
     const double getConstruction_time() const;
+
+    const vector<double> &getAllocatedTreatmentCapacities() const;
 };
 
 

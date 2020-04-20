@@ -436,14 +436,14 @@ vector<double> MasterDataCollector::calculatePrintObjectives(string file_name, b
 
         outStream.close();
 
-        for (int i = 0; i < (int) objectives.size(); ++i) {
-            double o = objectives.at(i);
-            if (o > 10e10 || o < -0.1) {
-                char error[512];
-                sprintf(error, "Objective %d has absurd value of %f. Aborting.\n", i, o);
-                throw_with_nested(runtime_error(error));
-            }
-        }
+//        for (int i = 0; i < (int) objectives.size(); ++i) {
+//            double o = objectives.at(i);
+//            if (o > 10e10 || o < -0.1) {
+//                char error[512];
+//                sprintf(error, "Objective %d has absurd value of %f. Aborting.\n", i, o);
+//                throw_with_nested(runtime_error(error));
+//            }
+//        }
     } else {
 //        cout << "Calculating Objectives" << endl;
         for (auto &u : utility_collectors) {

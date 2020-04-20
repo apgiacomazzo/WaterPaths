@@ -442,9 +442,9 @@ void InfrastructureManager::beginConstruction(int week, int infra_id) {
     }
 }
 
-void InfrastructureManager::connectWaterSourcesVectorsToUtilitys(vector<WaterSource *> &water_sources,
-                                                                 vector<int> &priority_draw_water_source,
-                                                                 vector<int> &non_priority_draw_water_source) {
+void InfrastructureManager::connectWaterSourcesVectorsToUtilities(vector<WaterSource *> &water_sources,
+                                                                  vector<int> &priority_draw_water_source,
+                                                                  vector<int> &non_priority_draw_water_source) {
     this->water_sources = &water_sources;
     this->priority_draw_water_source = &priority_draw_water_source;
     this->non_priority_draw_water_source = &non_priority_draw_water_source;
