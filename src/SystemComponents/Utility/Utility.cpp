@@ -415,7 +415,7 @@ void Utility::checkErrorsAddWaterSourceOnline(WaterSource *water_source) {
     }
 }
 
-//#pragma GCC optimize("O3")
+#pragma GCC optimize("O3")
 bool Utility::idealDemandSplitUnconstrained(double *split_demands,
                                           double *available_treated_flow_rate,
                                           double total_demand, const double *storage,
@@ -430,7 +430,7 @@ bool Utility::idealDemandSplitUnconstrained(double *split_demands,
     return treatment_capacity_violated;
 }
 
-//#pragma GCC optimize("O3")
+#pragma GCC optimize("O3")
 bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allocated,
                           bool *has_spare_capacity,
                           double *available_treated_flow_rate,
@@ -463,7 +463,7 @@ bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allo
  * allocations in reservoirs.
  * @param week
  */
-//#pragma GCC optimize("O3")
+#pragma GCC optimize("O3")
 void Utility::splitDemands(
         int week, vector<vector<double>> &demands,
         bool apply_demand_buffer) {
@@ -642,7 +642,7 @@ if (over_allocated_sources > 0) {
  * @param demand_offset
  * @return contingency fund contribution or draw.
  */
-//#pragma GCC optimize("O3")
+#pragma GCC optimize("O3")
 void Utility::updateContingencyFundAndDebtService(
         double unrestricted_demand, double demand_multiplier,
         double demand_offset, double unfulfilled_demand, int week) {
