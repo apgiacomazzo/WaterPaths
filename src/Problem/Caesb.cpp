@@ -494,17 +494,17 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             //Empréstimo para Expansão da ETA Corumbá (Sistema Corumbá)
 
     vector<Bond *> debendure_expansao_ETA_corumba_1 = {
-            new BalloonPaymentBond(11, 0, 20, 0.07, vector<int>(1, 0)),
             new LevelDebtServiceBond(6, 276521740.0, 20, 0.07,
-                                     vector<int>(1, 0))};
+                                     vector<int>(1, 0)),
+            new BalloonPaymentBond(11, 0, 20, 0.07, vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_corumba_2 = {
-            new BalloonPaymentBond(12, 0, 20, 0.07, vector<int>(1, 0)),
             new LevelDebtServiceBond(7, 222066142.8, 20, 0.07,
-                                     vector<int>(1, 0))};
+                                     vector<int>(1, 0)),
+            new BalloonPaymentBond(12, 0, 20, 0.07, vector<int>(1, 0))};
     vector<Bond *> debendure_expansao_ETA_corumba_3 = {
-            new BalloonPaymentBond(13, 0, 20, 0.07, vector<int>(1, 0)),
             new LevelDebtServiceBond(8, 251383400, 20, 0.07,
-                                     vector<int>(1, 0))};
+                                     vector<int>(1, 0)),
+            new BalloonPaymentBond(13, 0, 20, 0.07, vector<int>(1, 0))};
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa1(
             "Etapa 1 de Corumba IV", 6, 2, 0, {6, 7, 8},
@@ -717,9 +717,9 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                                                             // 0.98 significa que a demanda será restringida em 2% e assim por diante.
     vector<double> restriction_stage_triggers_caesb_descoberto = {
             caesb_descoberto_restriction_trigger, //estágio 1 - 2% de redução (campanha de conscientização)
-            caesb_descoberto_restriction_trigger -
+            caesb_descoberto_restriction_trigger +
             delta_descoberto_restriction_trigger, // estágio 2 - 4% de redução (tarifa de conting) + 2% do primeiro
-            caesb_descoberto_restriction_trigger - 2 *
+            caesb_descoberto_restriction_trigger + 2. *
             delta_descoberto_restriction_trigger}; //estágio 3 - 12% de redução (racionamento) + 2% do primeiro
     //Obs: o 1° estágio corresponde à campanha, o 2° à tarifa de contingência e o 3° ao racionamento.
     //Acumulou-se a campanha com os outros dois estágios.
@@ -731,10 +731,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     vector<double> restriction_stage_triggers_caesb_tortoSM = {
             caesb_tortoSM_restriction_trigger, //estágio 1
-            caesb_tortoSM_restriction_trigger -
+            caesb_tortoSM_restriction_trigger +
             delta_tortoSM_restriction_trigger, // estágio 2
-            caesb_tortoSM_restriction_trigger -
-            2 * delta_tortoSM_restriction_trigger}; //estágio 3
+            caesb_tortoSM_restriction_trigger +
+            2. * delta_tortoSM_restriction_trigger}; //estágio 3
 
     // Criação das políticas de restrição de uso da água (puxa o código Restrictions.h, que contém os comandos dessa política)
 

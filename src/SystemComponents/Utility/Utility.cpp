@@ -280,15 +280,14 @@ bool Utility::compById(Utility *a, Utility *b) {
 }
 
 void Utility::updateTreatmentAndNumberOfStorageSources() {
-    n_storage_sources = 0;
+    n_storage_sources = non_priority_draw_water_source.size();
     delete[] available_treated_flow_rate;
     available_treated_flow_rate = new double[non_priority_draw_water_source.size()];
-    for (int i = 0; i < non_priority_draw_water_source.size(); ++i) {
+    for (int i = 0; i < n_storage_sources; ++i) {
         auto ws = water_sources[non_priority_draw_water_source[i]];
         available_treated_flow_rate[i] = ws->getAllocatedTreatmentCapacity(id);
         total_storage_treatment_capacity += ws->getAllocatedTreatmentCapacity(
                 id);
-        n_storage_sources++;
     }
 }
 
@@ -309,15 +308,30 @@ void Utility::calculateWeeklyAverageWaterPrices(
     int n_tiers = static_cast<int>(typesMonthlyWaterPrice.at(0).size());
 
     // Calculate monthly average prices across consumer types.
-    for (int m = 0; m < NUMBER_OF_MONTHS; ++m)
-        for (int t = 0; t < n_tiers; ++t)
+    for (int m = 0; m < NUMBER_OF_MONTHS; ++m) {
+        for (int t = 0; t < n_tiers; ++t) {
             monthly_average_price[m] += typesMonthlyDemandFraction[m][t] *
                                         typesMonthlyWaterPrice[m][t];
-
+        }
+    }
     // Create weekly price table from monthly prices.
-    for (int w = 0; w < (int) (WEEKS_IN_YEAR + 1); ++w)
+    bool issued_high_tariff_warning = false;
+    for (int w = 0; w < (int) (WEEKS_IN_YEAR + 1); ++w) {
         weekly_average_volumetric_price[w] =
-                monthly_average_price[(int) (w / WEEKS_IN_MONTH)] / 1e6;
+                monthly_average_price[(int) (w / WEEKS_IN_MONTH)] / WEEKS_IN_MONTH;
+
+        if (weekly_average_volumetric_price[w] > 1e3) {
+            weekly_average_volumetric_price[w] /= 1e6;
+            if (!issued_high_tariff_warning) {
+                printf("Tariff price for utility %d is numerically "
+                       "too high, so the numbers are being divided by 1,000,000 "
+                       "(converting $ to MM$). This is probably the right price, "
+                       "but such high numbers may cause WaterPaths to have memory "
+                       "issues (I mean related to computer memory size).\n", id);
+                issued_high_tariff_warning = true;
+            }
+        }
+    }
 }
 
 /**
@@ -415,7 +429,7 @@ void Utility::checkErrorsAddWaterSourceOnline(WaterSource *water_source) {
     }
 }
 
-#pragma GCC optimize("O3")
+#pragma GCC optimize("O0")
 bool Utility::idealDemandSplitUnconstrained(double *split_demands,
                                           double *available_treated_flow_rate,
                                           double total_demand, const double *storage,
@@ -430,7 +444,7 @@ bool Utility::idealDemandSplitUnconstrained(double *split_demands,
     return treatment_capacity_violated;
 }
 
-#pragma GCC optimize("O3")
+#pragma GCC optimize("O0")
 bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allocated,
                           bool *has_spare_capacity,
                           double *available_treated_flow_rate,
@@ -463,7 +477,7 @@ bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allo
  * allocations in reservoirs.
  * @param week
  */
-#pragma GCC optimize("O3")
+#pragma GCC optimize("O0")
 void Utility::splitDemands(
         int week, vector<vector<double>> &demands,
         bool apply_demand_buffer) {
@@ -491,7 +505,6 @@ void Utility::splitDemands(
         demand_non_priority_sources -= source_demand;
         total_serviced_demand += source_demand;
     }
-
 
     double storages[n_storage_sources];
     double total_available_flow_rate = 0;
@@ -568,54 +581,6 @@ void Utility::splitDemands(
         }
     }
 
-    /*
-    for (int &ws : non_priority_draw_water_source) {
-        auto source = water_sources[ws];
-
-    // Calculate allocation based on sources' available volumes.
-    demand_fraction[ws] =
-            max(1.0e-6,
-                source->getAvailableAllocatedVolume(id) /
-                total_stored_volume);
-
-    // Calculate demand allocated to a given source.
-    double source_demand =
-            demand_non_priority_sources * demand_fraction[ws];
-    demands[ws][id] = source_demand;
-
-    // Check if allocated demand was greater than treatment capacity.
-    double over_allocated_demand_ws =
-            source_demand - source->getAllocatedTreatmentCapacity(id);
-
-    // Set reallocation variables for the sake of reallocating demand.
-    if (over_allocated_demand_ws > 0.) {
-        over_allocated_sources++;
-        over_allocated_volume += over_allocated_demand_ws;
-        demands[ws][id] = source_demand - over_allocated_demand_ws;
-    } else {
-        not_over_allocated_ids[not_over_allocated_sources] = ws;
-        sum_not_alloc_demand_fraction += demand_fraction[ws];
-        not_over_allocated_sources++;
-    }
-    total_serviced_demand += demands[ws][id];
-}
-
-// Do one iteration of demand reallocation among sources whose treatment
-// capacities have not yet been exceeded if there is an instance of
-// overallocation.
-if (over_allocated_sources > 0) {
-    for (int i = 0; i < not_over_allocated_sources; ++i) {
-        int ws = not_over_allocated_ids[i];
-        demands[ws][id] += over_allocated_volume *
-                           demand_fraction[ws] /
-                           sum_not_alloc_demand_fraction;
-    }
-
-    }
-
-}
-*/
-
     // Update contingency fund
     if (treatment_capacity_violation) {
         unfulfilled_demand = restricted_demand - total_available_flow_rate;
@@ -642,7 +607,7 @@ if (over_allocated_sources > 0) {
  * @param demand_offset
  * @return contingency fund contribution or draw.
  */
-#pragma GCC optimize("O3")
+#pragma GCC optimize("O0")
 void Utility::updateContingencyFundAndDebtService(
         double unrestricted_demand, double demand_multiplier,
         double demand_offset, double unfulfilled_demand, int week) {
@@ -811,6 +776,8 @@ int Utility::infrastructureConstructionHandler(double long_term_rof, int week) {
     // infrastructure NPV.
     issueBond(new_infra_triggered, week);
 
+    updateTreatmentAndNumberOfStorageSources();
+
     return new_infra_triggered;
 }
 
@@ -853,9 +820,7 @@ void Utility::setRealization(unsigned long r, vector<double> &rdm_factors) {
     demand_series_realization = vector<double>(n_weeks);
 
     // Apply demand multiplier and copy demands pertaining to current realization.
-    double delta_demand = demands_all_realizations.at(r)[0] * (1. -
-                                                               rdm_factors.at(
-                                                                       0));
+    double delta_demand = demands_all_realizations.at(r)[0] * (1. - rdm_factors.at(0));
     for (unsigned long w = 0; w < n_weeks; ++w) {
         demand_series_realization[w] = demands_all_realizations.at(r)[w] *
                                        rdm_factors.at(0)
@@ -870,8 +835,9 @@ void Utility::setRealization(unsigned long r, vector<double> &rdm_factors) {
     weekly_peaking_factor = calculateWeeklyPeakingFactor
             (&demands_all_realizations.at(r));
 
+    price_rdm_multiplier = rdm_factors.at(4);
     for (double &awp : weekly_average_volumetric_price) {
-        awp *= rdm_factors.at(4);
+        awp *= price_rdm_multiplier;
     }
 }
 
@@ -998,7 +964,7 @@ double Utility::waterPrice(int week) {
 }
 
 void Utility::setRestricted_price(double restricted_price) {
-    Utility::restricted_price = restricted_price;
+    Utility::restricted_price = restricted_price * price_rdm_multiplier;
 }
 
 void Utility::setNoFinaicalCalculations() {

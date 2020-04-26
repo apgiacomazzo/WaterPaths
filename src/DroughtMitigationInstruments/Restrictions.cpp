@@ -106,23 +106,27 @@ void Restrictions::calculateWeeklyAverageWaterPrices(
                 std::vector<std::vector<double>>();
 
         for (unsigned long s = 0; s < priceMultipliers->size(); ++s) { // stages loop
-//            restricted_weekly_average_volumetric_price[s] =
-//                    new double[(int) WEEKS_IN_YEAR + 1]();
             restricted_weekly_average_volumetric_price.emplace_back(
                     (int) WEEKS_IN_YEAR + 1, 0.);
             double monthly_average_price[NUMBER_OF_MONTHS] = {};
 
-            for (int m = 0; m < NUMBER_OF_MONTHS; ++m) // monthly loop
-                for (unsigned long t = 0; t < n_tiers;
-                     ++t) // consumer type loop
+            for (int m = 0; m < NUMBER_OF_MONTHS; ++m) { // monthly loop
+                for (unsigned long t = 0; t < n_tiers; ++t) { // consumer type loop
                     monthly_average_price[m] +=
                             (*typesMonthlyDemandFraction)[m][t] *
                             (*typesMonthlyWaterPrice)[m][t] *
                             (*priceMultipliers)[s][t];
+                }
+            }
 
-            for (int w = 0; w < (int) (WEEKS_IN_YEAR + 1); ++w)
+            for (int w = 0; w < (int) (WEEKS_IN_YEAR + 1); ++w) {
                 restricted_weekly_average_volumetric_price[s][w] =
-                        monthly_average_price[(int) (w / WEEKS_IN_MONTH)];
+                        monthly_average_price[(int) (w / WEEKS_IN_MONTH)] / WEEKS_IN_MONTH;
+
+                if (restricted_weekly_average_volumetric_price[s][w] > 1e3) {
+                    restricted_weekly_average_volumetric_price[s][w] /= 1e6;
+                }
+            }
         }
     }
 }
@@ -130,6 +134,6 @@ void Restrictions::calculateWeeklyAverageWaterPrices(
 void Restrictions::setRealization(unsigned long realization_id, vector<double> &utilities_rdm,
                                   vector<double> &water_sources_rdm, vector<double> &policy_rdm) {
     for (double& sm : stage_multipliers) {
-        sm *= policy_rdm.at((unsigned long) id);
+        sm = min(1., sm * policy_rdm.at((unsigned long) id));
     }
 }
