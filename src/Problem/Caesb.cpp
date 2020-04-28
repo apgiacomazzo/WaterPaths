@@ -173,8 +173,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     //    cout << getexepath() << endl;
 
     /// READ STREAMFLOWS
-    int streamflow_n_weeks = 52 * (50 +
-                                   40); //52 semanas em um ano / 50 anos de dados históricos / 40 anos de simulação futura.
+
+    auto streamflow_n_weeks = (int) std::round(90 * WEEKS_IN_YEAR); //90 = 50 anos de dados históricos + 40 anos de dados sintéticos (futuros).
 
     /// In case a vector containing realizations numbers to be calculated is passed, set
     /// number of realizations to number of realizations in that vector.
@@ -607,7 +607,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
      * of existing sources in parentheses
      *
      *                                  1 (Santa Maria)
-     *      0(13)                       |
+     *      0(12)                       |
      *       \                          |
      *        \                         |  4(Ban)   4 (Torto)
      *         \                        |   \      /
