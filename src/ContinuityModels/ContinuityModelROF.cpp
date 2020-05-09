@@ -310,8 +310,7 @@ void ContinuityModelROF::updateStorageToROFTable(
                 utility_storage += available_volumes_shifted[ws] *
                                    continuity_water_sources[ws]->getSupplyAllocatedFraction(
                                            u) *
-                                   (realization_water_sources[ws]->getAllocatedTreatmentCapacity(
-                                           u) > 0
+                                    (realization_utilities[u]->hasTreatmentConnected(ws)
                                     &&
                                     realization_water_sources[ws]->isOnline());
             // Register failure in the table for each utility meeting

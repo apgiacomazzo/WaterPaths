@@ -657,6 +657,11 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     //Criação das companhias de água. A descrição de cada termo está no arquivo .doc.
 
+    vector<vector<int>> water_sources_to_wtp_caesb_1 = {{0}, {2}};
+    vector<double> wtp_capacities_caesb_1 = {6.0e-6 * 3600 * 24 * 7, 0.};
+    vector<vector<int>> water_sources_to_wtp_caesb_2 = {{1, 4}, {3}};
+    vector<double> wtp_capacities_caesb_2 = {1.1e-6 * 3600 * 24 * 7 + 1.7e-6 * 3600 * 24 * 7, 0.7e-6 * 3600 * 24 * 7};
+
     Utility caesb_descoberto((char *) "CAESB Descoberto", 0,
                              demand_caesb_descoberto, demand_n_weeks,
                              caesb_descoberto_annual_payment,
@@ -664,8 +669,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                              caesbUserClassesWaterPrices,
                              wwtp_discharge_caesb_descoberto,
                              caesb_descoberto_inf_buffer,
+                             water_sources_to_wtp_caesb_1,
+                             wtp_capacities_caesb_1,
                              rof_triggered_infra_order_caesb_descoberto,
-                             vector<int>(), rofs_infra_caesb_descoberto, 0.04, //taxa de desconto
+                             vector<int>(), rofs_infra_caesb_descoberto, 0.04, // taxa de desconto
                              20, 0.07);
 
     Utility caesb_tortoSM((char *) "CAESB Torto/Santa Maria", 1,
@@ -675,8 +682,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                           caesbUserClassesWaterPrices,
                           wwtp_discharge_caesb_tortoSM,
                           caesb_tortoSM_inf_buffer,
+                          water_sources_to_wtp_caesb_2,
+                          wtp_capacities_caesb_2,
                           rof_triggered_infra_order_caesb_tortoSM,
-                          vector<int>(), rofs_infra_caesb_tortoSM, 0.04, //0.04 = taxa de desconto
+                          vector<int>(), rofs_infra_caesb_tortoSM, 0.04, // 0.04 = taxa de desconto
                           20, 0.07);
 
 

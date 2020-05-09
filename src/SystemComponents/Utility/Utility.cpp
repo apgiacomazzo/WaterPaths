@@ -6,11 +6,8 @@
 #include <numeric>
 #include <algorithm>
 #include "Utility.h"
-#include "../WaterSources/ReservoirExpansion.h"
-#include "../WaterSources/SequentialJointTreatmentExpansion.h"
-#include "../WaterSources/Relocation.h"
 #include "../../Utils/Utils.h"
-#include "InfrastructureManager.h"
+#include "../../../../osqp/include/osqp.h"
 
 /**
  * Main constructor for the Utility class.
@@ -38,7 +35,9 @@ Utility::Utility(
         const vector<vector<double>> &typesMonthlyDemandFraction,
         const vector<vector<double>> &typesMonthlyWaterPrice,
         WwtpDischargeRule wwtp_discharge_rule,
-        double demand_buffer) :
+        double demand_buffer,
+        vector<vector<int>> water_source_to_wtp,
+        vector<double> utility_owned_wtp_capacities) :
         total_storage_capacity(NONE),
         total_available_volume(NONE),
         wwtp_discharge_rule(wwtp_discharge_rule),
@@ -51,11 +50,35 @@ Utility::Utility(
         name(name),
         percent_contingency_fund_contribution(
                 percent_contingency_fund_contribution),
-        demand_buffer(demand_buffer) {
+        demand_buffer(demand_buffer),
+        utility_owned_wtp_capacities(utility_owned_wtp_capacities) {
     calculateWeeklyAverageWaterPrices(typesMonthlyDemandFraction,
                                       typesMonthlyWaterPrice);
+    unrollWaterSourceToWtpVector(water_source_to_wtp,
+                                 utility_owned_wtp_capacities);
+}
 
-    updateTreatmentAndNumberOfStorageSources();
+void Utility::unrollWaterSourceToWtpVector(
+        const vector<vector<int>> &water_source_to_wtp,
+        const vector<double> &utility_owned_wtp_capacities) {
+
+    if (water_source_to_wtp.size() != utility_owned_wtp_capacities.size()) {
+        char error[512];
+        sprintf(error, "Utility %d has %lu WTPs but %lu water sources (or "
+                       "groups of) assigned to WTPs.", id,
+                utility_owned_wtp_capacities.size(),
+                water_source_to_wtp.size());
+        throw invalid_argument(error);
+    }
+
+    for (int i = 0; i < water_source_to_wtp.size(); ++i) {
+        for (int ws : water_source_to_wtp[i]) {
+            if (ws >= this->water_source_to_wtp.size()) {
+                this->water_source_to_wtp.resize(ws + 1, NON_INITIALIZED);
+            }
+            this->water_source_to_wtp[ws] = i;
+        }
+    }
 }
 
 /**
@@ -88,12 +111,14 @@ Utility::Utility(const char *name, int id,
                  const vector<vector<double>> &typesMonthlyWaterPrice,
                  WwtpDischargeRule wwtp_discharge_rule,
                  double demand_buffer,
+                 vector<vector<int>> water_source_to_wtp,
+                 vector<double> utility_owned_wtp_capacities,
                  const vector<int> &rof_infra_construction_order,
                  const vector<int> &demand_infra_construction_order,
                  const vector<double> &infra_construction_triggers,
                  double infra_discount_rate,
-                 const vector<vector<int>> &infra_if_built_remove, double
-                 bond_term, double bond_interest_rate) :
+                 const vector<vector<int>> &infra_if_built_remove,
+                 double bond_term, double bond_interest_rate) :
         total_storage_capacity(NONE),
         total_available_volume(NONE),
         wwtp_discharge_rule(wwtp_discharge_rule),
@@ -106,7 +131,8 @@ Utility::Utility(const char *name, int id,
         name(name),
         percent_contingency_fund_contribution(
                 percent_contingency_fund_contribution),
-        demand_buffer(demand_buffer) {
+        demand_buffer(demand_buffer),
+        utility_owned_wtp_capacities(utility_owned_wtp_capacities) {
     infrastructure_construction_manager =
             InfrastructureManager(id, infra_construction_triggers,
                                   infra_if_built_remove,
@@ -114,6 +140,9 @@ Utility::Utility(const char *name, int id,
                                   bond_interest_rate,
                                   rof_infra_construction_order,
                                   demand_infra_construction_order);
+
+    unrollWaterSourceToWtpVector(water_source_to_wtp,
+                                 utility_owned_wtp_capacities);
 
     infrastructure_construction_manager.connectWaterSourcesVectorsToUtilities(
             water_sources,
@@ -165,6 +194,8 @@ Utility::Utility(const char *name, int id,
                  const vector<vector<double>> &typesMonthlyWaterPrice,
                  WwtpDischargeRule wwtp_discharge_rule,
                  double demand_buffer,
+                 vector<vector<int>> water_source_to_wtp,
+                 vector<double> utility_owned_wtp_capacities,
                  const vector<int> &rof_infra_construction_order,
                  const vector<int> &demand_infra_construction_order,
                  const vector<double> &infra_construction_triggers,
@@ -182,7 +213,12 @@ Utility::Utility(const char *name, int id,
         name(name),
         percent_contingency_fund_contribution(
                 percent_contingency_fund_contribution),
-        demand_buffer(demand_buffer) {
+        demand_buffer(demand_buffer),
+        utility_owned_wtp_capacities(utility_owned_wtp_capacities) {
+
+    unrollWaterSourceToWtpVector(water_source_to_wtp,
+                                 utility_owned_wtp_capacities);
+
     infrastructure_construction_manager = InfrastructureManager(id,
                                                                 infra_construction_triggers,
                                                                 vector<vector<int>>(),
@@ -224,6 +260,7 @@ Utility::Utility(Utility &utility) :
                 utility.weekly_average_volumetric_price),
         total_storage_capacity(utility.total_storage_capacity),
         total_available_volume(utility.total_available_volume),
+        total_treatment_capacity(utility.total_treatment_capacity),
         wwtp_discharge_rule(utility.wwtp_discharge_rule),
         demands_all_realizations(utility.demands_all_realizations),
         demand_series_realization(utility.demand_series_realization),
@@ -237,7 +274,10 @@ Utility::Utility(Utility &utility) :
                 utility.percent_contingency_fund_contribution),
         demand_buffer(utility.demand_buffer),
         infrastructure_construction_manager(
-                utility.infrastructure_construction_manager) {
+                utility.infrastructure_construction_manager),
+        water_source_to_wtp(
+                utility.water_source_to_wtp),
+        utility_owned_wtp_capacities(utility.utility_owned_wtp_capacities) {
 
     infrastructure_construction_manager.connectWaterSourcesVectorsToUtilities(
             water_sources,
@@ -267,11 +307,11 @@ Utility &Utility::operator=(const Utility &utility) {
     return *this;
 }
 
-bool Utility::operator<(const Utility *other) {
+bool Utility::operator<(const Utility *other) const {
     return id < other->id;
 }
 
-bool Utility::operator>(const Utility *other) {
+bool Utility::operator>(const Utility *other) const {
     return id > other->id;
 }
 
@@ -285,10 +325,17 @@ void Utility::updateTreatmentAndNumberOfStorageSources() {
     available_treated_flow_rate = new double[non_priority_draw_water_source.size()];
     for (int i = 0; i < n_storage_sources; ++i) {
         auto ws = water_sources[non_priority_draw_water_source[i]];
-        available_treated_flow_rate[i] = ws->getAllocatedTreatmentCapacity(id);
-        total_storage_treatment_capacity += ws->getAllocatedTreatmentCapacity(
-                id);
+        available_treated_flow_rate[i] = utility_owned_wtp_capacities[water_source_to_wtp[ws->id]];
+        total_storage_treatment_capacity += available_treated_flow_rate[i];
     }
+
+    total_treatment_capacity = accumulate(utility_owned_wtp_capacities.begin(),
+                                          utility_owned_wtp_capacities.end(),
+                                          0.);
+
+    //TODO: IMPLEMENT QP HERE
+//    P_x = new double[n_storage_sources];
+//    A_x = new double[n_storage_sources];
 }
 
 /**
@@ -318,7 +365,8 @@ void Utility::calculateWeeklyAverageWaterPrices(
     bool issued_high_tariff_warning = false;
     for (int w = 0; w < (int) (WEEKS_IN_YEAR + 1); ++w) {
         weekly_average_volumetric_price[w] =
-                monthly_average_price[(int) (w / WEEKS_IN_MONTH)] / WEEKS_IN_MONTH;
+                monthly_average_price[(int) (w / WEEKS_IN_MONTH)] /
+                WEEKS_IN_MONTH;
 
         if (weekly_average_volumetric_price[w] > 1e3) {
             weekly_average_volumetric_price[w] /= 1e6;
@@ -327,7 +375,8 @@ void Utility::calculateWeeklyAverageWaterPrices(
                        "too high, so the numbers are being divided by 1,000,000 "
                        "(converting $ to MM$). This is probably the right price, "
                        "but such high numbers may cause WaterPaths to have memory "
-                       "issues (I mean related to computer memory size).\n", id);
+                       "issues (I mean related to computer memory size).\n",
+                       id);
                 issued_high_tariff_warning = true;
             }
         }
@@ -375,7 +424,7 @@ void Utility::updateTotalAvailableVolume() {
         total_available_volume += stored_volume;
         total_stored_volume += stored_volume;
         net_stream_inflow += ws->getAllocatedInflow(id);
-        available_treated_flow_rate[i] = ws->getAllocatedTreatmentCapacity(id);
+        available_treated_flow_rate[i] = utility_owned_wtp_capacities[water_source_to_wtp[ws->id]];
     }
 }
 
@@ -404,11 +453,12 @@ void Utility::addWaterSource(WaterSource *water_source) {
 
     // If watersource is online and the utility owns some of its installed
     // treatment capacity, make it online.
-    if (water_source->isOnline() && water_source->
-            getAllocatedTreatmentCapacity(id) > 0) {
+    if (water_source->isOnline() &&
+        utility_owned_wtp_capacities[water_source_to_wtp[water_source->id]] >
+        0) {
         infrastructure_construction_manager.addWaterSourceToOnlineLists(
                 water_source->id, total_storage_capacity,
-                total_treatment_capacity, total_available_volume,
+                total_available_volume,
                 total_stored_volume);
     }
 
@@ -429,11 +479,14 @@ void Utility::checkErrorsAddWaterSourceOnline(WaterSource *water_source) {
     }
 }
 
-#pragma GCC optimize("O0")
+#pragma GCC optimize("O3")
+
 bool Utility::idealDemandSplitUnconstrained(double *split_demands,
-                                          double *available_treated_flow_rate,
-                                          double total_demand, const double *storage,
-                                          double total_storage, int n_storage_sources) {
+                                            const double *available_treated_flow_rate,
+                                            double total_demand,
+                                            const double *storage,
+                                            double total_storage,
+                                            int n_storage_sources) {
     bool treatment_capacity_violated = false;
     for (int i = 0; i < n_storage_sources; ++i) {
         split_demands[i] = total_demand * storage[i] / total_storage;
@@ -444,12 +497,16 @@ bool Utility::idealDemandSplitUnconstrained(double *split_demands,
     return treatment_capacity_violated;
 }
 
-#pragma GCC optimize("O0")
-bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allocated,
-                          bool *has_spare_capacity,
-                          double *available_treated_flow_rate,
-                          double total_demand, const double *storage,
-                          double total_storage, int n_storage_sources) {
+#pragma GCC optimize("O3")
+
+bool Utility::idealDemandSplitConstrained(double *split_demands,
+                                          bool *over_allocated,
+                                          bool *has_spare_capacity,
+                                          const double *available_treated_flow_rate,
+                                          double total_demand,
+                                          const double *storage,
+                                          double total_storage,
+                                          int n_storage_sources) {
     // Consider only storage of sources that are still not at provision capacity.
     total_storage = 0;
     for (int j = 0; j < n_storage_sources; ++j) {
@@ -463,7 +520,8 @@ bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allo
         if (has_spare_capacity[i]) {
             split_demands[i] = total_demand * storage[i] / total_storage;
         }
-        over_allocated[i] = split_demands[i] - 1e-9 > available_treated_flow_rate[i];
+        over_allocated[i] =
+                split_demands[i] - 1e-9 > available_treated_flow_rate[i];
         has_spare_capacity[i] =
                 split_demands[i] + 1e-9 < available_treated_flow_rate[i];
         if (over_allocated[i]) treatment_capacity_violated = true;
@@ -481,6 +539,7 @@ bool Utility::idealDemandSplitConstrained(double *split_demands, bool *over_allo
 void Utility::splitDemands(
         int week, vector<vector<double>> &demands,
         bool apply_demand_buffer) {
+    auto utility_owned_wtp_capacities = this->utility_owned_wtp_capacities;
     unrestricted_demand = demand_series_realization[week] +
                           apply_demand_buffer * demand_buffer *
                           weekly_peaking_factor[Utils::weekOfTheYear(week)];
@@ -497,23 +556,25 @@ void Utility::splitDemands(
     for (int &ws : priority_draw_water_source) {
         double max_source_output = min(
                 water_sources[ws]->getAvailableAllocatedVolume(id),
-                water_sources[ws]->getAllocatedTreatmentCapacity(id));
+                utility_owned_wtp_capacities[water_source_to_wtp[ws]]);
         double source_demand =
                 min(demand_non_priority_sources,
                     max_source_output);
         demands[ws][this->id] = source_demand;
         demand_non_priority_sources -= source_demand;
         total_serviced_demand += source_demand;
+        utility_owned_wtp_capacities[water_source_to_wtp[ws]] -= source_demand;
     }
 
     double storages[n_storage_sources];
     double total_available_flow_rate = 0;
     for (int i = 0; i < n_storage_sources; ++i) {
-        auto source = water_sources[non_priority_draw_water_source[i]];
-        storages[i] = source->getAvailableAllocatedVolume(id);
-        available_treated_flow_rate[i] = min(storages[i],
-                                             source->getAllocatedTreatmentCapacity(
-                                                     id));
+        auto ws = water_sources[non_priority_draw_water_source[i]];
+        storages[i] = ws->getAvailableAllocatedVolume(id);
+        available_treated_flow_rate[i] = min(
+                storages[i],
+                utility_owned_wtp_capacities[water_source_to_wtp[ws->id]]
+        );
         total_available_flow_rate += available_treated_flow_rate[i];
     }
 
@@ -522,34 +583,37 @@ void Utility::splitDemands(
         // If the utility's demand is greater than the sum of treatment
         // capacities of all water sources, all WTPs will be fully used.
         for (int i = 0; i < n_storage_sources; ++i) {
-            demands[non_priority_draw_water_source[i]][id] = available_treated_flow_rate[i];
+            demands[non_priority_draw_water_source[i]][id] =
+                    available_treated_flow_rate[i];
         }
         treatment_capacity_violation = true;
-    } else {
+    } else if (demand_non_priority_sources > 0) {
         // If a given WTP cannot fulfill its ideal demand but there is spare
         // treatment capacity available in other WTPs, use it.
 
-        // Create axuliary variables and check which sources are over allocated
+        // Create auxiliary variables and check which sources are over allocated
         // and which have spare capacity.
         bool has_spare_flow_rate[n_storage_sources];
         memset(has_spare_flow_rate, true, 2);
         bool over_allocated[n_storage_sources];
         double split_demands[n_storage_sources];
-        bool treatment_capacity_violation;
 
-        treatment_capacity_violation = idealDemandSplitUnconstrained(split_demands,
-                                                        available_treated_flow_rate,
-                                                        demand_non_priority_sources,
-                                                        storages,
-                                                        total_stored_volume,
-                                                        n_storage_sources);
+        treatment_capacity_violation = idealDemandSplitUnconstrained(
+                split_demands,
+                available_treated_flow_rate,
+                demand_non_priority_sources,
+                storages,
+                total_stored_volume,
+                n_storage_sources);
 
         if (treatment_capacity_violation) {
             // Check which sources are over allocated or have spare capacity.
             for (int i = 0; i < n_storage_sources; ++i) {
-                over_allocated[i] = split_demands[i] - 1e-9 > available_treated_flow_rate[i];
+                over_allocated[i] = split_demands[i] - 1e-9 >
+                                    available_treated_flow_rate[i];
                 has_spare_flow_rate[i] =
-                        split_demands[i] + 1e-9 < available_treated_flow_rate[i];
+                        split_demands[i] + 1e-9 <
+                        available_treated_flow_rate[i];
             }
 
             // Redistribute demands across water sources that may still have
@@ -608,6 +672,7 @@ void Utility::splitDemands(
  * @return contingency fund contribution or draw.
  */
 #pragma GCC optimize("O0")
+
 void Utility::updateContingencyFundAndDebtService(
         double unrestricted_demand, double demand_multiplier,
         double demand_offset, double unfulfilled_demand, int week) {
@@ -681,11 +746,10 @@ void Utility::resetDroughtMitigationVariables() {
 }
 
 void Utility::setWaterSourceOnline(unsigned int source_id, int week) {
-    infrastructure_construction_manager.setWaterSourceOnline(source_id, week,
-                                                             total_storage_capacity,
-                                                             total_treatment_capacity,
-                                                             total_available_volume,
-                                                             total_stored_volume);
+    infrastructure_construction_manager.setWaterSourceOnline(
+            source_id, week, utility_owned_wtp_capacities, water_source_to_wtp,
+            total_storage_capacity, total_available_volume,
+            total_stored_volume);
 
     updateTreatmentAndNumberOfStorageSources();
 }
@@ -699,15 +763,15 @@ void Utility::setWaterSourceOnline(unsigned int source_id, int week) {
  * @return
  */
 double Utility::updateCurrent_debt_payment(int week) {
-    double current_debt_payment = 0;
+    double updated_debt_payment = 0;
 
     // Checks if it's the first week of the year, when outstanding debt
     // payments should be made.
     for (Bond *bond : issued_bonds) {
-        current_debt_payment += bond->getDebtService(week);
+        updated_debt_payment += bond->getDebtService(week);
     }
 
-    return current_debt_payment;
+    return updated_debt_payment;
 }
 
 void Utility::issueBond(int new_infra_triggered, int week) {
@@ -727,7 +791,7 @@ void Utility::issueBond(int new_infra_triggered, int week) {
 }
 
 void Utility::forceInfrastructureConstruction(int week,
-                                              vector<int> new_infra_triggered) {
+                                              const vector<int> &new_infra_triggered) {
     // Build all triggered infrastructure
     infrastructure_construction_manager.forceInfrastructureConstruction(week,
                                                                         new_infra_triggered);
@@ -767,8 +831,9 @@ int Utility::infrastructureConstructionHandler(double long_term_rof, int week) {
     int new_infra_triggered = infrastructure_construction_manager.infrastructureConstructionHandler(
             long_term_rof, week,
             past_year_average_demand,
+            utility_owned_wtp_capacities,
+            water_source_to_wtp,
             total_storage_capacity,
-            total_treatment_capacity,
             total_available_volume,
             total_stored_volume);
 
@@ -785,10 +850,10 @@ void Utility::calculateWastewater_releases(int week, double *discharges) {
     double discharge;
     waste_water_discharge = 0;
 
-    for (int &id : wwtp_discharge_rule.discharge_to_source_ids) {
+    for (int &id_disch : wwtp_discharge_rule.discharge_to_source_ids) {
         discharge = restricted_demand * wwtp_discharge_rule
-                .get_dependent_variable(id, Utils::weekOfTheYear(week));
-        discharges[id] += discharge;
+                .get_dependent_variable(id_disch, Utils::weekOfTheYear(week));
+        discharges[id_disch] += discharge;
 
         waste_water_discharge += discharge;
     }
@@ -820,7 +885,8 @@ void Utility::setRealization(unsigned long r, vector<double> &rdm_factors) {
     demand_series_realization = vector<double>(n_weeks);
 
     // Apply demand multiplier and copy demands pertaining to current realization.
-    double delta_demand = demands_all_realizations.at(r)[0] * (1. - rdm_factors.at(0));
+    double delta_demand =
+            demands_all_realizations.at(r)[0] * (1. - rdm_factors.at(0));
     for (unsigned long w = 0; w < n_weeks; ++w) {
         demand_series_realization[w] = demands_all_realizations.at(r)[w] *
                                        rdm_factors.at(0)
@@ -855,7 +921,7 @@ vector<double> Utility::calculateWeeklyPeakingFactor(vector<double> *demands) {
                 0.0) /
                               ((int) ((y + 1) * WEEKS_IN_YEAR) -
                                (int) (y * WEEKS_IN_YEAR));
-        for (unsigned long w = 0; w < n_weeks; ++w) {
+        for (int w = 0; w < n_weeks; ++w) {
             year_averages[w] += (*demands)[y * WEEKS_IN_YEAR + w] /
                                 year_average_demand / n_years;
         }
@@ -865,6 +931,10 @@ vector<double> Utility::calculateWeeklyPeakingFactor(vector<double> *demands) {
 }
 
 //========================= GETTERS AND SETTERS =============================//
+
+bool Utility::hasTreatmentConnected(int ws) {
+    return utility_owned_wtp_capacities[water_source_to_wtp[ws]] > 0.;
+}
 
 double Utility::getStorageToCapacityRatio() const {
     return total_stored_volume / total_storage_capacity;
@@ -955,7 +1025,7 @@ const vector<int> &Utility::getDemand_infra_construction_order() const {
     return infrastructure_construction_manager.getDemand_infra_construction_order();
 }
 
-const vector<int> Utility::getInfrastructure_built() const {
+vector<int> Utility::getInfrastructure_built() const {
     return infrastructure_construction_manager.getInfra_built_last_week();
 }
 

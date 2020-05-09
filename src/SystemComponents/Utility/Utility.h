@@ -31,15 +31,19 @@ private:
     double gross_revenue = 0;
     double unfulfilled_demand = 0;
     double net_stream_inflow = 0;
-    double *available_treated_flow_rate = new double[0];
     double price_rdm_multiplier = 1.;
+    double *available_treated_flow_rate = new double[0];
     bool used_for_realization = true;
     unsigned short n_storage_sources = 0;
     vector<WaterSource *> water_sources;
     WwtpDischargeRule wwtp_discharge_rule;
     vector<vector<double>> &demands_all_realizations;
     vector<double> demand_series_realization;
+    vector<double> utility_owned_wtp_capacities; /// vector with water treatment capacity shared across one or more sources.
+    vector<int> water_source_to_wtp;
     InfrastructureManager infrastructure_construction_manager;
+
+    double *P_x{}, *A_x{}, *q{}, *l{}, *u{};
 
     /// Drought mitigation
     double fund_contribution = 0;
@@ -61,7 +65,6 @@ private:
 
     /// Infrastructure cost
     double current_debt_payment = 0;
-    vector<vector<double>> debt_payment_streams;
     double infra_net_present_cost = 0;
     vector<Bond *> issued_bonds;
 
@@ -76,20 +79,24 @@ public:
             const char *name, int id,
             vector<vector<double>> &demands_all_realizations,
             int number_of_week_demands,
-            const double percent_contingency_fund_contribution,
-            const vector<vector<double>> &typesMonthlyDemandFraction,
-            const vector<vector<double>> &typesMonthlyWaterPrice,
-            WwtpDischargeRule wwtp_discharge_rule,
-            double demand_buffer);
-
-    Utility(const char *name, int id,
-            vector<vector<double>> &demands_all_realizations,
-            int number_of_week_demands,
-            const double percent_contingency_fund_contribution,
+            double percent_contingency_fund_contribution,
             const vector<vector<double>> &typesMonthlyDemandFraction,
             const vector<vector<double>> &typesMonthlyWaterPrice,
             WwtpDischargeRule wwtp_discharge_rule,
             double demand_buffer,
+            vector<vector<int>> water_source_to_wtp,
+            vector<double> utility_owned_wtp_capacities);
+
+    Utility(const char *name, int id,
+            vector<vector<double>> &demands_all_realizations,
+            int number_of_week_demands,
+            double percent_contingency_fund_contribution,
+            const vector<vector<double>> &typesMonthlyDemandFraction,
+            const vector<vector<double>> &typesMonthlyWaterPrice,
+            WwtpDischargeRule wwtp_discharge_rule,
+            double demand_buffer,
+            vector<vector<int>> water_source_to_wtp,
+            vector<double> utility_owned_wtp_capacities,
             const vector<int> &rof_infra_construction_order,
             const vector<int> &demand_infra_construction_order,
             const vector<double> &infra_construction_triggers,
@@ -100,11 +107,13 @@ public:
     Utility(const char *name, int id,
             vector<vector<double>> &demands_all_realizations,
             int number_of_week_demands,
-            const double percent_contingency_fund_contribution,
+            double percent_contingency_fund_contribution,
             const vector<vector<double>> &typesMonthlyDemandFraction,
             const vector<vector<double>> &typesMonthlyWaterPrice,
             WwtpDischargeRule wwtp_discharge_rule,
             double demand_buffer,
+            vector<vector<int>> water_source_to_wtp,
+            vector<double> utility_owned_wtp_capacities,
             const vector<int> &rof_infra_construction_order,
             const vector<int> &demand_infra_construction_order,
             const vector<double> &infra_construction_triggers,
@@ -117,9 +126,9 @@ public:
 
     Utility &operator=(const Utility &utility);
 
-    bool operator<(const Utility *other);
+    bool operator<(const Utility *other) const;
 
-    bool operator>(const Utility *other);
+    bool operator>(const Utility *other) const;
 
     static bool compById(Utility *a, Utility *b);
 
@@ -148,11 +157,11 @@ public:
     double waterPrice(int week);
 
     void
-    forceInfrastructureConstruction(int week, vector<int> new_infra_triggered);
+    forceInfrastructureConstruction(int week, const vector<int>& new_infra_triggered);
 
     int infrastructureConstructionHandler(double long_term_rof, int week);
 
-    void priceCalculationErrorChecking(
+    static void priceCalculationErrorChecking(
             const vector<vector<double>> &typesMonthlyDemandFraction,
             const vector<vector<double>> &typesMonthlyWaterPrice);
 
@@ -212,7 +221,7 @@ public:
 
     void setRealization(unsigned long r, vector<double> &rdm_factors);
 
-    const vector<int> getInfrastructure_built() const;
+    vector<int> getInfrastructure_built() const;
 
     void setNoFinaicalCalculations();
 
@@ -220,7 +229,7 @@ public:
 
     const vector<int> &getDemand_infra_construction_order() const;
 
-    vector<double> calculateWeeklyPeakingFactor(vector<double> *demands);
+    static vector<double> calculateWeeklyPeakingFactor(vector<double> *demands);
 
     const vector<WaterSource *> &getWater_sources() const;
 
@@ -244,18 +253,28 @@ public:
 
     void updateTreatmentAndNumberOfStorageSources();
 
-    bool
+    static bool
     idealDemandSplitUnconstrained(double *split_demands,
-                                  double *available_treated_flow_rate,
+                                  const double *available_treated_flow_rate,
                                   double total_demand, const double *storage,
                                   double total_storage, int n_storage_sources);
 
-    bool
+    static bool
     idealDemandSplitConstrained(double *split_demands, bool *over_allocated,
                                 bool *has_spare_capacity,
-                                double *available_treated_flow_rate,
+                                const double *available_treated_flow_rate,
                                 double total_demand, const double *storage,
                                 double total_storage, int n_storage_sources);
+
+    void splitDemandsQP(int week, vector<vector<double>> &demands,
+                        bool apply_demand_buffer);
+
+    bool hasTreatmentConnected(int ws);
+
+    void
+    unrollWaterSourceToWtpVector(
+            const vector<vector<int>> &water_source_to_wtp,
+            const vector<double>& utility_owned_wtp_capacities);
 };
 
 
