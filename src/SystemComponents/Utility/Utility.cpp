@@ -7,7 +7,6 @@
 #include <algorithm>
 #include "Utility.h"
 #include "../../Utils/Utils.h"
-#include "../../../../osqp/include/osqp.h"
 
 /**
  * Main constructor for the Utility class.

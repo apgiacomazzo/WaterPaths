@@ -8,7 +8,6 @@
 #include <fstream> //biblioteca que fornece classes de fluxos de arquivos
 #include <omp.h> //biblioteca que permite a programação multi-processo de memória compartilhada em múltiplas plataformas, de modo a acrescentar simultaneidade aos programas escritos em C++
 #include <vector>
-#include <TransfersBilateral.h>
 
 #ifdef  PARALLEL
 #include <mpi.h> // biblioteca que permite a comunicação de dados em computação paralela
@@ -25,6 +24,7 @@
 #include "../SystemComponents/Bonds/LevelDebtServiceBond.h"
 #include "../SystemComponents/Bonds/BalloonPaymentBond.h"
 #include "../DroughtMitigationInstruments/Transfers.h"
+#include "../DroughtMitigationInstruments/TransfersBilateral.h"
 #include "../SystemComponents/WaterSources/AllocatedReservoir.h"
 
 /**

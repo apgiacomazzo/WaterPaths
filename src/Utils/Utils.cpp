@@ -4,6 +4,7 @@
 
 #include "Utils.h"
 #include "../DroughtMitigationInstruments/Transfers.h"
+#include "../DroughtMitigationInstruments/TransfersBilateral.h"
 #include "../SystemComponents/WaterSources/ReservoirExpansion.h"
 #include "../SystemComponents/WaterSources/Quarry.h"
 #include "../DroughtMitigationInstruments/InsuranceStorageToROF.h"
@@ -25,7 +26,6 @@
 #include <climits>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <TransfersBilateral.h>
 
 /**
  * Reads csv file into table, exported as a vector of vector of doubles.

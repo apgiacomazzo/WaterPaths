@@ -8,7 +8,7 @@
 #include <numeric>
 #include <random>
 #include <algorithm>
-#include <TransfersBilateral.h>
+#include "../DroughtMitigationInstruments/TransfersBilateral.h"
 
 #ifdef NETCDF
 #include <netcdf> 

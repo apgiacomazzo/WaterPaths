@@ -6,7 +6,7 @@
 #define WATERPATHS_TRANSFERSBILATERAL_H
 
 
-#include <Base/DroughtMitigationPolicy.h>
+#include "Base/DroughtMitigationPolicy.h"
 
 class TransfersBilateral : public DroughtMitigationPolicy {
     double transfer_overhead;
