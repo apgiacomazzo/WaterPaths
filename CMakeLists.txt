@@ -3,7 +3,7 @@ project(WaterPaths)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O0 -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O2 -march=native")
 
 include_directories(src/ContinuityModels)
 include_directories(src/ContinuityModels/Base)
@@ -91,8 +91,6 @@ add_executable(WaterPaths
         src/Problem/Base/Problem.h
         src/Problem/Caesb.cpp
         src/Problem/Caesb.h
-        src/Problem/PaperTestProblem.cpp
-        src/Problem/PaperTestProblem.h
         src/Simulation/Simulation.cpp
         src/Simulation/Simulation.h
         src/SystemComponents/Bonds/Base/Bond.cpp
@@ -145,4 +143,4 @@ add_executable(WaterPaths
         src/main.cpp
 #        Tests/catch.hpp
 #        Tests/Tests.cpp
-        Utils/Constants.h)
+        src/DroughtMitigationInstruments/TransfersBilateral.cpp src/DroughtMitigationInstruments/TransfersBilateral.h src/DataCollector/TransfersBilateralDataCollector.cpp src/DataCollector/TransfersBilateralDataCollector.h)

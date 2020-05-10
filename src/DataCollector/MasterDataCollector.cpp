@@ -8,6 +8,7 @@
 #include <numeric>
 #include <random>
 #include <algorithm>
+#include <TransfersBilateral.h>
 
 #ifdef NETCDF
 #include <netcdf> 
@@ -35,6 +36,7 @@ static const int NC_ERR = 2;
 #include "WaterReuseDataCollector.h"
 #include "AllocatedReservoirDataCollector.h"
 #include "EmptyDataCollector.h"
+#include "TransfersBilateralDataCollector.h"
 
 using namespace Constants;
 
@@ -656,13 +658,15 @@ DataCollector* MasterDataCollector::createPolicyDataCollector(DroughtMitigationP
         return new RestrictionsDataCollector(dynamic_cast<Restrictions *> (dmp), r);
     else if (dmp->type == TRANSFERS)
         return new TransfersDataCollector(dynamic_cast<Transfers *> (dmp), r);
+    else if (dmp->type == TRANSFERS_CAESB)
+        return new TransfersBilateralDataCollector(dynamic_cast<TransfersBilateral *> (dmp), r);
     else if (dmp->type == INSURANCE_STORAGE_ROF)
         return new EmptyDataCollector();
     else
         throw invalid_argument("Drought mitigation policy not recognized. "
                                  "Did you forget to add it to the "
                                  "MasterDataCollector::addRealization"
-                                 " function?");
+                                 " function or to create its data collector??");
 }
 
 DataCollector* MasterDataCollector::createWaterSourceDataCollector(WaterSource* ws, unsigned long r) {

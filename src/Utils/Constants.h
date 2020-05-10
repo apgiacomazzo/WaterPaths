@@ -84,6 +84,7 @@ namespace Constants {
     // for financial instruments.
     const int TRANSFERS = 0;
     const int RESTRICTIONS = 1;
+    const int TRANSFERS_CAESB = 2;
     const int INSURANCE_STORAGE_ROF = 100;
 
     const int SUPPLY_INSTRUMENT_LIM = 99;

@@ -125,8 +125,7 @@ Transfers::Transfers(
  * @param transfers
  */
 Transfers::Transfers(const Transfers &transfers) :
-        DroughtMitigationPolicy(transfers.id,
-                                TRANSFERS),
+        DroughtMitigationPolicy(transfers.id, TRANSFERS),
         source_utility_id(transfers.source_utility_id),
         source_treatment_buffer(transfers.source_treatment_buffer) {
 

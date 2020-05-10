@@ -306,6 +306,7 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
+#pragma GCC optimize("O0")
 MasterDataCollector *
 Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
     if (rof_tables_folder.length() == 0) {

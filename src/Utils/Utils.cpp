@@ -25,6 +25,7 @@
 #include <climits>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <TransfersBilateral.h>
 
 /**
  * Reads csv file into table, exported as a vector of vector of doubles.
@@ -237,6 +238,9 @@ Utils::copyDroughtMitigationPolicyVector(
         else if (dmp->type == TRANSFERS)
             drought_mitigation_policy_new.push_back(
                     new Transfers(*dynamic_cast<Transfers *>(dmp)));
+        else if (dmp->type == TRANSFERS_CAESB)
+            drought_mitigation_policy_new.push_back(
+                    new TransfersBilateral(*dynamic_cast<TransfersBilateral *>(dmp)));
         else if (dmp->type == INSURANCE_STORAGE_ROF)
             drought_mitigation_policy_new.push_back(
                     new InsuranceStorageToROF(
