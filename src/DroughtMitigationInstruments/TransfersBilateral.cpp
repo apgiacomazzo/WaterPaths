@@ -48,10 +48,9 @@ void TransfersBilateral::applyPolicy(int week) {
     }
 }
 
-#pragma GCC optimize("O0")
 double TransfersBilateral::performTransfer(Utility *sender, Utility *receiver,
                                            double pumping_capacity,
-                                           int week) {
+                                           int week) const {
 
     double transfer_volume = 0;
     if (receiver->getRisk_of_failure() > 0. &&

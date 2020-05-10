@@ -39,7 +39,7 @@ public:
 
     double performTransfer(Utility *sender, Utility *receiver,
                          double pumping_capacity,
-                         int week);
+                         int week) const;
 
     const vector<double> &getTransferedVolumes() const;
 };
