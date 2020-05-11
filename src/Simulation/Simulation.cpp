@@ -306,7 +306,6 @@ void printProgress(double percentage) {
     fflush(stdout);
 }
 
-#pragma GCC optimize("O0")
 MasterDataCollector *
 Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
     if (rof_tables_folder.length() == 0) {
@@ -361,34 +360,34 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
                 realization_model->getContinuity_utilities(),
                 realization);
 
-//        try {
+        try {
 //        double start = omp_get_wtime();
-        for (int w = 0; w < (int) total_simulation_time; ++w) {
-            // DO NOT change the order of the steps. This would mess up
-            // important dependencies.
-            // Calculate long-term risk-of-failre if current week is first week of the year.
-            if (Utils::isFirstWeekOfTheYear(w))
-                realization_model->setLongTermROFs(
-                        rof_model->calculateLongTermROF(w), w);
-            // Calculate short-term risk-of-failure
-            realization_model->setShortTermROFs(
-                    rof_model->calculateShortTermROF(w,
-                                                     import_export_rof_tables));
-            // Apply drought mitigation policies
-            if (import_export_rof_tables != EXPORT_ROF_TABLES) {
-                realization_model->applyDroughtMitigationPolicies(w);
+            for (int w = 0; w < (int) total_simulation_time; ++w) {
+                // DO NOT change the order of the steps. This would mess up
+                // important dependencies.
+                // Calculate long-term risk-of-failre if current week is first week of the year.
+                if (Utils::isFirstWeekOfTheYear(w))
+                    realization_model->setLongTermROFs(
+                            rof_model->calculateLongTermROF(w), w);
+                // Calculate short-term risk-of-failure
+                realization_model->setShortTermROFs(
+                        rof_model->calculateShortTermROF(w,
+                                                         import_export_rof_tables));
+                // Apply drought mitigation policies
+                if (import_export_rof_tables != EXPORT_ROF_TABLES) {
+                    realization_model->applyDroughtMitigationPolicies(w);
+                }
+                // Continuity calculations for current week
+                realization_model->continuityStep(w);
+                // Collect system data for output printing and objective calculations.
+                if (import_export_rof_tables != EXPORT_ROF_TABLES) {
+                    master_data_collector->collectData(realization);
+                }
             }
-            // Continuity calculations for current week
-            realization_model->continuityStep(w);
-            // Collect system data for output printing and objective calculations.
-            if (import_export_rof_tables != EXPORT_ROF_TABLES) {
-                master_data_collector->collectData(realization);
+            // Export ROF tables for future simulations of the same problem with the same states-of-the-world.
+            if (import_export_rof_tables == EXPORT_ROF_TABLES) {
+                rof_model->printROFTable(rof_tables_folder);
             }
-        }
-        // Export ROF tables for future simulations of the same problem with the same states-of-the-world.
-        if (import_export_rof_tables == EXPORT_ROF_TABLES) {
-            rof_model->printROFTable(rof_tables_folder);
-        }
 //        printf("Realization %lu took %f seconds.\n", r, omp_get_wtime() - start);
 
 // #pragma omp critical
@@ -396,14 +395,14 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
 //                 (double) master_data_collector->getRealizations_created() /
 //                 (double) realizations_to_run_unique.size());
 
-//        } catch (...) {
-//#pragma omp atomic
-//            ++had_catch;
-//            error_m += to_string(realization) + " ";
-//            error_file_name += "_" + to_string(realization);
-//            error_file_content += to_string(realization) + ",";
-//            master_data_collector->removeRealization(realization);
-//        }
+        } catch (...) {
+#pragma omp atomic
+            ++had_catch;
+            error_m += to_string(realization) + " ";
+            error_file_name += "_" + to_string(realization);
+            error_file_content += to_string(realization) + ",";
+            master_data_collector->removeRealization(realization);
+        }
 
         delete realization_model;
         delete rof_model;

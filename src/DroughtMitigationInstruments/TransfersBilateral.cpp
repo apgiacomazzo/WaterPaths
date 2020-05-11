@@ -30,7 +30,6 @@ TransfersBilateral::TransfersBilateral(const TransfersBilateral &transfer_caesb)
     this->utilities_ids = transfer_caesb.utilities_ids;
 }
 
-#pragma GCC optimize("O0")
 void TransfersBilateral::applyPolicy(int week) {
 
     double transfer_volume = 0;
@@ -60,8 +59,8 @@ double TransfersBilateral::performTransfer(Utility *sender, Utility *receiver,
                 (sender->getTotal_treatment_capacity()
                  - source_treatment_buffer) * PEAKING_FACTOR
                 - sender->getUnrestrictedDemand();
-        transfer_volume = min(available_transfer_volume,
-                              pumping_capacity);
+        transfer_volume = max(min(available_transfer_volume,
+                              pumping_capacity), 0.);
 
         // Perform transfer and apply tariffs
         int price_week = Utils::weekOfTheYear(week);
