@@ -33,6 +33,7 @@
  * @param max_lines
  * @return
  */
+#pragma GCC optimize("O3")
 vector<vector<double>> Utils::parse2DCsvFile(string file_name, unsigned long max_lines,
                                              vector<unsigned long> rows_to_read) {
 

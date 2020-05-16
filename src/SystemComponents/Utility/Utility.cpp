@@ -369,15 +369,15 @@ void Utility::calculateWeeklyAverageWaterPrices(
 
         if (weekly_average_volumetric_price[w] > 1e3) {
             weekly_average_volumetric_price[w] /= 1e6;
-            if (!issued_high_tariff_warning) {
-                printf("Tariff price for utility %d is numerically "
-                       "too high, so the numbers are being divided by 1,000,000 "
-                       "(converting $ to MM$). This is probably the right price, "
-                       "but such high numbers may cause WaterPaths to have memory "
-                       "issues (I mean related to computer memory size).\n",
-                       id);
-                issued_high_tariff_warning = true;
-            }
+//            if (!issued_high_tariff_warning) {
+//                printf("Tariff price for utility %d is numerically "
+//                       "too high, so the numbers are being divided by 1,000,000 "
+//                       "(converting $ to MM$). This is probably the right price, "
+//                       "but such high numbers may cause WaterPaths to have memory "
+//                       "issues (I mean related to computer memory size).\n",
+//                       id);
+//                issued_high_tariff_warning = true;
+//            }
         }
     }
 }
