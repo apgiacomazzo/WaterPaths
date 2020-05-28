@@ -983,37 +983,37 @@ Caesb::readInputData() { //A partir dessa linha serão inseridos os dados de ent
     cout << "Reading input data." << endl;
     string data_dir = DEFAULT_DATA_DIR + BAR;
 
-#pragma omp parallel default(none) num_threads(omp_get_thread_num())
-    {
-#pragma omp single
+//#pragma omp parallel default(none) num_threads(omp_get_thread_num())
+//    {
+// #pragma omp single
         streamflows_descoberto = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" +
                 evap_inflows_suffix +
                 BAR + "descoberto_inflows.csv", n_realizations);
 
-#pragma omp single
+// #pragma omp single
         streamflows_tortoSM = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" +
                 evap_inflows_suffix +
                 BAR + "tortoSM_inflows.csv", n_realizations);
-#pragma omp single
+// #pragma omp single
         streamflows_bananal_torto = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" +
                 evap_inflows_suffix +
                 BAR + "bananal_torto_inflows.csv", n_realizations);
-//#pragma omp single
+//// #pragma omp single
 //        streamflows_torto = Utils::parse2DCsvFile( //inserção dos dados de vazão
 //                io_directory + DEFAULT_DATA_DIR + "inflows" +
 //                evap_inflows_suffix +
 //                BAR + "torto_inflows.csv", n_realizations);
         // }
-#pragma omp single
+// #pragma omp single
         streamflows_paranoa = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" +
                 evap_inflows_suffix +
                 BAR + "paranoa_inflows.csv", n_realizations);
 
-#pragma omp single
+// #pragma omp single
         streamflows_corumbaIV = Utils::parse2DCsvFile( //inserção dos dados de vazão
                 io_directory + DEFAULT_DATA_DIR + "inflows" +
                 evap_inflows_suffix +
@@ -1021,34 +1021,35 @@ Caesb::readInputData() { //A partir dessa linha serão inseridos os dados de ent
 
 // };
         //cout << "Reading evaporations." << endl;
-#pragma omp single
+// #pragma omp single
         evap_descoberto = Utils::parse2DCsvFile(
                 io_directory + DEFAULT_DATA_DIR + "evaporation" +
                 evap_inflows_suffix +
                 BAR + "descoberto_evap.csv",
                 n_realizations); //inserção dos dados de evaporação
-#pragma omp single
+// #pragma omp single
         evap_tortoSM = Utils::parse2DCsvFile(
                 io_directory + DEFAULT_DATA_DIR + "evaporation" +
                 evap_inflows_suffix +
                 BAR + "tortoSM_evap.csv",
                 n_realizations); //inserção dos dados de evaporação
-#pragma omp single
+// #pragma omp single
         evap_paranoa = Utils::parse2DCsvFile(
                 io_directory + DEFAULT_DATA_DIR + "evaporation" +
                 evap_inflows_suffix +
                 BAR + "paranoa_evap.csv",
                 n_realizations); //inserção dos dados de evaporação
-#pragma omp single
+// #pragma omp single
         evap_corumba = Utils::parse2DCsvFile(
                 io_directory + DEFAULT_DATA_DIR + "evaporation" +
+                evap_inflows_suffix +
                 evap_inflows_suffix +
                 BAR + "corumba_evap.csv",
                 n_realizations); //inserção dos dados de evaporação
 
 
         //cout << "Reading demands." << endl;
-#pragma omp single
+// #pragma omp single
         demand_caesb_descoberto = Utils::parse2DCsvFile(
                 io_directory + DEFAULT_DATA_DIR + "demands" +
                 evap_inflows_suffix + //inserção dos dados de demanda da caesb
@@ -1061,8 +1062,8 @@ Caesb::readInputData() { //A partir dessa linha serão inseridos os dados de ent
 
 
         //cout << "Reading others." << endl;
-#pragma omp single
-        {
+// #pragma omp single
+//        {
             demand_to_wastewater_fraction_caesb_descoberto = Utils::parse2DCsvFile(
                     io_directory + DEFAULT_DATA_DIR +
                     "demand_to_wastewater_fraction_caesb_descoberto.csv"); //demanda de efluentes da caesb
@@ -1086,8 +1087,8 @@ Caesb::readInputData() { //A partir dessa linha serão inseridos os dados de ent
             caesbPriceRestrictionMultipliers = Utils::parse2DCsvFile(
                     io_directory + DEFAULT_DATA_DIR +
                     "caesbPriceRestrictionMultipliers.csv"); //% de aumento da tarifa para cada categoria durante o racionamento
-        }
+//        }
 //    cout << "Done reading input data." << endl;
-    }
+//    }
 
 }

@@ -289,15 +289,6 @@ int main(int argc, char *argv[]) {
     }
     problem_ptr = &problem;
 
-    vector<vector<double>> solutions;
-    if (strlen(solution_file.c_str()) > 2) {
-        solutions = Utils::parse2DCsvFile(system_io + solution_file);
-        if (standard_solution >= solutions.size())
-            throw invalid_argument("Number of solutions in file <= solution ID.\n");
-    } else {
-        throw invalid_argument("You must specify a solutions file.\n");
-    }
-
     // Set realizations to be run -- otherwise, n_realizations realizations will be run.
     if (!realizations_to_run.empty() && (n_sets <= 0 || n_bs_samples <= 0)) {
         auto realizations_to_run_ul = vector<unsigned long>(realizations_to_run[0].begin(),
@@ -313,6 +304,15 @@ int main(int argc, char *argv[]) {
 
     // If Borg is not called, run in simulation mode
     if (!run_optimization) {
+        vector<vector<double>> solutions;
+        if (strlen(solution_file.c_str()) > 2) {
+            solutions = Utils::parse2DCsvFile(system_io + solution_file);
+            if (standard_solution >= solutions.size())
+                throw invalid_argument("Number of solutions in file <= solution ID.\n");
+        } else {
+            throw invalid_argument("You must specify a solutions file.\n");
+        }
+
         vector<int> sol_range;
         // Check for basic input errors.
         if ((first_solution == -1 && last_solution != -1) ||
@@ -377,12 +377,13 @@ int main(int argc, char *argv[]) {
 #ifdef  PARALLEL
 
         printf("Running Borg with:\n"
-            "n_islands: %lu\n"
+            "n_dec_vars: %d\n"
+            "n_objectives: %d\n"
             "nfe: %lu\n"
             "output freq.: %lu\n"
             "n_weeks: %lu\n"
             "n_realizations: %lu\n\n",
-            n_islands, nfe, output_frequency, n_weeks, n_realizations);
+            c_num_dec, c_num_obj, nfe, output_frequency, n_weeks, n_realizations);
          
         // for debugging borg, creating file to print each ranks DVs which isdone in Eval function   
         
