@@ -358,6 +358,11 @@ void Utility::calculateWeeklyAverageWaterPrices(
         for (int t = 0; t < n_tiers; ++t) {
             monthly_average_price[m] += typesMonthlyDemandFraction[m][t] *
                                         typesMonthlyWaterPrice[m][t];
+            if (monthly_average_price[m] < 1e-6) {
+                char error[256];
+                sprintf(error, "Utility %d has $0.00 water price.", id);
+                throw runtime_error(error);
+            }
         }
     }
     // Create weekly price table from monthly prices.
@@ -366,19 +371,6 @@ void Utility::calculateWeeklyAverageWaterPrices(
         weekly_average_volumetric_price[w] =
                 monthly_average_price[(int) (w / WEEKS_IN_MONTH)] /
                 WEEKS_IN_MONTH;
-
-        if (weekly_average_volumetric_price[w] > 1e3) {
-            weekly_average_volumetric_price[w] /= 1e6;
-            if (!issued_high_tariff_warning) {
-                printf("Tariff price for utility %d is numerically "
-                       "too high, so the numbers are being divided by 1,000,000 "
-                       "(converting $ to MM$). This is probably the right price, "
-                       "but such high numbers may cause WaterPaths to have memory "
-                       "issues (I mean related to computer memory size).\n",
-                       id);
-                issued_high_tariff_warning = true;
-            }
-        }
     }
 }
 
@@ -393,12 +385,14 @@ void Utility::priceCalculationErrorChecking(
     if (typesMonthlyDemandFraction.size() != NUMBER_OF_MONTHS)
         throw invalid_argument(
                 "There must be 12 total_demand fractions per tier.");
-    if (typesMonthlyWaterPrice.size() != NUMBER_OF_MONTHS)
+    if (typesMonthlyWaterPrice.size() != NUMBER_OF_MONTHS) {
         throw invalid_argument("There must be 12 water prices per tier.");
+    }
     if ((&typesMonthlyWaterPrice)[0].size() !=
-        (&typesMonthlyDemandFraction)[0].size())
+        (&typesMonthlyDemandFraction)[0].size()) {
         throw invalid_argument("There must be Demand fractions and water "
                                "prices for the same number of tiers.");
+    }
 }
 
 /**
@@ -478,7 +472,7 @@ void Utility::checkErrorsAddWaterSourceOnline(WaterSource *water_source) {
     }
 }
 
-#pragma GCC optimize("O3")
+//#pragma GCC optimize("O3")
 bool Utility::idealDemandSplitUnconstrained(double *split_demands,
                                             const double *available_treated_flow_rate,
                                             double total_demand,
@@ -495,7 +489,7 @@ bool Utility::idealDemandSplitUnconstrained(double *split_demands,
     return treatment_capacity_violated;
 }
 
-#pragma GCC optimize("O3")
+//#pragma GCC optimize("O3")
 bool Utility::idealDemandSplitConstrained(double *split_demands,
                                           bool *over_allocated,
                                           bool *has_spare_capacity,
@@ -532,7 +526,7 @@ bool Utility::idealDemandSplitConstrained(double *split_demands,
  * allocations in reservoirs.
  * @param week
  */
-#pragma GCC optimize("O3")
+//#pragma GCC optimize("O3")
 void Utility::splitDemands(
         int week, vector<vector<double>> &demands,
         bool apply_demand_buffer) {
@@ -668,7 +662,7 @@ void Utility::splitDemands(
  * @param demand_offset
  * @return contingency fund contribution or draw.
  */
-#pragma GCC optimize("O3")
+//#pragma GCC optimize("O3")
 void Utility::updateContingencyFundAndDebtService(
         double unrestricted_demand, double demand_multiplier,
         double demand_offset, double unfulfilled_demand, int week) {
