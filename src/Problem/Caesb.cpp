@@ -58,11 +58,11 @@ void Caesb::setProblemDefinition(BORG_Problem &problem) //void = vazio. O tipo v
     BORG_Problem_set_bounds(problem, 18, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb - tortoSM
 
     // Set epsilons for objectives //(problem, n° de identificação da função objetivo, valor do epsilon). O valor do epsilon indica a precisão das funções objetivo.
-    BORG_Problem_set_epsilon(problem, 0, 0.002);
-    BORG_Problem_set_epsilon(problem, 1, 0.02);
-    BORG_Problem_set_epsilon(problem, 2, 10.);
-    BORG_Problem_set_epsilon(problem, 3, 0.02);
-    BORG_Problem_set_epsilon(problem, 4, 0.01);
+    BORG_Problem_set_epsilon(problem, 0, 0.001);
+    BORG_Problem_set_epsilon(problem, 1, 0.005);
+    BORG_Problem_set_epsilon(problem, 2, 10000000.);
+    BORG_Problem_set_epsilon(problem, 3, 0.002);
+    BORG_Problem_set_epsilon(problem, 4, 0.005);
 }
 #endif
 
