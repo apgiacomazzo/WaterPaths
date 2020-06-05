@@ -900,7 +900,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     objectives = calculateAndPrintObjectives(false);
 
         int i = 0;
-        objs[i] = min(objectives[i], objectives[5 + i]) - 1.;
+        objs[i] = -min(objectives[i], objectives[5 + i]);
         for (i = 1; i < 5; ++i) {                       //são 5 objetivos que serão otimizados (0 a 4)
             objs[i] = max(objectives[i], objectives[5 + i]);
         }
