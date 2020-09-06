@@ -107,13 +107,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     double ETA_paranoaSul_upgrade3_ranking = vars[12]; // ampliação da capacidade da ETA Paranoá Sul
     double ETA_corumba_upgrade1_ranking = vars[13]; // ampliação da ETA Corumbá (+ 1400 l/s)
     double ETA_corumba_upgrade2_ranking = vars[14]; // ampliação da ETA Corumbá (+ 1400 l/s)
-    double ETA_corumba_upgrade3_ranking = vars[15]; // ampliação da ETA Corumbá (+ 1200 l/s)
-<<<<<<< HEAD
-    double descoberto_expansao_ranking = vars[16]; // expansão da capacidade de armazenamento do reservatório do Descobto    
-=======
-    double descoberto_expansao_ranking = vars[16]; // expansão da capacidade de armazenamento do reservatório do Descoberto
-    //double tortoSM_descoberto_dupli_adut_ranking = vars[10]; // 3 // dupli adut = duplicação da adutora para aumentar a capacidade de transferência entre os sistemas
->>>>>>> 2050b9fb9b9f54160e7a8f42ae3547b16c3d15ad
+    double ETA_corumba_upgrade3_ranking = vars[15]; // ampliação da ETA Corumbá (+ 1200 l/
+    double descoberto_expansao_ranking = vars[16]; // expansão da capacidade de armazenamento do reservatório do scoberto
     double caesb_descoberto_inf_buffer = vars[17];
     double caesb_tortoSM_inf_buffer = vars[18];
 
