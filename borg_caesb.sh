@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH -n 24 -N 8
-#SBATCH --job-name=caesb_semFC_1
-#SBATCH --output=output/caesb_semFC_1.out
-#SBATCH --error=error/caesb_semFC_1.err
+#SBATCH --job-name=caesb_semFC_3
+#SBATCH --output=output/caesb_semFC_3.out
+#SBATCH --error=error/caesb_semFC_3.err
 #SBATCH --time=60:00:00
 #SBATCH --exclusive
 #SBATCH -c 5
@@ -18,7 +18,7 @@ time mpirun -np 24 ./triangleSimulation\
         -d /scratch/spec959/\
         -C -1\
         -O rof_tables_test_problem_intake_present/\
-        -e 1\
+        -e 3\
         -U TestFiles/utilities_rdm.csv\
         -W TestFiles/water_sources_rdm.csv\
         -P TestFiles/policies_rdm.csv\
