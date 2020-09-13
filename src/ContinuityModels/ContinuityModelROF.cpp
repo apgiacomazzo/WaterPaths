@@ -315,8 +315,7 @@ void ContinuityModelROF::updateStorageToROFTable(
                                     realization_water_sources[ws]->isOnline());
             // Register failure in the table for each utility meeting
             // failure criteria.
-            if (utility_storage / utilities_capacities[u] <
-                STORAGE_CAPACITY_RATIO_FAIL) {
+            if (utility_storage / utilities_capacities[u] < STORAGE_CAPACITY_RATIO_FAIL || continuity_utilities[u]->getUnrestrictedDemand() > 0.9 * continuity_utilities[u]->getTotal_treatment_capacity()) {
                 ut_storage_to_rof_rof_realization[u](week_of_the_year,
                                                      NO_OF_INSURANCE_STORAGE_TIERS -
                                                      s) = FAILURE;
