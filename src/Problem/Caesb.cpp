@@ -58,11 +58,11 @@ void Caesb::setProblemDefinition(BORG_Problem &problem) //void = vazio. O tipo v
     BORG_Problem_set_bounds(problem, 18, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb - tortoSM
 
     // Set epsilons for objectives //(problem, n° de identificação da função objetivo, valor do epsilon). O valor do epsilon indica a precisão das funções objetivo.
-    BORG_Problem_set_epsilon(problem, 0, 0.002);
-    BORG_Problem_set_epsilon(problem, 1, 0.02);
-    BORG_Problem_set_epsilon(problem, 2, 10.);
-    BORG_Problem_set_epsilon(problem, 3, 0.02);
-    BORG_Problem_set_epsilon(problem, 4, 0.01);
+    BORG_Problem_set_epsilon(problem, 0, 0.001);
+    BORG_Problem_set_epsilon(problem, 1, 0.005);
+    BORG_Problem_set_epsilon(problem, 2, 10000000.);
+    BORG_Problem_set_epsilon(problem, 3, 0.002);
+    BORG_Problem_set_epsilon(problem, 4, 0.005);
 }
 #endif
 
@@ -107,9 +107,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     double ETA_paranoaSul_upgrade3_ranking = vars[12]; // ampliação da capacidade da ETA Paranoá Sul
     double ETA_corumba_upgrade1_ranking = vars[13]; // ampliação da ETA Corumbá (+ 1400 l/s)
     double ETA_corumba_upgrade2_ranking = vars[14]; // ampliação da ETA Corumbá (+ 1400 l/s)
-    double ETA_corumba_upgrade3_ranking = vars[15]; // ampliação da ETA Corumbá (+ 1200 l/s)
-    double descoberto_expansao_ranking = vars[16]; // expansão da capacidade de armazenamento do reservatório do Descoberto
-    //double tortoSM_descoberto_dupli_adut_ranking = vars[10]; // 3 // dupli adut = duplicação da adutora para aumentar a capacidade de transferência entre os sistemas
+    double ETA_corumba_upgrade3_ranking = vars[15]; // ampliação da ETA Corumbá (+ 1200 l/
+    double descoberto_expansao_ranking = vars[16]; // expansão da capacidade de armazenamento do reservatório do scoberto
     double caesb_descoberto_inf_buffer = vars[17];
     double caesb_tortoSM_inf_buffer = vars[18];
 
@@ -252,35 +251,36 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                          40.002 * table_gen_storage_multiplier,
                                          49.843 * table_gen_storage_multiplier,
                                          60.988 * table_gen_storage_multiplier,
-                                         73.357 * table_gen_storage_multiplier,
-                                         86.694 * table_gen_storage_multiplier,
-                                         100.862 *
-                                         table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Descoberto
+                                         73.357 * table_gen_storage_multiplier};
+                                         //86.694 * table_gen_storage_multiplier,
+                                         //100.862 *
+                                         //table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Descoberto
     vector<double> descoberto_area = {408.953, 494.839, 587.373, 678.283,
                                       751.075, 821.850, 923.983, 1049.369,
-                                      1178.847, 1290.198, 1373.824,
-                                      1461.072}; //dados da área (hm²) do reservatório do Descoberto (correspondente a cada volume acima)
+                                      1178.847, 1290.198};
+                                      //, 1373.824,
+                                      //1461.072}; //dados da área (hm²) do reservatório do Descoberto (correspondente a cada volume acima)
 
     //Curva do Santa Maria - baseado no arquivo de batimetria passado pela CAESB (volume útil em hm³)
-    vector<double> tortoSM_storage = {0, 3.584 * table_gen_storage_multiplier,
-                                      7.507 * table_gen_storage_multiplier,
-                                      11.758 * table_gen_storage_multiplier,
-                                      16.322 * table_gen_storage_multiplier,
-                                      21.228 * table_gen_storage_multiplier,
-                                      24.878 * table_gen_storage_multiplier,
-                                      32.122 * table_gen_storage_multiplier,
-                                      38.122 * table_gen_storage_multiplier,
-                                      44.504 * table_gen_storage_multiplier,
-                                      51.299 * table_gen_storage_multiplier,
-                                      58.507 * table_gen_storage_multiplier,
-                                      66.090 * table_gen_storage_multiplier,
-                                      73.954 *
-                                      table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório de Santa Maria
+    vector<double> tortoSM_storage = {0, 1.392 * table_gen_storage_multiplier,
+                                      5.213 * table_gen_storage_multiplier,
+                                      9.369 * table_gen_storage_multiplier,
+                                      13.838 * table_gen_storage_multiplier,
+                                      18.637 * table_gen_storage_multiplier,
+                                      23.797 * table_gen_storage_multiplier,
+                                      29.316 * table_gen_storage_multiplier,
+                                      35.2 * table_gen_storage_multiplier,
+                                      41.467 * table_gen_storage_multiplier,
+                                      48.135 * table_gen_storage_multiplier,
+                                      55.221 * table_gen_storage_multiplier,
+                                      62.7 * table_gen_storage_multiplier};
+                                      //73.954 *
+                                      //table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório de Santa Maria
 
-    vector<double> tortoSM_area = {340.830, 375.330, 409.180, 440.600, 472.690,
-                                   508.480, 534.380, 580.740, 619.150, 658.450,
-                                   700.400, 740.800, 774.640,
-                                   793.160}; //dados da area (hm²) do reservatório de Santa Maria (correspondente a cada volume acima)
+    vector<double> tortoSM_area = {350.76, 365.601, 399.314, 431.316, 462.723,
+                                   497.954, 534.384, 569.411, 607.685, 645.696,
+                                   687.915, 728.97, 765.141};                                  
+                                   //793.160}; //dados da area (hm²) do reservatório de Santa Maria (correspondente a cada volume acima)
 
     //Curva do Paranoá - baseado na batimetria da CAESB, realizada em 2003 (volume total do lago)
     vector<double> paranoa_storage = {0, 0.0278 * table_gen_storage_multiplier,
@@ -397,7 +397,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Reservoir descoberto("Descoberto",//nome do reservatório
                          0,//número de identificação
                          bacia_descoberto,//vetor criado lá em cima - contém as vazões referentes aos afluentes do Descoberto
-                         100.862 *
+                         73.357 *
                          table_gen_storage_multiplier, //capacidade de armazenamento do reservatório (hm³)
                          6.0e-6 * 3600 * 24 *
                          7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana)
@@ -406,7 +406,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     Reservoir tortoSM("Torto / Santa Maria", 1,
                       bacia_tortoSM,
-                      73.954 * table_gen_storage_multiplier, //hm³
+                      62.7 * table_gen_storage_multiplier, //hm³
                       1.1e-6 * 3600 * 24 *
                       7, //capacidade máxima de tratamento da ETA Brasília (hm³/semana)
                       evaporation_tortoSM,
@@ -899,12 +899,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 #ifdef  PARALLEL
     objectives = calculateAndPrintObjectives(false);
 
-        int i = 0;
-        objs[i] = min(objectives[i], objectives[5 + i]) - 1.;
-        for (i = 1; i < 5; ++i) {                       //são 5 objetivos que serão otimizados (0 a 4)
-            objs[i] = max(objectives[i], objectives[5 + i]);
-        }
-
+	objs[0] = -min(objectives[0], objectives[5]);
+	objs[1] = max(objectives[1], objectives[6]);
+	objs[2] = max(objectives[2], objectives[7]);
+	objs[3] = max(objectives[3], objectives[8]);
+	objs[4] = max(objectives[4], objectives[9]);       
+ 
         if (s != nullptr) {	 // != significa "diferente de"
             delete s;
     }
