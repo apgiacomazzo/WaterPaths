@@ -241,46 +241,41 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     // CURVAS VOLUME X ÁREA DOS RESERVATÓRIOS
 
-    //Curva do Descoberto - baseado no arquivo de batimetria passado pela CAESB (volume útil em hm³)
+    //Curva do Descoberto - baseado na Nota Técnica n° 58/2016 da ADASA (volume útil em hm³)
     vector<double> descoberto_storage = {0,
-                                         4.508 * table_gen_storage_multiplier,
-                                         9.930 * table_gen_storage_multiplier,
-                                         16.269 * table_gen_storage_multiplier,
-                                         23.436 * table_gen_storage_multiplier,
-                                         31.282 * table_gen_storage_multiplier,
-                                         40.002 * table_gen_storage_multiplier,
-                                         49.843 * table_gen_storage_multiplier,
-                                         60.988 * table_gen_storage_multiplier,
-                                         73.357 * table_gen_storage_multiplier};
-                                         //86.694 * table_gen_storage_multiplier,
-                                         //100.862 *
-                                         //table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório do Descoberto
-    vector<double> descoberto_area = {408.953, 494.839, 587.373, 678.283,
-                                      751.075, 821.850, 923.983, 1049.369,
-                                      1178.847, 1290.198};
-                                      //, 1373.824,
-                                      //1461.072}; //dados da área (hm²) do reservatório do Descoberto (correspondente a cada volume acima)
+                                         4.54 * table_gen_storage_multiplier,
+                                         9.92 * table_gen_storage_multiplier,
+                                         16.21 * table_gen_storage_multiplier,
+                                         23.28 * table_gen_storage_multiplier,
+                                         31.08 * table_gen_storage_multiplier,
+                                         39.81 * table_gen_storage_multiplier,
+                                         49.49 * table_gen_storage_multiplier,
+                                         60.31 * table_gen_storage_multiplier,
+                                         72.29 * table_gen_storage_multiplier};
 
-    //Curva do Santa Maria - baseado no arquivo de batimetria passado pela CAESB (volume útil em hm³)
-    vector<double> tortoSM_storage = {0, 1.392 * table_gen_storage_multiplier,
-                                      5.213 * table_gen_storage_multiplier,
-                                      9.369 * table_gen_storage_multiplier,
-                                      13.838 * table_gen_storage_multiplier,
-                                      18.637 * table_gen_storage_multiplier,
-                                      23.797 * table_gen_storage_multiplier,
-                                      29.316 * table_gen_storage_multiplier,
-                                      35.2 * table_gen_storage_multiplier,
-                                      41.467 * table_gen_storage_multiplier,
-                                      48.135 * table_gen_storage_multiplier,
-                                      55.221 * table_gen_storage_multiplier,
-                                      62.7 * table_gen_storage_multiplier};
-                                      //73.954 *
-                                      //table_gen_storage_multiplier}; //dados do volume (hm³) do reservatório de Santa Maria
+    vector<double> descoberto_area = {412.94, 494.21, 584.10, 670.80,
+                                      740.33, 825.34, 917.11, 1023.49,
+                                      1141.23, 1255.34};
+                                      //dados da área (hm²) do reservatório do Descoberto (correspondente a cada volume acima)
 
-    vector<double> tortoSM_area = {350.76, 365.601, 399.314, 431.316, 462.723,
-                                   497.954, 534.384, 569.411, 607.685, 645.696,
-                                   687.915, 728.97, 765.141};                                  
-                                   //793.160}; //dados da area (hm²) do reservatório de Santa Maria (correspondente a cada volume acima)
+    //Curva do Santa Maria - baseado na Nota Técnica 61/2016 da ADASA (volume útil em hm³)
+    vector<double> tortoSM_storage = {0,
+                                      3.821 * table_gen_storage_multiplier,
+                                      7.977 * table_gen_storage_multiplier,
+                                      12.446 * table_gen_storage_multiplier,
+                                      17.245 * table_gen_storage_multiplier,
+                                      22.405 * table_gen_storage_multiplier,
+                                      27.924 * table_gen_storage_multiplier,
+                                      33.809 * table_gen_storage_multiplier,
+                                      40.075 * table_gen_storage_multiplier,
+                                      46.743 * table_gen_storage_multiplier,
+                                      53.830 * table_gen_storage_multiplier,
+                                      61.308 * table_gen_storage_multiplier};
+
+    vector<double> tortoSM_area = {365.601, 399.314, 431.316, 462.723,
+                                   497.954, 534.384, 569.411, 607.685,
+                                   645.696, 687.915, 728.970, 765.141};
+                                   //dados da area (hm²) do reservatório de Santa Maria (correspondente a cada volume acima)
 
     //Curva do Paranoá - baseado na batimetria da CAESB, realizada em 2003 (volume total do lago)
     vector<double> paranoa_storage = {0, 0.0278 * table_gen_storage_multiplier,
@@ -335,18 +330,19 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     vector<int> bananal_torto_weeks = {0, 5, 9, 13, 18, 22, 26, 31, 35, 39, 44,
                                        48,
                                        53}; // período de estiagem (maio - week 18, a outubro) e período chuvoso (novembro - week 44 a abril)
-    vector<double> bananal_torto_releases = {(0.416e-6 * 3600 * 24 * 7),
-                                             (0.503e-6 * 3600 * 24 * 7),
-                                             (0.462e-6 * 3600 * 24 * 7),
-                                             (0.437e-6 * 3600 * 24 * 7),
-                                             (0.333e-6 * 3600 * 24 * 7),
-                                             (0.249e-6 * 3600 * 24 * 7),
-                                             (0.216e-6 * 3600 * 24 * 7),
-                                             (0.593e-6 * 3600 * 24 * 7),
-                                             (0.529e-6 * 3600 * 24 * 7),
-                                             (0.179e-6 * 3600 * 24 * 7),
-                                             (0.242e-6 * 3600 * 24 * 7),
-                                             (0.341e-6 * 3600 * 24 * 7)};
+    //A vazão remanescente da water source integrada Bananal + Torto corresponde à soma das vazões remanescentes de cada um
+    vector<double> bananal_torto_releases = {(0.832e-6 * 3600 * 24 * 7),
+                                             (1.006e-6 * 3600 * 24 * 7),
+                                             (0.924e-6 * 3600 * 24 * 7),
+                                             (0.874e-6 * 3600 * 24 * 7),
+                                             (0.666e-6 * 3600 * 24 * 7),
+                                             (0.498e-6 * 3600 * 24 * 7),
+                                             (0.432e-6 * 3600 * 24 * 7),
+                                             (0.376e-6 * 3600 * 24 * 7),
+                                             (0.338e-6 * 3600 * 24 * 7),
+                                             (0.358e-6 * 3600 * 24 * 7),
+                                             (0.484e-6 * 3600 * 24 * 7),
+                                             (0.682e-6 * 3600 * 24 * 7)};
     SeasonalMinEnvFlowControl bananal_torto_min_env_control(4,
                                                             bananal_torto_weeks,
                                                             bananal_torto_releases);
@@ -397,7 +393,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     Reservoir descoberto("Descoberto",//nome do reservatório
                          0,//número de identificação
                          bacia_descoberto,//vetor criado lá em cima - contém as vazões referentes aos afluentes do Descoberto
-                         73.357 *
+                         72.29 *
                          table_gen_storage_multiplier, //capacidade de armazenamento do reservatório (hm³)
                          6.0e-6 * 3600 * 24 *
                          7, //capacidade máxima de tratamento da ETA Descoberto (hm³/semana)
@@ -406,7 +402,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     Reservoir tortoSM("Torto / Santa Maria", 1,
                       bacia_tortoSM,
-                      62.7 * table_gen_storage_multiplier, //hm³
+                      61.308 * table_gen_storage_multiplier, //hm³
                       1.1e-6 * 3600 * 24 *
                       7, //capacidade máxima de tratamento da ETA Brasília (hm³/semana)
                       evaporation_tortoSM,
