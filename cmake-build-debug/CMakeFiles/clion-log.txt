@@ -1,6 +1,6 @@
-/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/c/Users/Bernardo/CLionProjects/WaterPathsAndressa
--- The C compiler identification is GNU 9.3.0
--- The CXX compiler identification is GNU 9.3.0
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /mnt/c/Users/andre/CLionProjects/WaterPaths2
+-- The C compiler identification is GNU 7.4.0
+-- The CXX compiler identification is GNU 7.4.0
 -- Check for working C compiler: /usr/bin/cc
 -- Check for working C compiler: /usr/bin/cc -- works
 -- Detecting C compiler ABI info
@@ -15,4 +15,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /mnt/c/Users/Bernardo/CLionProjects/WaterPathsAndressa/cmake-build-debug
+-- Build files have been written to: /mnt/c/Users/andre/CLionProjects/WaterPaths2/cmake-build-debug

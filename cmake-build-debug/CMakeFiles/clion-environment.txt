@@ -1,4 +1,4 @@
-ToolSet: Ubuntu 20.04.1 LTS (local)@C:\Users\Bernardo\AppData\Local\Microsoft\WindowsApps\ubuntu2004.exe
+ToolSet: Ubuntu 18.04.2 LTS (local)@C:\Users\andre\AppData\Local\Microsoft\WindowsApps\ubuntu1804.exe
 Options: 
 
 Options:

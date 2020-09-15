@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/c/Users/Bernardo/CLionProjects/WaterPathsAndressa
+# Install script for directory: /mnt/c/Users/andre/CLionProjects/WaterPaths2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/c/Users/Bernardo/CLionProjects/WaterPathsAndressa/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/c/Users/andre/CLionProjects/WaterPaths2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

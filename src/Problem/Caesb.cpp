@@ -54,8 +54,8 @@ void Caesb::setProblemDefinition(BORG_Problem &problem) //void = vazio. O tipo v
     BORG_Problem_set_bounds(problem, 14, 0.0, 1.0); //Ordem de "construção" do upgrade 2 da ETA Corumbá (ampliação da capacidade de produção - 1400 l/s)
     BORG_Problem_set_bounds(problem, 15, 0.0, 1.0); //Ordem de "construção" do upgrade 3 da ETA Corumbá (implantação de + 1.200 l/s só pra CAESB)
     BORG_Problem_set_bounds(problem, 16, 0.0, 1.0); //Ordem de "construção" da elevação do nível da barragem do Descoberto
-    BORG_Problem_set_bounds(problem, 17, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb - descoberto
-    BORG_Problem_set_bounds(problem, 18, 0.0, 20.0); //Buffer de infraestrutura por parte da Caesb - tortoSM
+    BORG_Problem_set_bounds(problem, 17, 0.1, 0.5); //Buffer de infraestrutura por parte da Caesb - descoberto
+    BORG_Problem_set_bounds(problem, 18, 0.1, 0.5); //Buffer de infraestrutura por parte da Caesb - tortoSM
 
     // Set epsilons for objectives //(problem, n° de identificação da função objetivo, valor do epsilon). O valor do epsilon indica a precisão das funções objetivo.
     BORG_Problem_set_epsilon(problem, 0, 0.001);
