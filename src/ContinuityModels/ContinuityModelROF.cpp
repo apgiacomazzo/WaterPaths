@@ -225,10 +225,12 @@ vector<double> ContinuityModelROF::calculateShortTermROFFullCalcs(int week) {
                     year_failure[u] = FAILURE;
                 }
 
+
             // calculated week of storage-rof table
             updateStorageToROFTable(INSURANCE_SHIFT_STORAGE_CURVES_THRESHOLD,
                                     week_of_the_year, to_full);
         }
+
 
         // Record ROF realization results into final ROF table for that week.
         recordROFStorageTable(ut_storage_to_rof_rof_realization,
@@ -315,12 +317,16 @@ void ContinuityModelROF::updateStorageToROFTable(
                                     realization_water_sources[ws]->isOnline());
             // Register failure in the table for each utility meeting
             // failure criteria.
+
             if (utility_storage / utilities_capacities[u] < STORAGE_CAPACITY_RATIO_FAIL || continuity_utilities[u]->getUnrestrictedDemand() > 0.9 * continuity_utilities[u]->getTotal_treatment_capacity()) {
                 ut_storage_to_rof_rof_realization[u](week_of_the_year,
                                                      NO_OF_INSURANCE_STORAGE_TIERS -
                                                      s) = FAILURE;
                 count_fails++;
             }
+//            if (week_of_the_year > 20) {
+//                int i = 0;
+//            }
         }
 
         // If all utilities have failed, stop dropping storage level and label
@@ -338,6 +344,7 @@ void ContinuityModelROF::updateStorageToROFTable(
             break;
         }
     }
+
 }
 
 //FIXME: MAKE THIS MORE EFFICIENT. THIS METHOD IS THE MOST EXPENSIVE ONE IN THE CODE.

@@ -541,6 +541,9 @@ void Utility::splitDemands(
     restricted_demand -= unfulfilled_demand;
     double demand_non_priority_sources = restricted_demand;
     double total_serviced_demand = 0;
+//    if (week > 1027) {
+//        int i = 0;
+//    }
 
     // Allocates demand to intakes and reuse based on allocated volume to
     // this utility.
@@ -712,15 +715,23 @@ void Utility::updateContingencyFundAndDebtService(
                            recouped_loss_price_surcharge,
                            0.0);
 
+
+//    if (demand_multiplier < 1.0 && demand_offset != 0 && week > 285) {
+//        int i = 0;
+//    }
+//    if (week > 1028) {
+//        int i = 0;
+//    }
+
     // Update variables for data collection and next iteration.
     drought_mitigation_cost = max(revenue_losses + transfer_costs -
                                   insurance_payout -
                                   recouped_loss_price_surcharge,
                                   0.0);
-
     fund_contribution =
             projected_fund_contribution - revenue_losses - transfer_costs +
             recouped_loss_price_surcharge;
+
 
     resetDroughtMitigationVariables();
 
@@ -883,8 +894,8 @@ void Utility::setRealization(unsigned long r, vector<double> &rdm_factors) {
                                        + delta_demand;
     }
 
-    bond_term_multiplier = rdm_factors.at(1);
-    bond_interest_rate_multiplier = rdm_factors.at(2);
+    bond_interest_rate_multiplier = rdm_factors.at(1);
+    bond_term_multiplier = rdm_factors.at(2);
     infra_discount_rate *= rdm_factors.at(3);
 
     // Set peaking demand factor.
