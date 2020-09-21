@@ -43,6 +43,7 @@ namespace Constants {
     const int TREATMENT_CAPACITY_VS_VOLUME_SMALL_WTP = 200;
     const int ILLIMITED_TREATMENT_CAPACITY = 99999;
     const double STORAGE_CAPACITY_RATIO_FAIL = 0.2;
+    static const double TREATMENT_CAPACITY_FAILURE_THRESHOLD = 0.9;
     const int NOT_ALLOCATED = 1;
     const int MAX_NUMBER_OF_UTILITIES = 50;
     const double MAX_FRACTION_CF_TO_BUY_INSURANCE = 0.7;
@@ -76,9 +77,11 @@ namespace Constants {
     const int RESERVOIR = 100;
     const int QUARRY = 101;
     const int ALLOCATED_RESERVOIR = 102;
-    const int NEW_WATER_TREATMENT_PLANT = 200;
-    const int SOURCE_RELOCATION = 201;
+    const int NON_STRUCTURAL_SOURCES = 200;
+    const int NEW_WATER_TREATMENT_PLANT = 201;
+    const int SOURCE_RELOCATION = 202;
     const int RESERVOIR_EXPANSION = 203;
+
 
     // Use 0 - 99 for supply instruments and 100 - 199
     // for financial instruments.

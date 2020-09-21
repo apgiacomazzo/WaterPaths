@@ -487,7 +487,9 @@ void ContinuityModelROF::updateOnlineInfrastructure(int week) {
             // If so, set it online in the ROF calculation model.
             for (int uu : utilities_to_water_sources[ws]) {
                 auto u = (unsigned long) uu;
-                water_sources_online_to_utilities.at(u).push_back((int) ws);
+                if (continuity_water_sources[ws]->source_type < NON_STRUCTURAL_SOURCES) {
+                    water_sources_online_to_utilities.at(u).push_back((int) ws);
+                }
                 continuity_utilities.at(u)
                         ->setWaterSourceOnline((int) ws, week);
 

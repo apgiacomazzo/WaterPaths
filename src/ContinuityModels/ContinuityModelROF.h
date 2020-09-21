@@ -6,6 +6,7 @@
 #define TRIANGLEMODEL_CONTINUITYMODELROF_H
 
 
+
 #include "Base/ContinuityModel.h"
 #include "../Utils/Matrices.h"
 
@@ -85,6 +86,8 @@ public:
                                int &week_of_the_year);
 
     void calculateEmptyVolumes(vector<WaterSource *> &realization_water_sources, double *to_full);
+
+    bool getFailure(int u, double utility_storage_ratio) const;
 };
 
 

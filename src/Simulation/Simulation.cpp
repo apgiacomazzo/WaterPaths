@@ -366,13 +366,14 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
                 // DO NOT change the order of the steps. This would mess up
                 // important dependencies.
                 // Calculate long-term risk-of-failre if current week is first week of the year.
-                if (Utils::isFirstWeekOfTheYear(w))
+                if (Utils::isFirstWeekOfTheYear(w)) {
                     realization_model->setLongTermROFs(
                             rof_model->calculateLongTermROF(w), w);
+                }
                 // Calculate short-term risk-of-failure
                 realization_model->setShortTermROFs(
                         rof_model->calculateShortTermROF(w,
-                                                         import_export_rof_tables));
+                                import_export_rof_tables));
                 // Apply drought mitigation policies
                 if (import_export_rof_tables != EXPORT_ROF_TABLES) {
                     realization_model->applyDroughtMitigationPolicies(w);
