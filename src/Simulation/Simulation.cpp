@@ -343,7 +343,7 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
     string error_file_content = "#";
 
     // Run realizations.
-#pragma omp parallel for ordered num_threads(n_threads) shared(had_catch, realizations_to_run_unique, error_m, error_file_name, error_file_content) default(none)
+//#pragma omp parallel for ordered num_threads(n_threads) shared(had_catch, realizations_to_run_unique, error_m, error_file_name, error_file_content) default(none)
     for (unsigned long r = 0; r < realizations_to_run_unique.size(); ++r) {
         unsigned long realization = realizations_to_run_unique[r];
         //printf("Realization %lu\n", r);
@@ -366,13 +366,14 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
                 // DO NOT change the order of the steps. This would mess up
                 // important dependencies.
                 // Calculate long-term risk-of-failre if current week is first week of the year.
-                if (Utils::isFirstWeekOfTheYear(w))
+                if (Utils::isFirstWeekOfTheYear(w)) {
                     realization_model->setLongTermROFs(
                             rof_model->calculateLongTermROF(w), w);
+                }
                 // Calculate short-term risk-of-failure
                 realization_model->setShortTermROFs(
                         rof_model->calculateShortTermROF(w,
-                                                         import_export_rof_tables));
+                                import_export_rof_tables));
                 // Apply drought mitigation policies
                 if (import_export_rof_tables != EXPORT_ROF_TABLES) {
                     realization_model->applyDroughtMitigationPolicies(w);
