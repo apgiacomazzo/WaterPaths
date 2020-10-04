@@ -88,12 +88,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     //VARIÁVEIS DE DECISÃO
 
-    double caesb_descoberto_restriction_trigger = 1.1; //vars[0]; //gatilho para acionar restrição no Descoberto
-    double caesb_tortoSM_restriction_trigger = 1.1; //vars[1]; //gatilho para acionar restrição no TortoSM
-    double delta_descoberto_restriction_trigger = 1.1; //vars[2];
-    double delta_tortoSM_restriction_trigger = 1.1; //vars[3];
-    double caesb_descoberto_transfer_trigger = 1.1; //vars[4]; //gatilho para acionar transferência de água para o Descoberto
-    double caesb_tortoSM_transfer_trigger = 1.1; //vars[5]; //gatilho para acionar transferência de água para o Descoberto
+    double caesb_descoberto_restriction_trigger = vars[0]; //gatilho para acionar restrição no Descoberto
+    double caesb_tortoSM_restriction_trigger = vars[1]; //gatilho para acionar restrição no TortoSM
+    double delta_descoberto_restriction_trigger = vars[2];
+    double delta_tortoSM_restriction_trigger = vars[3];
+    double caesb_descoberto_transfer_trigger = vars[4]; //gatilho para acionar transferência de água para o Descoberto
+    double caesb_tortoSM_transfer_trigger = vars[5]; //gatilho para acionar transferência de água para o Descoberto
     double caesb_descoberto_annual_payment = vars[6]; // pagamento anual ao fundo de contingência. O valor é constante (igual para todo ano).
     double caesb_tortoSM_annual_payment = vars[7]; // pagamento anual ao fundo de contingência. O valor é constante (igual para todo ano).
     double caesb_descoberto_inftrigger = vars[8]; //gatilho para acionar a construção de nova infraestrutura por parte da Companhia Descoberto

@@ -3,7 +3,7 @@ project(WaterPaths)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O0 -march=native")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O2 -march=native")
 #Debug: não pode ter otimização (usar O0)
 #Otimização: O2 -> utilizar esse
 #Otimização mais agressiva: O3
