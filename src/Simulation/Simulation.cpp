@@ -62,7 +62,7 @@ Simulation::Simulation(
         vector<vector<double>> &policies_rdm,
         const unsigned long total_simulation_time,
         vector<unsigned long> &realizations_to_run,
-        vector<vector<Matrix2D<double>>> &precomputed_rof_tables,
+        vector<vector<Matrix2D<int>>> &precomputed_rof_tables,
         vector<vector<double>> &table_storage_shift,
         string &rof_tables_folder) :
         total_simulation_time(total_simulation_time),
@@ -360,9 +360,10 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
                 realization_model->getContinuity_utilities(),
                 realization);
 
-        try {
+//        try {
 //        double start = omp_get_wtime();
             for (int w = 0; w < (int) total_simulation_time; ++w) {
+//                printf("%d\n", w);
                 // DO NOT change the order of the steps. This would mess up
                 // important dependencies.
                 // Calculate long-term risk-of-failre if current week is first week of the year.
@@ -396,14 +397,14 @@ Simulation::runFullSimulation(unsigned long n_threads, double *vars) {
 //                 (double) master_data_collector->getRealizations_created() /
 //                 (double) realizations_to_run_unique.size());
 
-        } catch (...) {
-#pragma omp atomic
-            ++had_catch;
-            error_m += to_string(realization) + " ";
-            error_file_name += "_" + to_string(realization);
-            error_file_content += to_string(realization) + ",";
-            master_data_collector->removeRealization(realization);
-        }
+//        } catch (...) {
+//#pragma omp atomic
+//            ++had_catch;
+//            error_m += to_string(realization) + " ";
+//            error_file_name += "_" + to_string(realization);
+//            error_file_content += to_string(realization) + ",";
+//            master_data_collector->removeRealization(realization);
+//        }
 
         delete realization_model;
         delete rof_model;

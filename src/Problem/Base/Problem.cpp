@@ -310,10 +310,10 @@ Problem::setRofTables(unsigned long n_realizations, string rof_tables_directory)
         ifile = std::ifstream(fname.c_str());
     }
 
-    rof_tables = vector<vector<Matrix2D<double>>>(
+    rof_tables = vector<vector<Matrix2D<int>>>(
             n_realizations,
-            vector<Matrix2D<double>>((unsigned long) n_utilities,
-                                     Matrix2D<double>(n_weeks_in_table, n_tiers)));
+            vector<Matrix2D<int>>((unsigned long) n_utilities,
+                                     Matrix2D<int>(n_weeks_in_table, n_tiers)));
 
     for (unsigned long r = 0; r < n_realizations; ++r) {
 //        printf("Reading tables for realization %lu.\n", r);
@@ -322,7 +322,8 @@ Problem::setRofTables(unsigned long n_realizations, string rof_tables_directory)
             auto tables_utility_week = Utils::parse2DCsvFile(file_name);
 
             for (int w = 0; w < n_weeks; ++w) {
-                rof_tables[r][u].setPartialData(w, tables_utility_week[w].data(), tables_utility_week[w].size());
+                auto tables_int = vector<int>(tables_utility_week[w].begin(), tables_utility_week[w].end());
+                rof_tables[r][u].setPartialData(w, tables_int.data(), tables_utility_week[w].size());
             }
 //        u = 1;
 //        file_name = rof_tables_directory + "tables_r" + to_string(r) + "_u" + to_string(u) + ".csv";

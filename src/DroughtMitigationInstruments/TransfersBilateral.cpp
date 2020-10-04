@@ -16,8 +16,11 @@ TransfersBilateral::TransfersBilateral(const int id,
           surcharge_percentage_fee(surcharge_percentage_fee),
           pipe_transfer_capacities(pipe_transfer_capacities),
           transfer_overhead(surcharge_percentage_fee),
-          transfer_triggers(transfer_triggers) {
+          transfer_triggers(vector<double>(max(utilities_ids[0], utilities_ids[1]) + 1, NON_INITIALIZED)) {
+    this->transfer_triggers[utilities_ids[0]] = transfer_triggers[0];
+    this->transfer_triggers[utilities_ids[1]] = transfer_triggers[1];
     this->utilities_ids = utilities_ids;
+
 }
 
 TransfersBilateral::TransfersBilateral(const TransfersBilateral &transfer_caesb):
@@ -32,8 +35,7 @@ TransfersBilateral::TransfersBilateral(const TransfersBilateral &transfer_caesb)
 
 void TransfersBilateral::applyPolicy(int week) {
 
-    double transfer_volume = 0;
-    transfer_volume = performTransfer(realization_utilities[0],
+    double transfer_volume = performTransfer(realization_utilities[0],
                                       realization_utilities[1],
                                       pipe_transfer_capacities[1], week);
 
@@ -52,7 +54,7 @@ double TransfersBilateral::performTransfer(Utility *sender, Utility *receiver,
                                            int week) const {
 
     double transfer_volume = 0;
-    if (receiver->getRisk_of_failure() > 0. &&
+    if (receiver->getRisk_of_failure() > transfer_triggers[receiver->id] &&
         sender->getRisk_of_failure() == 0.) {
         // Calculate transfer volume
         double available_transfer_volume =

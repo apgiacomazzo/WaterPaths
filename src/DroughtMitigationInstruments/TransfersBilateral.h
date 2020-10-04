@@ -13,7 +13,7 @@ class TransfersBilateral : public DroughtMitigationPolicy {
     const vector<double> &pipe_transfer_capacities;
     double source_treatment_buffer;
     double surcharge_percentage_fee;
-    const vector<double> &transfer_triggers;
+    vector<double> transfer_triggers;
     vector<double> transfered_volumes;
 
 public:

@@ -56,7 +56,7 @@ namespace Constants {
     const int EXPORT_ROF_TABLES = 1;
     const int DO_NOT_EXPORT_OR_IMPORT_ROF_TABLES = 0;
     const int IMPORT_ROF_TABLES = -1;
-    const double BASE_STORAGE_CAPACITY_MULTIPLIER = 4.;
+    const double BASE_STORAGE_CAPACITY_MULTIPLIER = 5.;
 
     const bool ONLINE = true;
     const bool OFFLINE = false;

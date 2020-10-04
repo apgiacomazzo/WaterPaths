@@ -13,7 +13,7 @@
 
 class DroughtMitigationPolicy {
 private:
-    vector<Matrix2D<double>> *storage_to_rof_table_;
+    vector<Matrix2D<int>> *storage_to_rof_table_;
 
 protected:
     DroughtMitigationPolicy(const DroughtMitigationPolicy &drought_mitigation_policy);
@@ -48,7 +48,7 @@ public:
 
     virtual ~DroughtMitigationPolicy();
 
-    void setStorage_to_rof_table_(vector<Matrix2D<double>> &storage_to_rof_table_, int use_imported_tables);
+    void setStorage_to_rof_table_(vector<Matrix2D<int>> &storage_to_rof_table_, int use_imported_tables);
 
     virtual void setRealization(unsigned long realization_id, vector<double> &utilities_rdm,
                                 vector<double> &water_sources_rdm, vector<double> &policy_rdm)= 0;

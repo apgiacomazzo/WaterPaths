@@ -34,7 +34,7 @@ double DroughtMitigationPolicy::getRofFromRealizationTable(int utility_id, int w
     return (*DroughtMitigationPolicy::storage_to_rof_table_)[utility_id](week, tier);
 }
 
-void DroughtMitigationPolicy::setStorage_to_rof_table_(vector<Matrix2D<double>> &storage_to_rof_table_,
+void DroughtMitigationPolicy::setStorage_to_rof_table_(vector<Matrix2D<int>> &storage_to_rof_table_,
                                                        int use_imported_tables) {
     DroughtMitigationPolicy::storage_to_rof_table_ = &storage_to_rof_table_;
     DroughtMitigationPolicy::use_imported_tables = use_imported_tables == IMPORT_ROF_TABLES;

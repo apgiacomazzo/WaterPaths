@@ -88,12 +88,12 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 
     //VARIÁVEIS DE DECISÃO
 
-    double caesb_descoberto_restriction_trigger = vars[0]; //gatilho para acionar restrição no Descoberto
-    double caesb_tortoSM_restriction_trigger = vars[1]; //gatilho para acionar restrição no TortoSM
-    double delta_descoberto_restriction_trigger = vars[2];
-    double delta_tortoSM_restriction_trigger = vars[3];
-    double caesb_descoberto_transfer_trigger = vars[4]; //gatilho para acionar transferência de água para o Descoberto
-    double caesb_tortoSM_transfer_trigger = vars[5]; //gatilho para acionar transferência de água para o Descoberto
+    double caesb_descoberto_restriction_trigger = 1.1; //vars[0]; //gatilho para acionar restrição no Descoberto
+    double caesb_tortoSM_restriction_trigger = 1.1; //vars[1]; //gatilho para acionar restrição no TortoSM
+    double delta_descoberto_restriction_trigger = 1.1; //vars[2];
+    double delta_tortoSM_restriction_trigger = 1.1; //vars[3];
+    double caesb_descoberto_transfer_trigger = 1.1; //vars[4]; //gatilho para acionar transferência de água para o Descoberto
+    double caesb_tortoSM_transfer_trigger = 1.1; //vars[5]; //gatilho para acionar transferência de água para o Descoberto
     double caesb_descoberto_annual_payment = vars[6]; // pagamento anual ao fundo de contingência. O valor é constante (igual para todo ano).
     double caesb_tortoSM_annual_payment = vars[7]; // pagamento anual ao fundo de contingência. O valor é constante (igual para todo ano).
     double caesb_descoberto_inftrigger = vars[8]; //gatilho para acionar a construção de nova infraestrutura por parte da Companhia Descoberto
@@ -442,11 +442,10 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     AllocatedReservoir corumba("Corumba IV",
                                2,
                                bacia_corumba,
-                               cIV_storage_capacity *
-                               table_gen_storage_multiplier,
+                               0,
                                0,
                                evaporation_corumba,
-                               &corumba_storage_area,
+                               15000., //&corumba_storage_area,
                                &cIV_allocations_ids,
                                &cIV_allocation_fractions,
                                &cIV_treatment_allocation_fractions);
@@ -489,7 +488,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 //                            sistema_torto,
 //                            0.95e-6 * 3600 * 24 * 7); //950 m³/s corresponde à captação média no Torto.
 
-    LevelDebtServiceBond dummy_bond(5, 1., 1, 1., vector<int>(1, 0));
+
+    BalloonPaymentBond dummy_bond(5, 0., 1, 1., vector<int>(1, 0));
     Reservoir dummy_endpoint("Dummy Node", 5, vector<Catchment *>(), 1., 0,
                              evaporation_corumba, 1,
                              construction_time_interval, 0, dummy_bond);
@@ -532,20 +532,25 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                      vector<int>(1, 0)),
             new BalloonPaymentBond(13, 0, 20, 0.07, vector<int>(1, 0))};
 
+
+    BalloonPaymentBond no_bond(13, 0., 1, 1, vector<int>(1, 0));
+    ReservoirExpansion corumba_makeshift_expansion("Corumba Ativação", 13, 2, cIV_storage_capacity *
+                                                                              table_gen_storage_multiplier, vector<double>(2, 0.), 0, no_bond);
+
     SequentialJointTreatmentExpansion ETA_corumba_etapa1(
-            "Etapa 1 de Corumba IV", 6, 2, 0, {6, 7, 8},
+            "Etapa 1 de Corumba IV", 6, 2, 0, {13, 6, 7, 8},
             capacity_ETA_corumba_upgrade_1,
             debendure_expansao_ETA_corumba_1, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2020
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa2(
-            "Etapa 2 de Corumba IV", 7, 2, 1, {6, 7, 8},
+            "Etapa 2 de Corumba IV", 7, 2, 1, {13, 6, 7, 8},
             capacity_ETA_corumba_upgrade_2,
             debendure_expansao_ETA_corumba_2, construction_time_interval,
             0 * WEEKS_IN_YEAR); //previsão: 2030 a 2033
 
     SequentialJointTreatmentExpansion ETA_corumba_etapa3(
-            "Etapa 3 de Corumba IV", 8, 2, 2, {6, 7, 8},
+            "Etapa 3 de Corumba IV", 8, 2, 2, {13, 6, 7, 8},
             capacity_ETA_corumba_upgrade_3,
             debendure_expansao_ETA_corumba_3, construction_time_interval,
             5 * WEEKS_IN_YEAR); //previsão: depois de 2037
@@ -621,6 +626,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
 //    water_sources.push_back(&ribeirao_bananal);
 //    water_sources.push_back(&ribeirao_torto);
 
+    water_sources.push_back(&corumba_makeshift_expansion);
     water_sources.push_back(&ETA_corumba_etapa1);
     water_sources.push_back(&ETA_corumba_etapa2);
     water_sources.push_back(&ETA_corumba_etapa3);
@@ -700,6 +706,8 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
             1.1e-6 * 3600 * 24 * 7 + 1.7e-6 * 3600 * 24 * 7,
             0.7e-6 * 3600 * 24 * 7};
 
+    rof_triggered_infra_order_caesb_descoberto.push_back(13);
+    rofs_infra_caesb_descoberto.push_back(1.1);
     Utility caesb_descoberto((char *) "CAESB Descoberto", 0,
                              demand_caesb_descoberto, demand_n_weeks,
                              caesb_descoberto_annual_payment,
@@ -733,17 +741,18 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
     utilities.push_back(&caesb_descoberto);
     utilities.push_back(&caesb_tortoSM);
 
-    /// Water-source-utility connectivity matrix (each row corresponds to a utility and numbers are water
-    /// sources IDs.
+    // Water-source-utility connectivity matrix (each row corresponds to a utility and numbers are water
+    // sources IDs.
     vector<vector<int>> reservoir_utility_connectivity_matrix = {
-            {0, 2, 6, 7, 8,  12},  //CAESB Descoberto
+            {0, 2, 6, 7, 8,  12, 13},  //CAESB Descoberto
             {1, 3, 4, 9, 10, 11}  //CAESB Torto/Santa Maria
     };
 
 //    @TODO: verificar se há necessidade de corrigir volumes de reservatórios construídos.
 //    // O que table_storage_shift representa? O que são esses números (2000, 5000...) [3] [17]
-    auto table_storage_shift = vector<vector<double>>(4,
-                                                      vector<double>(25, 0.));
+    auto table_storage_shift = vector<vector<double>>(2,
+                                                      vector<double>(14, 0.));
+    table_storage_shift[0][13] = 30;
 //    table_storage_shift[3][17] = 2000.; //tem a ver com a RdF
 //    table_storage_shift[3][8] = 5000.;
 //    table_storage_shift[1][14] = 100.;

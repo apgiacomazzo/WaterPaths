@@ -13,9 +13,6 @@
 
 class ContinuityModelROF : public ContinuityModel {
 private:
-//    Matrix3D<double> storage_to_rof_table;
-//    Matrix3D<double> storage_to_rof_rof_realization;
-    vector<Matrix2D<double>> ut_storage_to_rof_rof_realization;
     vector<int> online_downstream_sources;
     bool *storage_wout_downstream;
     const int n_topo_sources;
@@ -25,7 +22,7 @@ protected:
     int beginning_tier = 0;
     vector<WaterSource *> realization_water_sources;
     vector<Utility *> realization_utilities;
-    vector<Matrix2D<double>> ut_storage_to_rof_table;
+    vector<Matrix2D<int>> ut_storage_to_rof_table;
 
     vector<vector<double>> table_storage_shift;
     vector<double> utility_base_storage_capacity;;
@@ -46,10 +43,7 @@ public:
 
     vector<double> calculateShortTermROFFullCalcs(int week);
 
-    vector<double> calculateShortTermROFTable(int week, vector<Utility *> utilities,
-                                              vector<double> utilities_base_storage_capacity,
-                                              const vector<Matrix2D<double>> &ut_storage_to_rof_table,
-                                              vector<double> current_storage_table_shift);
+    vector<double> calculateShortTermROFTable(int week);
 
     vector<double> calculateLongTermROF(int week);
 
@@ -64,30 +58,21 @@ public:
     virtual ~ContinuityModelROF();
 
     void updateStorageToROFTable(double storage_percent_decrement,
-                                 int week_of_the_year,
-                                 const double *to_full_toposort);
+                                 int week,
+                                 const double *to_full_toposort, int rof_realization_number);
 
-    vector<Matrix2D<double>> &getUt_storage_to_rof_table();
+    vector<Matrix2D<int>> &getUt_storage_to_rof_table();
 
     void shiftStorages(double *available_volumes_shifted, const double
     *delta_storage);
 
     void printROFTable(const string &folder);
 
-    void setROFTablesAndShifts(const vector<Matrix2D<double>> &storage_to_rof_table,
+    void setROFTablesAndShifts(const vector<Matrix2D<int>> &storage_to_rof_table,
                                const vector<vector<double>> &table_storage_shift);
-
-    void tableROFExceptionHandler(double m, int u, int week);
-
-    void setInitialTableTier(int week, const int &utilities, vector<Matrix2D<double>> &vector, int &tier);
-
-    void recordROFStorageTable(vector<Matrix2D<double>> &ut_storage_to_rof_rof_realization,
-                               vector<Matrix2D<double>> &ut_storage_to_rof_table, const int &n_utilities, int &week,
-                               int &week_of_the_year);
 
     void calculateEmptyVolumes(vector<WaterSource *> &realization_water_sources, double *to_full);
 
-    bool getFailure(int u, double utility_storage_ratio) const;
 };
 
 

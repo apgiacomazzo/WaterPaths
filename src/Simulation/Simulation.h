@@ -35,7 +35,7 @@ private:
     vector<vector<double>>& water_sources_rdm;
     vector<vector<double>>& policies_rdm;
 
-    vector<vector<Matrix2D<double>>>* precomputed_rof_tables;
+    vector<vector<Matrix2D<int>>>* precomputed_rof_tables;
     vector<vector<double>>* table_storage_shift;
     MasterDataCollector* master_data_collector = nullptr;
     string rof_tables_folder;
@@ -66,7 +66,7 @@ public:
                vector<vector<double>> &policies_rdm,
                const unsigned long total_simulation_time,
                vector<unsigned long> &realizations_to_run,
-               vector<vector<Matrix2D<double>>> &precomputed_rof_tables,
+               vector<vector<Matrix2D<int>>> &precomputed_rof_tables,
                vector<vector<double>> &table_storage_shift,
                string &rof_tables_folder);
 

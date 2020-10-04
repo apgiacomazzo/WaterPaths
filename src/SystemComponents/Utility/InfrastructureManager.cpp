@@ -196,7 +196,7 @@ InfrastructureManager::setWaterSourceOnline(unsigned int source_id, int week,
     }
 }
 
-
+#pragma GCC optimize("O0")
 void
 InfrastructureManager::waterTreatmentPlantConstructionHandler(
         unsigned int source_id, double &total_storage_capacity,
@@ -236,14 +236,17 @@ InfrastructureManager::waterTreatmentPlantConstructionHandler(
             == non_priority_draw_water_source->end();
 
     /// Finally, the checking.
-    if (is_priority_source && is_not_in_priority_list) {
+    if (is_not_in_priority_list && is_priority_source) {
         priority_draw_water_source->push_back((int) wtp->parent_reservoir_ID);
         total_storage_capacity +=
                 water_sources->at(wtp->parent_reservoir_ID)
                         ->getAllocatedCapacity(id);
-    } else if (is_not_in_non_priority_list) {
+    } else if (is_not_in_non_priority_list && !is_priority_source) {
         non_priority_draw_water_source
                 ->push_back((int) wtp->parent_reservoir_ID);
+        total_storage_capacity +=
+                water_sources->at(wtp->parent_reservoir_ID)
+                        ->getAllocatedCapacity(id);
     }
     water_sources->at(source_id)->setOnline();
 }

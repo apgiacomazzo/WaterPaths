@@ -50,7 +50,7 @@ protected:
     vector<vector<double>> utilities_rdm;
     vector<vector<double>> water_sources_rdm;
     vector<vector<double>> policies_rdm;
-    vector<vector<Matrix2D<double>>> rof_tables;
+    vector<vector<Matrix2D<int>>> rof_tables;
 
     double checkAndFixInfraExpansionHighLowOrder(vector<int> *order, vector<double> *trigger, int id_low, int id_high,
             double capacity_low, double capacity_high);
