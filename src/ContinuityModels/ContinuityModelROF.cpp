@@ -272,6 +272,7 @@ vector<double> ContinuityModelROF::calculateShortTermROFFullCalcs(int week) {
  * @param week_of_the_year
  * @param to_full empty volume of all reservoir in ID order.
  */
+#pragma GCC optimize("O3")
 void ContinuityModelROF::updateStorageToROFTable(
         double storage_percent_decrement, int week,
         const double *to_full, int rof_realization_number) {
@@ -342,6 +343,7 @@ void ContinuityModelROF::updateStorageToROFTable(
 }
 
 //FIXME: MAKE THIS MORE EFFICIENT. THIS METHOD IS THE MOST EXPENSIVE ONE IN THE CODE.
+#pragma GCC optimize("O3")
 void ContinuityModelROF::shiftStorages(
         double *available_volumes_shifted,
         const double *delta_storage) {
