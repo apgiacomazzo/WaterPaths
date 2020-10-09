@@ -33,7 +33,8 @@ private:
     vector<vector<double>> demand_to_wastewater_fraction_caesb_tortoSM;
     vector<vector<double>> caesbDescobertoDemandClassesFractions;
     vector<vector<double>> caesbTortoSMDemandClassesFractions;
-    vector<vector<double>> caesbUserClassesWaterPrices;
+    vector<vector<double>> caesbDescobertoUserClassesWaterPrices;
+    vector<vector<double>> caesbTortoSMUserClassesWaterPrices;
     vector<vector<double>> caesbPriceRestrictionMultipliers;
 
 public:

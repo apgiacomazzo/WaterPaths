@@ -712,7 +712,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                              demand_caesb_descoberto, demand_n_weeks,
                              caesb_descoberto_annual_payment,
                              caesbDescobertoDemandClassesFractions,
-                             caesbUserClassesWaterPrices,
+                             caesbDescobertoUserClassesWaterPrices,
                              wwtp_discharge_caesb_descoberto,
                              caesb_descoberto_inf_buffer,
                              water_sources_to_wtp_caesb_1,
@@ -726,7 +726,7 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                           demand_caesb_tortoSM, demand_n_weeks,
                           caesb_tortoSM_annual_payment,
                           caesbTortoSMDemandClassesFractions,
-                          caesbUserClassesWaterPrices,
+                          caesbTortoSMUserClassesWaterPrices,
                           wwtp_discharge_caesb_tortoSM,
                           caesb_tortoSM_inf_buffer,
                           water_sources_to_wtp_caesb_2,
@@ -800,14 +800,14 @@ int Caesb::functionEvaluation(double *vars, double *objs, double *consts) {
                                          restriction_stage_multipliers_caesb_descoberto,
                                          restriction_stage_triggers_caesb_descoberto,
                                          &caesbDescobertoDemandClassesFractions,
-                                         &caesbUserClassesWaterPrices,
+                                         &caesbDescobertoUserClassesWaterPrices,
                                          &caesbPriceRestrictionMultipliers);
 
     Restrictions restrictions_tortoSM(1,
                                       restriction_stage_multipliers_caesb_tortoSM,
                                       restriction_stage_triggers_caesb_tortoSM,
                                       &caesbTortoSMDemandClassesFractions,
-                                      &caesbUserClassesWaterPrices,
+                                      &caesbTortoSMUserClassesWaterPrices,
                                       &caesbPriceRestrictionMultipliers);
 
     drought_mitigation_policies = {&restrictions_descoberto,
@@ -1085,10 +1085,15 @@ Caesb::readInputData() { //A partir dessa linha serão inseridos os dados de ent
                     io_directory + DEFAULT_DATA_DIR +
                     "caesbTortoSMDemandClassesFractions.csv"); //demanda de cada categoria de usuário da caesb
 
-            caesbUserClassesWaterPrices = Utils::parse2DCsvFile(
+            caesbDescobertoUserClassesWaterPrices = Utils::parse2DCsvFile(
                     io_directory + DEFAULT_DATA_DIR +
-                    "caesbUserClassesWaterPrices.csv"); //tarifa de água para cada categoria de usuário da caesb
+                    "caesbDescobertoUserClassesWaterPrices.csv"); //tarifa de água para cada categoria de usuário da caesb
             //OBS: inserir no valor a tarifa de esgoto também na última coluna desse arquivo (100% da de água)
+
+            caesbTortoSMUserClassesWaterPrices = Utils::parse2DCsvFile(
+                    io_directory + DEFAULT_DATA_DIR +
+                    "caesbTortoSMUserClassesWaterPrices.csv");
+
             caesbPriceRestrictionMultipliers = Utils::parse2DCsvFile(
                     io_directory + DEFAULT_DATA_DIR +
                     "caesbPriceRestrictionMultipliers.csv"); //% de aumento da tarifa para cada categoria durante o racionamento
